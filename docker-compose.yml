@@ -1,0 +1,18 @@
+version: '3.1'
+services:
+  culturist_web:
+    build: .
+    volumes:
+      - ./web:/var/www/html/culturist
+    ports:
+      - 8081:8081
+      - 3000:3000
+  culturist_database:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ./database:/var/lib/mysql
+    ports:
+      - 3306:3306
