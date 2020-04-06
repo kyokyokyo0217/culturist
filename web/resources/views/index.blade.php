@@ -15,9 +15,6 @@
 </head>
 <body>
   <div id="app">
-    <v-app>
-      <app></app>
-    </v-app>
   </div>
 </body>
 </html>
