@@ -9,14 +9,22 @@
         <RouterView />
       </v-container>
     </v-content>
+    <AudioPlayer :file="audio"></AudioPlayer>
   </v-app>
 </template>
 
 <script>
   import Navigation from './Navigation.vue'
+  import AudioPlayer from './AudioPlayer.vue'
   export default {
     components: {
-      Navigation
-    }
+      Navigation,
+      AudioPlayer
+    },
+    data(){
+      return{
+        audio: '/audio/jinglebells.mp3'
+      }
+    },
   }
 </script>

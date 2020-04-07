@@ -19,9 +19,11 @@
             class="d-flex child-flex"
             cols="4"
           >
-            <v-card flat tile class="d-flex">
+            <v-card class="d-flex ma-4">
               <v-img
                 :src="muscle_src"
+                aspect-ratio="1"
+                contain
               ></v-img>
             </v-card>
           </v-col>

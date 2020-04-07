@@ -9,6 +9,7 @@ import Feed from './components/Feed.vue'
 import Trending from './components/Trending.vue'
 import Likes from './components/Likes.vue'
 import History from './components/History.vue'
+import WorkDetail from './components/WorkDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -41,6 +42,10 @@ const routes = [
     path: '/history',
     component: History
   },
+  {
+    path: '/work/:id',
+    component: WorkDetail
+  }
 ]
 
 const router = new VueRouter({
