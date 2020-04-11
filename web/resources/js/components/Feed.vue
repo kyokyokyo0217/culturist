@@ -10,7 +10,7 @@
 
     <v-divider></v-divider>
 
-    <v-card color="cyan lighten-5" height="100%">
+    <v-card color="grey lighten-5" height="100%">
       <v-container fluid>
         <v-row>
           <v-col

@@ -10,6 +10,7 @@ import Trending from './components/Trending.vue'
 import Likes from './components/Likes.vue'
 import History from './components/History.vue'
 import WorkDetail from './components/WorkDetail.vue'
+import Upload from './components/Upload.vue'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,10 @@ const routes = [
   {
     path: '/work/:id',
     component: WorkDetail
+  },
+  {
+    path: '/upload',
+    component: Upload
   }
 ]
 

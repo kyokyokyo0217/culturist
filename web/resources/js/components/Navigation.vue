@@ -36,6 +36,19 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
+
+      <v-divider></v-divider>
+
+      <v-col class="text-center">
+      <v-btn
+        outlined
+        depressed
+        to="/upload"
+      >
+        <v-icon class="mr-2">mdi-cloud-upload</v-icon>
+        Upload
+      </v-btn>
+      </v-col>
     </v-navigation-drawer>
 </template>
 
