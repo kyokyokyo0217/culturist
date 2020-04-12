@@ -3,11 +3,15 @@
     <v-card-title class="font-weight-black display-2">
       <p class="blue--text text--darken-3">Your Feed</p>
       <v-spacer></v-spacer>
-      <v-btn small rounded color="primary" dark class="mx-2" @click="getMusic">music</v-btn>
-      <v-btn small rounded color="primary" dark class="mx-2">picture</v-btn>
-      <v-btn small rounded color="primary" dark class="mx-2">video</v-btn>
+      <v-chip-group
+        active-class="deep-purple accent-4 white--text"
+        column
+      >
+        <v-chip>All</v-chip>
+        <v-chip>Music</v-chip>
+        <v-chip>Picture</v-chip>
+      </v-chip-group>
     </v-card-title>
-
     <v-divider></v-divider>
 
     <v-card color="grey lighten-5" height="100%">

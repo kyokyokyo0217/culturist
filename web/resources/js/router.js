@@ -11,6 +11,7 @@ import Likes from './components/Likes.vue'
 import History from './components/History.vue'
 import WorkDetail from './components/WorkDetail.vue'
 import Upload from './components/Upload.vue'
+import UserProfile from './components/UserProfile.vue'
 
 Vue.use(VueRouter)
 
@@ -44,12 +45,16 @@ const routes = [
     component: History
   },
   {
-    path: '/work/:id',
+    path: '/work/:workId',
     component: WorkDetail
   },
   {
     path: '/upload',
     component: Upload
+  },
+  {
+    path: '/:userId',
+    component: UserProfile
   }
 ]
 
