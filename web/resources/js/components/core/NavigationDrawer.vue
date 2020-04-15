@@ -1,12 +1,16 @@
 <template>
     <v-navigation-drawer app permanent :width="200">
       <v-card to="/feed" flat>
-        <v-img :src="logo_src"></v-img>
+        <v-img
+          :src="logo_src"
+          width="150px"
+          class="mx-auto"
+        ></v-img>
       </v-card>
 
       <v-divider></v-divider>
 
-      <v-list-item to="/user">
+      <v-list-item to="/user" class="py-2">
         <v-list-item-avatar color="orange" size="48">
           <v-img :src="avator_src"></v-img>
         </v-list-item-avatar>

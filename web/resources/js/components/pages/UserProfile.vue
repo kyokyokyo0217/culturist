@@ -18,14 +18,14 @@
       </v-container>
     </v-img>
 
-    <v-card color="indigo lighten-5" height="100%">
+    <v-card color="grey lighten-5" height="100%">
       <v-container class="profile-nm px-12">
         <v-row>
           <v-col class="text-right">
             <v-list-item-avatar size="200" color="orange">
               <v-img :src="avator_src">
 
-                <v-dialog v-model="dialog" persistent max-width="200px">
+                <!-- <v-dialog v-model="dialog" persistent max-width="200px">
                   <template v-slot:activator="{ on }">
                     <v-btn v-if="edit" class="ma-auto" v-on="on">
                       <v-icon class="mr-2">mdi-camera</v-icon>
@@ -41,12 +41,12 @@
                       <v-btn color="green darken-1" text @click="dialog = false">Agree</v-btn>
                     </v-card-actions>
                   </v-card>
-                </v-dialog>
+                </v-dialog> -->
 
-                <!-- <v-btn v-if="edit" class="ma-auto">
+                <v-btn v-if="edit" class="ma-auto">
                   <v-icon class="mr-2">mdi-camera</v-icon>
                   Change
-                </v-btn> -->
+                </v-btn>
               </v-img>
             </v-list-item-avatar>
           </v-col>
@@ -105,24 +105,7 @@
 
           </v-col>
           <v-col cols="8">
-            <v-container fluid>
-              <v-row>
-                <v-col
-                  v-for="n in 12"
-                  :key="n"
-                  class="d-flex child-flex"
-                  cols="6"
-                >
-                  <v-card class="d-flex ma-4">
-                    <v-img
-                      :src="muscle_src"
-                      aspect-ratio="1"
-                      contain
-                    ></v-img>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-container>
+            <works :cols="6"></works>
           </v-col>
         </v-row>
       </v-container>
@@ -130,28 +113,35 @@
   </v-card>
 </template>
 <script>
-export default {
-  data(){
-    return{
-      background_src: '/img/background.jpg',
-      avator_src: '/img/avator.png',
-      muscle_src: '/img/muscle.png',
-      auth: true,
-      edit: false,
-      dialog: false
-    }
-  },
-  methods: {
-    saveChange(){
-      console.log('save change');
-      this.edit =! this.edit;
+  import Works from '../shared/Works.vue'
+  export default {
+    components:{
+      Works
+    },
+    props:{
+      cols: Number
+    },
+    data(){
+      return{
+        background_src: '/img/background.jpg',
+        avator_src: '/img/avator.png',
+        muscle_src: '/img/muscle.png',
+        auth: true,
+        edit: false,
+        dialog: false
+      }
+    },
+    methods: {
+      saveChange(){
+        console.log('save change');
+        this.edit =! this.edit;
+      }
     }
   }
-}
 </script>
 <style scoped>
-.profile-nm{
-  position: relative;
-  top: -100px;
-}
+  .profile-nm{
+    position: relative;
+    top: -100px;
+  }
 </style>

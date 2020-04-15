@@ -8,6 +8,7 @@ import History from './components/pages/History.vue'
 import WorkDetail from './components/pages/WorkDetail.vue'
 import Upload from './components/pages/Upload.vue'
 import UserProfile from './components/pages/UserProfile.vue'
+import SearchResult from  './components/pages/SearchResult.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,10 @@ const routes = [
   {
     path: '/:userId',
     component: UserProfile
+  },
+  {
+    path: '/search/:word',
+    component: SearchResult
   }
 ]
 
