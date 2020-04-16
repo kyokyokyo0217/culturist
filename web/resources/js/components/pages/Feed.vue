@@ -1,27 +1,22 @@
 <template>
   <content-layout>
+    <template v-slot:title>
+      Feed
+    </template>
     <template v-slot:content>
-      <works :cols="4"></works>
+      <works-index :cols="4"></works-index>
     </template>
   </content-layout>
 </template>
 <script>
   import ContentLayout from '../core/ContentLayout.vue'
-  import Works from '../shared/Works.vue'
+  import WorksIndex from '../shared/WorksIndex.vue'
   export default {
     components: {
       ContentLayout,
-      Works
-    },
-    data(){
-      return{
-        muscle_src: '/img/muscle.png',
-      }
+      WorksIndex
     },
     methods:{
-      getMusic(){
-        console.log('get tracks using axios');
-      }
     }
   }
 </script>

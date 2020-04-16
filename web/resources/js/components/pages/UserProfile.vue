@@ -105,7 +105,7 @@
 
           </v-col>
           <v-col cols="8">
-            <works :cols="6"></works>
+            <works-index :cols="6"></works-index>
           </v-col>
         </v-row>
       </v-container>
@@ -113,10 +113,10 @@
   </v-card>
 </template>
 <script>
-  import Works from '../shared/Works.vue'
+  import WorksIndex from '../shared/WorksIndex.vue'
   export default {
     components:{
-      Works
+      WorksIndex
     },
     props:{
       cols: Number

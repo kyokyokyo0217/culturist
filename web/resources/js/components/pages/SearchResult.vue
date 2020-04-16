@@ -1,28 +1,24 @@
 <template>
   <content-layout>
     <template v-slot:content>
-      <v-container class="container-width">
-        <v-subheader>Users</v-subheader>
-        <v-divider></v-divider>
-        <user-profiles :cols="3"></user-profiles>
-        <v-subheader>Works</v-subheader>
-        <v-divider></v-divider>
-      </v-container>
+      <v-subheader>Users</v-subheader>
+      <v-divider></v-divider>
+      <profiles-index :cols="3"></profiles-index>
+      <v-subheader>Works</v-subheader>
+      <v-divider></v-divider>
+      <works-index :cols="4"></works-index>
     </template>
   </content-layout>
 </template>
 <script>
-import ContentLayout from '../core/ContentLayout.vue'
-import UserProfiles from '../shared/UserProfiles.vue'
-export default {
-  components: {
-    ContentLayout,
-    UserProfiles
+  import ContentLayout from '../core/ContentLayout.vue'
+  import ProfilesIndex from '../shared/ProfilesIndex.vue'
+  import WorksIndex from '../shared/WorksIndex.vue'
+  export default {
+    components: {
+      ContentLayout,
+      ProfilesIndex,
+      WorksIndex
+    }
   }
-}
 </script>
-<style scoped>
-  .container-width{
-    width: 70%;
-  }
-</style>

@@ -3,14 +3,13 @@
       <v-card to="/feed" flat>
         <v-img
           :src="logo_src"
-          width="150px"
-          class="mx-auto"
+          width="200"
         ></v-img>
       </v-card>
 
       <v-divider></v-divider>
 
-      <v-list-item to="/user" class="py-2">
+      <v-list-item to="/user" class="py-2" color="black">
         <v-list-item-avatar color="orange" size="48">
           <v-img :src="avator_src"></v-img>
         </v-list-item-avatar>
@@ -32,6 +31,7 @@
             v-for="(item, i) in items"
             :key="i"
             :to="item.path"
+            color="black"
           >
             <v-list-item-content>
               <v-list-item-title >{{ item.title }}</v-list-item-title>
@@ -45,7 +45,7 @@
       <v-col class="text-center">
         <v-btn
           to="/upload"
-          color="primary"
+          outlined
         >
           <v-icon class="mr-2">mdi-cloud-upload</v-icon>
           Upload
@@ -61,7 +61,7 @@
         items: [
           { title: 'Feed', path: '/feed'},
           { title: 'Trending', path: '/trending'},
-          { title: 'likes', path: '/likes'},
+          { title: 'Likes', path: '/likes'},
           { title: 'History', path: '/history'}
         ],
         logo_src: '/img/logo.png',
@@ -74,7 +74,7 @@
 
 <style scoped>
   .border{
-    border-left: 8px solid #1565C0;
+    border-left: 8px solid #000000;
     /* blue darken-3 */
   }
 </style>

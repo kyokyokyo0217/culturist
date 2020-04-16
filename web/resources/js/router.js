@@ -15,11 +15,11 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/feed',
-    component: Feed
+    component: Feed,
   },
   {
     path: '/trending',
-    component: Trending
+    component: Trending,
   },
   {
     path: '/likes',

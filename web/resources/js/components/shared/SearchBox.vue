@@ -6,9 +6,20 @@
     dense
     hide-details
     height="4"
-    class="compact-form ml-4 mt-2"
+    class="compact-form"
+    v-on:keyup.enter="search"
   ></v-text-field>
 </template>
+<script>
+  export default{
+    methods: {
+      search() {
+        console.log('search words');
+        this.$router.push({ path: `/search/ggg` })
+      }
+    }
+  }
+</script>
 <style scoped>
   .v-input{
     flex: 0 0 auto;
