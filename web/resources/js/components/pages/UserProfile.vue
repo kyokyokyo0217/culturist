@@ -61,13 +61,13 @@
             </v-list-item-content>
           </v-col>
           <v-col align-self="end" class="mb-12 text-center">
-            <v-btn v-if="auth && edit" color="primary" outlined @click="saveChange">
+            <v-btn v-if="auth && edit" color="black" outlined @click="saveChange">
               Save Changes
             </v-btn>
-            <v-btn  v-else-if="auth" color="primary" outlined @click="edit =! edit">
+            <v-btn  v-else-if="auth" color="black" outlined @click="edit =! edit">
               Edit Page
             </v-btn>
-            <v-btn v-else color="primary" outlined>
+            <v-btn v-else color="black" outlined>
               Follow
             </v-btn>
           </v-col>
@@ -77,7 +77,7 @@
       <v-container fluid class="profile-nm px-12">
         <v-row>
           <v-col cols="4" class="pa-8">
-            <v-card v-if="edit" class="pa-8" color="cyan lighten-4" flat>
+            <v-card v-if="edit" class="pa-8" flat>
               <v-form>
                 <v-textarea
                   outlined

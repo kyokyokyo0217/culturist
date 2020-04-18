@@ -8,14 +8,20 @@
     height="4"
     class="compact-form"
     v-on:keyup.enter="search"
+    v-model="text"
   ></v-text-field>
 </template>
 <script>
   export default{
+    data(){
+      return{
+        text: '',
+      }
+    },
     methods: {
       search() {
         console.log('search words');
-        this.$router.push({ path: `/search/ggg` })
+        this.$router.push({ path: '/search', query: {result: this.text} })
       }
     }
   }

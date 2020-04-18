@@ -38,12 +38,12 @@ const routes = [
     component: Upload
   },
   {
-    path: '/:userId',
-    component: UserProfile
+    path: '/search*',
+    component: SearchResult
   },
   {
-    path: '/search/:word',
-    component: SearchResult
+    path: '/:userId',
+    component: UserProfile
   }
 ]
 

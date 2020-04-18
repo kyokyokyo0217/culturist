@@ -1,5 +1,8 @@
 <template>
   <content-layout>
+    <template v-slot:title>
+      Showing Results for "{{ $route.query.result }}"
+    </template>
     <template v-slot:content>
       <v-subheader>Users</v-subheader>
       <v-divider></v-divider>

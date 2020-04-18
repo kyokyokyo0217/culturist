@@ -7,31 +7,22 @@
         class="d-flex child-flex"
         :cols="cols"
       >
-        <v-card class="ma-4" flat>
-          <!-- v-card直下にv-avatar置くとradiusが消える -->
-              <v-avatar color="orange" size="124" >
-                <v-img :src="user.src"></v-img>
-              </v-avatar>
-         <!-- <v-card-title>
-           {{user.name}}
-         </v-card-title> -->
-        </v-card>
+        <profile-card :item=user></profile-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
+import ProfileCard from './ProfileCard.vue'
 export default {
+  components: {
+    ProfileCard
+  },
   props:{
     cols: Number
   },
   data(){
     return{
-      // users: [
-      //   {src: '/img/muscle.png'},
-      //   {src: '/img/avator.png'},
-      //   {src: '/img/background.jpg'}
-      // ]
       users:[
           {name: 'muscle',src: '/img/muscle.png'},
           {name: 'avatar', src: '/img/avator.png'},

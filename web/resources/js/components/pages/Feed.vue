@@ -4,7 +4,7 @@
       Feed
     </template>
     <template v-slot:content>
-      <works-index :cols="4"></works-index>
+      <works-index :cols="3"></works-index>
     </template>
   </content-layout>
 </template>

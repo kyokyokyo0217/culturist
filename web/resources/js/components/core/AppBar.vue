@@ -12,13 +12,27 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="2">
+        <!-- v-model? -->
         <v-chip-group
-          active-class="deep-purple accent-4 white--text"
+          mandatory
+          v-model="selectedChip"
+          active-class="black accent-4 white--text disable-events"
           class="d-flex justify-end"
         >
-          <v-chip small>All</v-chip>
-          <v-chip small>Music</v-chip>
-          <v-chip small>Picture</v-chip>
+          <v-chip
+           small
+           value="music"
+           @click="selectMusic"
+          >
+            Music
+          </v-chip>
+          <v-chip
+            small
+            value="picture"
+            @click="selectPicture"
+          >
+            Picture
+          </v-chip>
         </v-chip-group>
       </v-col>
     </v-row>
@@ -26,6 +40,7 @@
     <template v-if="showTabsControl" v-slot:extension>
       <v-tabs
         color="black"
+        v-model="activeTab"
       >
         <v-tab
           v-for="(tab, index) in tabsTitles.trending"
@@ -46,6 +61,8 @@
     data: function() {
       return {
         showTabsControl: false,
+        selectedChip: 'music',
+        activeTab: 0,
         tabsTitles: {
           trending: [
             'THIS WEEK', 'THIS MONTH', 'ALL TIME'
@@ -56,11 +73,21 @@
     watch: {
       // tab使うページが増えたら困る
       '$route'(to, from) {
+        this.selectedChip = 'music'
         if(this.$route.path === '/trending'){
           this.showTabsControl = true;
         }else{
           this.showTabsControl = false;
         }
+
+      }
+    },
+    methods: {
+      selectMusic(){
+        this.$eventHub.$emit('selectMusic')
+      },
+      selectPicture(){
+        this.$eventHub.$emit('selectPicture')
       }
     }
   }
@@ -68,5 +95,8 @@
 <style scoped>
   .v-toolbar__content{
     padding: 0px;
+  }
+  .disable-events {
+    pointer-events: none
   }
 </style>

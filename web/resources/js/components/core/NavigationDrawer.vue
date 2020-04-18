@@ -46,6 +46,7 @@
         <v-btn
           to="/upload"
           outlined
+
         >
           <v-icon class="mr-2">mdi-cloud-upload</v-icon>
           Upload
@@ -76,5 +77,8 @@
   .border{
     border-left: 8px solid #000000;
     /* blue darken-3 */
+  }
+  .v-btn--active{
+    background-color: white;
   }
 </style>
