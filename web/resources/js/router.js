@@ -5,7 +5,6 @@ import Feed from './components/pages/Feed.vue'
 import Trending from './components/pages/Trending.vue'
 import Likes from './components/pages/Likes.vue'
 import History from './components/pages/History.vue'
-import WorkDetail from './components/pages/WorkDetail.vue'
 import Upload from './components/pages/Upload.vue'
 import UserProfile from './components/pages/UserProfile.vue'
 import SearchResult from  './components/pages/SearchResult.vue'
@@ -28,10 +27,6 @@ const routes = [
   {
     path: '/history',
     component: History
-  },
-  {
-    path: '/work/:workId',
-    component: WorkDetail
   },
   {
     path: '/upload',

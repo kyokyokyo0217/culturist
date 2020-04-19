@@ -49,11 +49,6 @@ export default{
 }
 </script>
 <style scoped>
-  /* .img{
-    position:absolute;
-    top: 0;
-    left: 0;
-  } */
   .show-btn{
     opacity: 1 !important;
   }

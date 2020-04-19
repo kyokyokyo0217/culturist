@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app permanent :width="200">
+    <v-navigation-drawer app permanent :width="200" style="z-index: 0">
       <v-card to="/feed" flat>
         <v-img
           :src="logo_src"
@@ -43,10 +43,11 @@
       <v-divider></v-divider>
 
       <v-col class="text-center">
+        <!-- activeのとき黒にしたい -->
         <v-btn
           to="/upload"
           outlined
-
+          color="grey"
         >
           <v-icon class="mr-2">mdi-cloud-upload</v-icon>
           Upload
@@ -76,9 +77,14 @@
 <style scoped>
   .border{
     border-left: 8px solid #000000;
-    /* blue darken-3 */
   }
-  .v-btn--active{
+  .v-btn:hover{
+    background-color: white !important;
+    color: black !important;
+  }
+  .theme--light.v-btn--active:before{
     background-color: white;
+    color: black !important;
+    opacity: 0 !important;
   }
 </style>

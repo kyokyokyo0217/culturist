@@ -5,48 +5,59 @@
       max-height="400px"
       :gradient="edit ? 'to bottom, rgba(0,0,0,0), rgba(100,100,100,25)' : undefined"
     >
-      <v-container fluid class="fill-height">
+      <v-container fluid class="fill-height" v-if="edit">
         <v-row>
           <!-- align-selfが効いてない -->
           <v-col cols="12" class="text-center" align-self="end">
-            <v-btn v-if="edit" @click="showPhotoUploader">
-              <v-icon class="mr-2">mdi-camera</v-icon>
-              Change Cover Photo
-            </v-btn>
+            <!-- close-on~~ :付けないと動かない-->
+            <v-menu
+              v-model="backgroundMenu"
+              :close-on-click="false"
+              :close-on-content-click="false"
+              :nudge-width="200"
+              offset-y
+            >
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-on="on"
+                >
+                  <v-icon class="mr-2">mdi-camera</v-icon>
+                  Change Cover Photo
+                </v-btn>
+              </template>
+              <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card>
+            </v-menu>
           </v-col>
         </v-row>
       </v-container>
     </v-img>
 
     <v-card color="grey lighten-5" height="100%">
+
       <v-container class="profile-nm px-12">
         <v-row>
           <v-col class="text-right">
             <v-list-item-avatar size="200" color="orange">
               <v-img :src="avator_src">
-
-                <!-- <v-dialog v-model="dialog" persistent max-width="200px">
+                <v-menu
+                  v-if="edit"
+                  v-model="avatarMenu"
+                  :close-on-click="false"
+                  :close-on-content-click="false"
+                  nudge-width="200"
+                  offset-y
+                >
                   <template v-slot:activator="{ on }">
-                    <v-btn v-if="edit" class="ma-auto" v-on="on">
+                    <v-btn
+                      v-on="on"
+                      class="ma-auto"
+                    >
                       <v-icon class="mr-2">mdi-camera</v-icon>
                       Change
                     </v-btn>
                   </template>
-                  <v-card>
-                    <v-card-title class="headline">Use Google's location service?</v-card-title>
-                    <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="green darken-1" text @click="dialog = false">Disagree</v-btn>
-                      <v-btn color="green darken-1" text @click="dialog = false">Agree</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog> -->
-
-                <v-btn v-if="edit" class="ma-auto">
-                  <v-icon class="mr-2">mdi-camera</v-icon>
-                  Change
-                </v-btn>
+                  <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card>
+                </v-menu>
               </v-img>
             </v-list-item-avatar>
           </v-col>
@@ -109,13 +120,17 @@
           </v-col>
         </v-row>
       </v-container>
+
     </v-card>
+
   </v-card>
 </template>
 <script>
+  import ImageUploadCard from '../shared/ImageUploadCard.vue'
   import WorksIndex from '../shared/WorksIndex.vue'
   export default {
     components:{
+      ImageUploadCard,
       WorksIndex
     },
     props:{
@@ -128,7 +143,8 @@
         muscle_src: '/img/muscle.png',
         auth: true,
         edit: false,
-        dialog: false
+        avatarMenu: false,
+        backgroundMenu: false
       }
     },
     methods: {

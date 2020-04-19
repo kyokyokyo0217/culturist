@@ -8,7 +8,12 @@
     </div>
     <!-- v-card-titleはなぜかflexらしい -->
    <v-card-title class="justify-center">
-     {{item.name}}
+     <router-link
+       to="/user"
+       class="user-link"
+     >
+       {{ item.name }}
+     </router-link>
    </v-card-title>
   </v-card>
 </template>
@@ -22,3 +27,12 @@ export default{
    }
 }
 </script>
+<style scoped>
+  .user-link{
+    text-decoration: none;
+    color: grey;
+  }
+  .user-link:hover{
+    color:black;
+  }
+</style>
