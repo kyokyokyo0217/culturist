@@ -1,40 +1,28 @@
 <template>
   <v-app>
-  <v-card
-    class="mx-auto"
-    max-width="400"
-  >
-    <v-img
-      class="white--text align-end"
-      height="200px"
-      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-    >
-      <v-card-title>Top 10 Australian beaches</v-card-title>
-    </v-img>
-
-    <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-
-    <v-card-text class="text--primary">
-      <div>Whitehaven Beach</div>
-
-      <div>Whitsunday Island, Whitsunday Islands</div>
-    </v-card-text>
-
-    <v-card-actions>
-      <v-btn
-        color="orange"
-        text
-      >
-        Share
-      </v-btn>
-
-      <v-btn
-        color="orange"
-        text
-      >
-        Explore
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-</v-app>
+    <navigation-drawer></navigation-drawer>
+    <app-bar></app-bar>
+    <main-view></main-view>
+    <audio-player :file="audio"></audio-player>
+  </v-app>
 </template>
+
+<script>
+  import NavigationDrawer from './components//core/NavigationDrawer.vue'
+  import AudioPlayer from './components/core/AudioPlayer.vue'
+  import MainView from './components/core/MainView.vue'
+  import AppBar from './components/core/AppBar.vue'
+  export default {
+    components: {
+      NavigationDrawer,
+      AppBar,
+      MainView,
+      AudioPlayer,
+    },
+    data(){
+      return{
+        audio: '/audio/jinglebells.mp3'
+      }
+    },
+  }
+</script>
