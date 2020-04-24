@@ -1,10 +1,11 @@
 require('./bootstrap')
 
 import Vue from 'vue'
-import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import '@mdi/font/css/materialdesignicons.css'
+import store from './store'
+import router from './router'
 import EventHub from './EventHub'
 
 import App from './App.vue'
@@ -14,6 +15,7 @@ Vue.use(EventHub)
 
 new Vue({
     el: '#app',
+    store,
     router,
     vuetify: new Vuetify({
       icons: {

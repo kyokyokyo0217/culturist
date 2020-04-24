@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import Login from './components/pages/Login.vue'
+import SignUp from './components/pages/SignUp.vue'
 import Feed from './components/pages/Feed.vue'
 import Trending from './components/pages/Trending.vue'
 import Likes from './components/pages/Likes.vue'
@@ -12,6 +14,14 @@ import SearchResult from  './components/pages/SearchResult.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/login',
+    component: Login,
+  },
+  {
+    path: '/signup',
+    component: SignUp,
+  },
   {
     path: '/feed',
     component: Feed,

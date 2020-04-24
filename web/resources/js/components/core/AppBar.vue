@@ -35,6 +35,11 @@
           </v-chip>
         </v-chip-group>
       </v-col>
+      <v-col cols="2">
+        <v-btn @click="logout">
+          logout
+        </v-btn>
+      </v-col>
     </v-row>
 <!-- 論理的にはurlから真偽値を得たい -->
     <template v-if="showTabsControl" v-slot:extension>
@@ -88,6 +93,10 @@
       },
       selectPicture(){
         this.$eventHub.$emit('selectPicture')
+      },
+      async logout () {
+        await this.$store.dispatch('auth/logout')
+        this.$router.push('/login')
       }
     }
   }

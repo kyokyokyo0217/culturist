@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <navigation-drawer></navigation-drawer>
+    <navigation-drawer v-if="auth"></navigation-drawer>
     <app-bar></app-bar>
     <main-view></main-view>
-    <audio-player :file="audio"></audio-player>
+    <audio-player :file="audio" v-if="auth"></audio-player>
   </v-app>
 </template>
 
@@ -21,7 +21,8 @@
     },
     data(){
       return{
-        audio: '/audio/jinglebells.mp3'
+        audio: '/audio/jinglebells.mp3',
+        auth: false
       }
     },
   }
