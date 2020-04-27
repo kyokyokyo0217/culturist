@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import store from './store'
+
 import Login from './components/pages/Login.vue'
 import SignUp from './components/pages/SignUp.vue'
 import Feed from './components/pages/Feed.vue'
@@ -17,6 +19,13 @@ const routes = [
   {
     path: '/login',
     component: Login,
+    beforeEnter (to, from, next) {
+      if (store.getters['auth/check']) {
+        next('/feed')
+      } else {
+        next()
+      }
+    }
   },
   {
     path: '/signup',

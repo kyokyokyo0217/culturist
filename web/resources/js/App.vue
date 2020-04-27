@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <navigation-drawer v-if="auth"></navigation-drawer>
+    <navigation-drawer v-if="isLogin"></navigation-drawer>
     <app-bar></app-bar>
     <main-view></main-view>
-    <audio-player :file="audio" v-if="auth"></audio-player>
+    <audio-player :file="audio" v-if="isLogin"></audio-player>
   </v-app>
 </template>
 
@@ -24,6 +24,11 @@
         audio: '/audio/jinglebells.mp3',
         auth: false
       }
+    },
+    computed: {
+      isLogin () {
+        return this.$store.getters['auth/check']
+      },
     },
   }
 </script>

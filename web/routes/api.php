@@ -17,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::post('/works', 'WorkController@create')->name('work.create');
+Route::get('/user', fn() => Auth::user())->name('user');

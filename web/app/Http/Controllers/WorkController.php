@@ -11,13 +11,21 @@ use Illuminate\Support\Facades\Storage;
 
 class WorkController extends Controller
 {
+  public function __construct()
+  {
+      // 認証が必要
+      $this->middleware('auth');
+  }
+
   public function create(StoreWork $request)
   {
-    $extension = $request->photo->extension();
+    $extension = $request->work->extension();
 
     $work = new Work();
 
     $work->filename = $work->id . '.' . $extension;
+
+    $work->type = 'music';
 
     Storage::cloud()
         ->putFileAs('', $request->work, $work->filename, 'public');
@@ -26,7 +34,7 @@ class WorkController extends Controller
     DB::beginTransaction();
 
     try {
-        // Auth::user()->works()->save($work);
+        Auth::user()->works()->save($work);
         DB::commit();
     } catch (\Exception $exception) {
         DB::rollBack();

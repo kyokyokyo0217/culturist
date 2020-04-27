@@ -15,10 +15,10 @@
       </v-list-item-avatar>
       <v-list-item-content class="text-center">
         <v-list-item-title class="title">
-          Name
+          {{ accountname }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          @handlename
+          @{{ username }}
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
@@ -71,6 +71,14 @@
         right: null,
       }
     },
+    computed: {
+      accountname () {
+        return this.$store.getters['auth/accountname']
+      },
+      username () {
+        return this.$store.getters['auth/username']
+      }
+    }
   }
 </script>
 

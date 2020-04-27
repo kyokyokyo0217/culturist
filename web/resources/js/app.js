@@ -13,15 +13,21 @@ import App from './App.vue'
 Vue.use(Vuetify)
 Vue.use(EventHub)
 
-new Vue({
-    el: '#app',
-    store,
-    router,
-    vuetify: new Vuetify({
-      icons: {
-        iconfont: 'mdi',
-      },
-    }),
-    components: { App },
-    template: '<App />'
-})
+const createApp = async () => {
+  await store.dispatch('auth/currentUser')
+
+    new Vue({
+        el: '#app',
+        store,
+        router,
+        vuetify: new Vuetify({
+          icons: {
+            iconfont: 'mdi',
+          },
+        }),
+        components: { App },
+        template: '<App />'
+    })
+}
+
+createApp()

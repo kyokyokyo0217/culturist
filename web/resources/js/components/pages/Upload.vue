@@ -8,7 +8,10 @@
         <v-container>
           <v-row>
             <v-col>
-              <v-file-input label="File Input"></v-file-input>
+              <v-file-input label="File Input" @change="onFileChange">
+              </v-file-input>
+              <v-img :src="preview" v-if="preview">
+              </v-img>
             </v-col>
             <v-col>
               <v-text-field
@@ -35,13 +38,50 @@
     },
     data: function () {
       return {
-        file: null,
         fileSrc: '/img/avator.png',
         title: '',
+        preview: null,
+        file: null,
       }
     },
     methods: {
-      uploadFile(){
+      // ファイルが１つの前提
+      onFileChange (event) {
+        console.log(event)
+        this.reset()
+
+        if (event.length === 0) {
+          return false
+        }
+
+        // if (! event.target.files[0].type.match('image.*')) {
+        //   return false
+        // }
+
+        const reader = new FileReader()
+
+        reader.onload = e => {
+          this.preview = e.target.result
+        }
+
+        reader.readAsDataURL(event)
+
+        this.file = event
+        console.log(this.file)
+      },
+      reset () {
+        this.preview = ''
+        this.file = null
+        this.$el.querySelector('input[type="file"]').value = null
+      },
+      async uploadFile(){
+        const formData = new FormData()
+        formData.append('work', this.file)
+        console.log(formData)
+        console.log(formData.get('work'))
+        const response = await axios.post('/api/works', formData)
+
+        this.reset()
       }
     }
   }

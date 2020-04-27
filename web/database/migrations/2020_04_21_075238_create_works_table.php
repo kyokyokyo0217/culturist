@@ -14,7 +14,7 @@ class CreateWorksTable extends Migration
     public function up()
     {
         Schema::create('works', function (Blueprint $table) {
-          $table->id();
+          $table->string('id')->primary();
           $table->foreignId('user_id')->constrained()->onDelete('cascade');
           $table->string('filename');
           $table->string('type');
