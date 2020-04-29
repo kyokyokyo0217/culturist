@@ -25,9 +25,9 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+     protected $visible = [
+         'name', 'user_name'
+     ];
 
     /**
      * The attributes that should be cast to native types.
@@ -38,8 +38,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function works()
+
+    public function pictures()
     {
-      return $this->hasMany('App\Work');
+      return $this->hasMany('App\Picture');
     }
 }

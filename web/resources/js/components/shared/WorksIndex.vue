@@ -2,13 +2,13 @@
   <v-container fluid>
     <v-row>
       <v-col
-        v-for="(work, index) in works"
+        v-for="(picture, index) in pictures"
         :key="index"
         class="d-flex child-flex"
         :cols="cols"
       >
-      <track-card :item=work v-if="selectMusic"></track-card>
-      <picture-card :item=work v-if="selectPicture"></picture-card>
+      <!-- <track-card v-if="selectMusic" :item=work :pictures=pictures></track-card> -->
+      <picture-card :item=picture v-if="selectPicture"></picture-card>
       </v-col>
     </v-row>
   </v-container>
@@ -22,7 +22,8 @@ export default {
     PictureCard
   },
   props:{
-    cols: Number
+    cols: Number,
+    pictures: Array
   },
   mounted: function () {
     this.$eventHub.$on('selectMusic', this.getMusic)

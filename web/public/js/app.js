@@ -2501,8 +2501,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _core_ContentLayout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core/ContentLayout.vue */ "./resources/js/components/core/ContentLayout.vue");
-/* harmony import */ var _shared_WorksIndex_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/WorksIndex.vue */ "./resources/js/components/shared/WorksIndex.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _core_ContentLayout_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../core/ContentLayout.vue */ "./resources/js/components/core/ContentLayout.vue");
+/* harmony import */ var _shared_WorksIndex_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/WorksIndex.vue */ "./resources/js/components/shared/WorksIndex.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2517,10 +2525,68 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    ContentLayout: _core_ContentLayout_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    WorksIndex: _shared_WorksIndex_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    ContentLayout: _core_ContentLayout_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    WorksIndex: _shared_WorksIndex_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  methods: {}
+  data: function data() {
+    return {
+      pictures: []
+    };
+  },
+  methods: {
+    fetchPhotos: function fetchPhotos() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get('/api/pictures');
+
+              case 2:
+                response = _context.sent;
+                // if (response.status !== OK) {
+                //   this.$store.commit('error/setCode', response.status)
+                //   return false
+                // }
+                _this.pictures = response.data.data;
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  },
+  watch: {
+    $route: {
+      handler: function handler() {
+        var _this2 = this;
+
+        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.next = 2;
+                  return _this2.fetchPhotos();
+
+                case 2:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2);
+        }))();
+      },
+      immediate: true
+    }
+  }
 });
 
 /***/ }),
@@ -2941,18 +3007,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 formData = new FormData();
-                formData.append('work', _this2.file);
+                formData.append('picture', _this2.file);
                 console.log(formData);
-                console.log(formData.get('work'));
+                console.log(formData.get('picture'));
                 _context.next = 6;
-                return axios.post('/api/works', formData);
+                return axios.post('/api/pictures', formData);
 
               case 6:
                 response = _context.sent;
 
+                _this2.$router.push('/feed');
+
                 _this2.reset();
 
-              case 8:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -3216,10 +3284,7 @@ __webpack_require__.r(__webpack_exports__);
     PictureDetailCard: _PictureDetailCard_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    item: {
-      type: Object,
-      required: true
-    }
+    item: Object
   },
   data: function data() {
     return {
@@ -3553,7 +3618,8 @@ __webpack_require__.r(__webpack_exports__);
     PictureCard: _PictureCard_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
-    cols: Number
+    cols: Number,
+    pictures: Array
   },
   mounted: function mounted() {
     this.$eventHub.$on('selectMusic', this.getMusic);
@@ -41585,7 +41651,9 @@ var render = function() {
       {
         key: "content",
         fn: function() {
-          return [_c("works-index", { attrs: { cols: 3 } })]
+          return [
+            _c("works-index", { attrs: { cols: 3, pictures: _vm.pictures } })
+          ]
         },
         proxy: true
       }
@@ -42499,7 +42567,7 @@ var render = function() {
     [
       _c("v-img", {
         staticClass: "picture-card",
-        attrs: { src: _vm.item.src, "aspect-ratio": "1" },
+        attrs: { src: _vm.item.url, "aspect-ratio": "1" },
         on: {
           click: function($event) {
             _vm.overlay = true
@@ -42622,7 +42690,7 @@ var render = function() {
             [
               _c("v-img", {
                 attrs: {
-                  src: _vm.item.src,
+                  src: _vm.item.url,
                   "max-width": "1000px",
                   "max-height": "500px",
                   contain: ""
@@ -42918,7 +42986,7 @@ var render = function() {
     [
       _c(
         "v-row",
-        _vm._l(_vm.works, function(work, index) {
+        _vm._l(_vm.pictures, function(picture, index) {
           return _c(
             "v-col",
             {
@@ -42927,12 +42995,8 @@ var render = function() {
               attrs: { cols: _vm.cols }
             },
             [
-              _vm.selectMusic
-                ? _c("track-card", { attrs: { item: work } })
-                : _vm._e(),
-              _vm._v(" "),
               _vm.selectPicture
-                ? _c("picture-card", { attrs: { item: work } })
+                ? _c("picture-card", { attrs: { item: picture } })
                 : _vm._e()
             ],
             1
@@ -102783,7 +102847,7 @@ var actions = {
           switch (_context4.prev = _context4.next) {
             case 0:
               _context4.next = 2;
-              return axios.get('/api/user');
+              return axios.get('/api/auth/user');
 
             case 2:
               response = _context4.sent;

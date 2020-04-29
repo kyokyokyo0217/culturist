@@ -39,7 +39,7 @@
 
       <v-row justify="center">
         <v-img
-          :src="item.src"
+          :src="item.url"
           max-width="1000px"
           max-height="500px"
           contain

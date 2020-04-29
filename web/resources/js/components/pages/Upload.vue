@@ -76,10 +76,12 @@
       },
       async uploadFile(){
         const formData = new FormData()
-        formData.append('work', this.file)
+        formData.append('picture', this.file)
         console.log(formData)
-        console.log(formData.get('work'))
-        const response = await axios.post('/api/works', formData)
+        console.log(formData.get('picture'))
+        const response = await axios.post('/api/pictures', formData)
+
+        this.$router.push('/feed')
 
         this.reset()
       }

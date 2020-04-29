@@ -28,7 +28,7 @@ const actions = {
     context.commit('setUser', null)
   },
   async currentUser (context) {
-    const response = await axios.get('/api/user')
+    const response = await axios.get('/api/auth/user')
     const user = response.data || null
     context.commit('setUser', user)
   }

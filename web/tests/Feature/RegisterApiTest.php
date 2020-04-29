@@ -18,7 +18,7 @@ class RegisterApiTest extends TestCase
     {
         $data = [
             'name' => 'dumy user',
-            'userId' => 'dumydumy',
+            'user_name' => 'dumydumy',
             'email' => 'dumy@email.com',
             'password' => 'test1234',
             'password_confirmation' => 'test1234',

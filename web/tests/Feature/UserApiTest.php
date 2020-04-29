@@ -22,12 +22,14 @@ class UserApiTest extends TestCase
      */
     public function should_return_authenticated_user()
     {
-        $response = $this->actingAs($this->user)->json('GET', route('user'));
-
+        $response = $this->actingAs($this->user)->json('GET', route('auth.user'));
+        $response->dump();
+        // 通ってない？？
         $response
             ->assertStatus(200)
             ->assertJson([
                 'name' => $this->user->name,
+                'user_name' => $this->user->user_name
             ]);
     }
 
@@ -36,7 +38,7 @@ class UserApiTest extends TestCase
      */
     public function should_return_empty_string()
     {
-        $response = $this->json('GET', route('user'));
+        $response = $this->json('GET', route('auth.user'));
 
         $response->assertStatus(200);
         $this->assertEquals("", $response->content());

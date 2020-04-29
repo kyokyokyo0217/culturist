@@ -16,7 +16,7 @@
 
     <v-img
       @click="overlay = true"
-      :src="item.src"
+      :src="item.url"
       aspect-ratio="1"
       class="picture-card"
     >
@@ -36,10 +36,7 @@ export default{
     PictureDetailCard
   },
   props: {
-    item: {
-      type:Object,
-      required: true,
-    }
+    item: Object
   },
   data(){
     return{
