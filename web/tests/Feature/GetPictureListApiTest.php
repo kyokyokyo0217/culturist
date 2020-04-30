@@ -29,6 +29,7 @@ class GetPictureListApiTest extends TestCase
           return [
               'id' => $picture->id,
               'url' => $picture->url,
+              'title' => $picture->title,
               'artist' => [
                   'name' => $picture->artist->name,
                   'user_name' => $picture->artist->user_name

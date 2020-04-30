@@ -38,7 +38,6 @@
     },
     data: function () {
       return {
-        fileSrc: '/img/avator.png',
         title: '',
         preview: null,
         file: null,
@@ -77,8 +76,9 @@
       async uploadFile(){
         const formData = new FormData()
         formData.append('picture', this.file)
-        console.log(formData)
-        console.log(formData.get('picture'))
+        formData.append('title', this.title)
+        // console.log(formData)
+        // console.log(formData.get('picture'))
         const response = await axios.post('/api/pictures', formData)
 
         this.$router.push('/feed')

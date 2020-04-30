@@ -17,6 +17,7 @@ class CreatePicturesTable extends Migration
           $table->string('id')->primary();
           $table->foreignId('user_id')->constrained()->onDelete('cascade');
           $table->string('filename');
+          $table->string('title');
           $table->timestamps();
         });
     }

@@ -2961,7 +2961,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      fileSrc: '/img/avator.png',
       title: '',
       preview: null,
       file: null
@@ -3008,19 +3007,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 formData = new FormData();
                 formData.append('picture', _this2.file);
-                console.log(formData);
-                console.log(formData.get('picture'));
-                _context.next = 6;
+                formData.append('title', _this2.title); // console.log(formData)
+                // console.log(formData.get('picture'))
+
+                _context.next = 5;
                 return axios.post('/api/pictures', formData);
 
-              case 6:
+              case 5:
                 response = _context.sent;
 
                 _this2.$router.push('/feed');
 
                 _this2.reset();
 
-              case 9:
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -42696,7 +42696,7 @@ var render = function() {
                 "v-list-item-content",
                 [
                   _c("v-list-item-title", { staticClass: "headline" }, [
-                    _vm._v("Picture Title")
+                    _vm._v(_vm._s(_vm.item.title))
                   ]),
                   _vm._v(" "),
                   _c(
@@ -42705,8 +42705,22 @@ var render = function() {
                       _vm._v("\n          by\n          "),
                       _c(
                         "router-link",
-                        { staticClass: "user-link", attrs: { to: "/user" } },
-                        [_vm._v("\n            username\n          ")]
+                        {
+                          staticClass: "user-link",
+                          attrs: {
+                            to: {
+                              name: "user",
+                              params: { username: _vm.item.artist.user_name }
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(_vm.item.artist.name) +
+                              "\n          "
+                          )
+                        ]
                       )
                     ],
                     1

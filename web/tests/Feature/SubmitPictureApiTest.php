@@ -32,6 +32,7 @@ class SubmitPictureApiTest extends TestCase
         $response = $this->actingAs($this->user)
             ->postJson('api/pictures', [
                 'picture' => UploadedFile::fake()->image('photo.jpg'),
+                'title' => 'untitled'
             ]);
 
         $response->assertStatus(201);
@@ -40,7 +41,12 @@ class SubmitPictureApiTest extends TestCase
 
         $this->assertRegExp('/^[0-9a-zA-Z-_]{12}$/', $picture->id);
 
+        // $this->assertExists($picture->title);
+
+        $this->assertDatabaseHas('pictures', ['title' => 'untitled']);
+
         Storage::cloud()->assertExists($picture->filename);
+
     }
 
     /**

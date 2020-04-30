@@ -51,6 +51,7 @@ class PictureController extends Controller
         $picture = new Picture();
 
         $picture->filename = $picture->id . '.' . $extension;
+        $picture->title = $request->title;
 
         Storage::cloud()
             ->putFileAs('', $request->picture, $picture->filename, 'public');

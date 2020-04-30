@@ -17,7 +17,7 @@ class Picture extends Model
   ];
 
   protected $visible = [
-      'id', 'artist', 'url',
+      'id', 'artist', 'url', 'title'
   ];
 
 

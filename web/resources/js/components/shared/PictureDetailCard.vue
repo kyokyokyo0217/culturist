@@ -11,14 +11,14 @@
       <v-list-item>
         <v-list-item-avatar color="grey"></v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title class="headline">Picture Title</v-list-item-title>
+          <v-list-item-title class="headline">{{ item.title }}</v-list-item-title>
           <v-list-item-subtitle>
             by
             <router-link
-              to="/user"
+              :to="{ name: 'user', params:{username: item.artist.user_name}}"
               class="user-link"
             >
-              username
+              {{ item.artist.name }}
             </router-link>
           </v-list-item-subtitle>
         </v-list-item-content>
