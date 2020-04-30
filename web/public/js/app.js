@@ -3042,8 +3042,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _shared_ImageUploadCard_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared/ImageUploadCard.vue */ "./resources/js/components/shared/ImageUploadCard.vue");
-/* harmony import */ var _shared_WorksIndex_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/WorksIndex.vue */ "./resources/js/components/shared/WorksIndex.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_ImageUploadCard_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/ImageUploadCard.vue */ "./resources/js/components/shared/ImageUploadCard.vue");
+/* harmony import */ var _shared_WorksIndex_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/WorksIndex.vue */ "./resources/js/components/shared/WorksIndex.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -3175,8 +3183,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    ImageUploadCard: _shared_ImageUploadCard_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    WorksIndex: _shared_WorksIndex_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    ImageUploadCard: _shared_ImageUploadCard_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    WorksIndex: _shared_WorksIndex_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
     cols: Number
@@ -3189,13 +3197,63 @@ __webpack_require__.r(__webpack_exports__);
       auth: true,
       edit: false,
       avatarMenu: false,
-      backgroundMenu: false
+      backgroundMenu: false,
+      user: null
     };
   },
   methods: {
     saveChange: function saveChange() {
       console.log('save change');
       this.edit = !this.edit;
+    },
+    fetchUser: function fetchUser() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("/api/user/".concat(_this.$route.params.username));
+
+              case 2:
+                response = _context.sent;
+                console.log(_this.response);
+                _this.user = response.data;
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  },
+  watch: {
+    $route: {
+      handler: function handler() {
+        var _this2 = this;
+
+        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.next = 2;
+                  return _this2.fetchUser();
+
+                case 2:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2);
+        }))();
+      },
+      immediate: true
     }
   }
 });
@@ -41537,7 +41595,13 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-list-item",
-        { staticClass: "py-2", attrs: { to: "/user", color: "black" } },
+        {
+          staticClass: "py-2",
+          attrs: {
+            to: { name: "user", params: { username: _vm.username } },
+            color: "black"
+          }
+        },
         [
           _c(
             "v-list-item-avatar",
@@ -42348,7 +42412,9 @@ var render = function() {
                             { staticClass: "display-2" },
                             [
                               _vm._v(
-                                "\n              Name namename\n            "
+                                "\n                " +
+                                  _vm._s(_vm.user.name) +
+                                  "\n            "
                               )
                             ]
                           ),
@@ -42358,7 +42424,9 @@ var render = function() {
                             { staticClass: "headline" },
                             [
                               _vm._v(
-                                "\n                @username\n            "
+                                "\n                @" +
+                                  _vm._s(_vm.user.user_name) +
+                                  "\n            "
                               )
                             ]
                           )
@@ -102725,8 +102793,9 @@ var routes = [{
   path: '/search*',
   component: _components_pages_SearchResult_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
 }, {
-  path: '/:userId',
-  component: _components_pages_UserProfile_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
+  path: '/user/:username',
+  component: _components_pages_UserProfile_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
+  name: 'user'
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',

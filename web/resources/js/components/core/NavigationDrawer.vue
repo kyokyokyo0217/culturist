@@ -9,7 +9,7 @@
 
     <v-divider></v-divider>
 
-    <v-list-item to="/user" class="py-2" color="black">
+    <v-list-item :to="{ name: 'user', params:{username: username}}" class="py-2" color="black">
       <v-list-item-avatar color="orange" size="48">
         <v-img :src="avator_src"></v-img>
       </v-list-item-avatar>

@@ -64,10 +64,10 @@
           <v-col align-self="end" class="mb-6">
             <v-list-item-content>
               <v-list-item-title class="display-2">
-                Name namename
+                  {{ user.name }}
               </v-list-item-title>
               <v-list-item-subtitle class="headline">
-                  @username
+                  @{{ user.user_name }}
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-col>
@@ -144,15 +144,29 @@
         auth: true,
         edit: false,
         avatarMenu: false,
-        backgroundMenu: false
+        backgroundMenu: false,
+        user: null
       }
     },
     methods: {
       saveChange(){
         console.log('save change');
         this.edit =! this.edit;
+      },
+      async fetchUser(){
+        const response = await axios.get(`/api/user/${this.$route.params.username}`)
+        console.log(this.response)
+        this.user = response.data
       }
-    }
+    },
+    watch: {
+      $route: {
+        async handler () {
+          await this.fetchUser()
+        },
+        immediate: true
+      }
+    },
   }
 </script>
 <style scoped>

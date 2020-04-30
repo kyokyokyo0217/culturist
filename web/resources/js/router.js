@@ -56,8 +56,9 @@ const routes = [
     component: SearchResult
   },
   {
-    path: '/:userId',
-    component: UserProfile
+    path: '/user/:username',
+    component: UserProfile,
+    name: 'user'
   }
 ]
 
