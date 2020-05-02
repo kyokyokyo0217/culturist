@@ -5,7 +5,7 @@
   >
     <v-hover v-slot:default="{ hover }">
     <v-img
-      :src="item.src"
+      :src="item.artwork.url"
       aspect-ratio="1"
       contain
       :class="{'image-clickable': hover}"
@@ -30,10 +30,10 @@
     <v-card-text class="py-0">
       <p class="ma-0 subtitle-1 black--text">{{ item.title }}</p>
       <router-link
-        to="/user"
+        :to="{ name: 'user', params:{username: item.artist.user_name}}"
         class="user-link"
       >
-        {{ item.userName }}
+        {{ item.artist.user_name }}
       </router-link>
     </v-card-text>
   </v-card>

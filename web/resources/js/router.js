@@ -12,6 +12,7 @@ import History from './components/pages/History.vue'
 import Upload from './components/pages/Upload.vue'
 import UserProfile from './components/pages/UserProfile.vue'
 import SearchResult from  './components/pages/SearchResult.vue'
+import UploadTrack from './components/pages/UploadTrack.vue'
 
 Vue.use(VueRouter)
 
@@ -59,6 +60,10 @@ const routes = [
     path: '/user/:username',
     component: UserProfile,
     name: 'user'
+  },
+  {
+    path: '/uploadtrack',
+    component: UploadTrack,
   }
 ]
 

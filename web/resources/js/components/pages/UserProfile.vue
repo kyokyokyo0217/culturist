@@ -155,7 +155,6 @@
       },
       async fetchUser(){
         const response = await axios.get(`/api/user/${this.$route.params.username}`)
-        console.log(this.response)
         this.user = response.data
       }
     },

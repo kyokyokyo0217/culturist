@@ -4,7 +4,7 @@
       Feed
     </template>
     <template v-slot:content>
-      <works-index :cols="3" :pictures=pictures></works-index>
+      <works-index :cols="3" :pictures=pictures :tracks=tracks></works-index>
     </template>
   </content-layout>
 </template>
@@ -18,7 +18,8 @@
     },
     data: function(){
       return{
-        pictures: []
+        pictures: [],
+        tracks: []
       }
     },
     methods:{
@@ -31,12 +32,17 @@
         // }
 
         this.pictures = response.data.data
+      },
+      async fetchTracks () {
+        const response = await axios.get('/api/tracks')
+        this.tracks = response.data.data
       }
     },
     watch: {
       $route: {
         async handler () {
-          await this.fetchPhotos()
+          await this.fetchTracks()
+          // await this.fetchPhotos()
         },
         immediate: true
       }

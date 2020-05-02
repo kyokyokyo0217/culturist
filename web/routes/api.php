@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::resource('pictures', 'PictureController');
-Route::get('/works', 'WorkController@index')->name('work.index');
-Route::post('/works', 'WorkController@create')->name('work.create');
+Route::resource('tracks', 'TrackController');
+Route::resource('artworks', 'ArtworkController');
 Route::get('/auth/user', function(){return Auth::user();})->name('auth.user');
 Route::get('/user/{user:user_name}', function (App\User $user) {return $user;})->name('user');

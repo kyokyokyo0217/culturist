@@ -4,7 +4,7 @@
 
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
-use App\Work;
+use App\Picture;
 
 $factory->define(App\Picture::class, function (Faker $faker) {
     return [

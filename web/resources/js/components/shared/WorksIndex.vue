@@ -2,13 +2,22 @@
   <v-container fluid>
     <v-row>
       <v-col
+        v-if="selectMusic"
+        v-for="(track, index) in tracks"
+        :key="index"
+        class="d-flex child-flex"
+        :cols="cols"
+      >
+        <track-card :item=track></track-card>
+      </v-col>
+      <v-col
+        v-if="selectPicture"
         v-for="(picture, index) in pictures"
         :key="index"
         class="d-flex child-flex"
         :cols="cols"
       >
-      <!-- <track-card v-if="selectMusic" :item=work :pictures=pictures></track-card> -->
-      <picture-card :item=picture v-if="selectPicture"></picture-card>
+        <picture-card :item=picture></picture-card>
       </v-col>
     </v-row>
   </v-container>
@@ -23,7 +32,8 @@ export default {
   },
   props:{
     cols: Number,
-    pictures: Array
+    pictures: Array,
+    tracks: Array
   },
   mounted: function () {
     this.$eventHub.$on('selectMusic', this.getMusic)
@@ -33,11 +43,6 @@ export default {
     return{
       selectMusic: true,
       selectPicture: false,
-      works:[
-          {title: 'muscle', userName: 'muscleman', src: '/img/muscle.png'},
-          {title: 'avatar', userName: 'avatarman', src: '/img/avator.png'},
-          {title: 'back', userName: 'photoman', src: '/img/background.jpg'}
-      ]
     }
   },
   methods:{
