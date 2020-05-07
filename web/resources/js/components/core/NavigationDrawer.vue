@@ -10,8 +10,8 @@
     <v-divider></v-divider>
 
     <v-list-item :to="{ name: 'user', params:{username: username}}" class="py-2" color="black">
-      <v-list-item-avatar color="orange" size="48">
-        <v-img :src="avator_src"></v-img>
+      <v-list-item-avatar color="white" size="48">
+        <v-img :src="profilePicture"></v-img>
       </v-list-item-avatar>
       <v-list-item-content class="text-center">
         <v-list-item-title class="title">
@@ -67,7 +67,6 @@
           { title: 'History', path: '/history'}
         ],
         logo_src: '/img/logo.png',
-        avator_src: '/img/avator.png',
         right: null,
       }
     },
@@ -77,6 +76,9 @@
       },
       username () {
         return this.$store.getters['auth/username']
+      },
+      profilePicture () {
+        return this.$store.getters['auth/profilePicture']
       }
     }
   }

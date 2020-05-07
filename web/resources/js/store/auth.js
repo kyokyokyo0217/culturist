@@ -5,7 +5,9 @@ const state = {
 const getters = {
   check: state => !! state.user,
   accountname: state => state.user ? state.user.name : '',
-  username: state => state.user ? state.user.user_name : ''
+  username: state => state.user ? state.user.user_name : '',
+  profilePicture: state => state.user.profile_picture ? state.user.profile_picture.url : '/img/avator.png',
+  // profilePicture: state => '/img/avator.png'
 }
 
 const mutations = {

@@ -5,9 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\StringKey;
 
 class Track extends Model
 {
+  use StringKey;
+
   protected $keyType = 'string';
 
   public $incrementing = false;
@@ -22,37 +25,13 @@ class Track extends Model
       'id', 'artist', 'url', 'title', 'artwork'
   ];
 
-// 共通なのでまとめたい
   public function __construct(array $attributes = [])
   {
     parent::__construct($attributes);
 
     if (! Arr::get($this->attributes, 'id')) {
-        $this->setId();
+        $this->setStringId($attributes);
     }
-  }
-
-  private function setId()
-  {
-      $this->attributes['id'] = $this->getRandomId();
-  }
-
-  private function getRandomId()
-  {
-      $characters = array_merge(
-          range(0, 9), range('a', 'z'),
-          range('A', 'Z'), ['-', '_']
-      );
-
-      $length = count($characters);
-
-      $id = "";
-
-      for ($i = 0; $i < self::ID_LENGTH; $i++) {
-          $id .= $characters[random_int(0, $length - 1)];
-      }
-
-      return $id;
   }
 
   public function getUrlAttribute()

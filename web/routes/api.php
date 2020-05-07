@@ -16,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::resource('pictures', 'PictureController');
-Route::resource('tracks', 'TrackController');
-Route::resource('artworks', 'ArtworkController');
-Route::get('/auth/user', function(){return Auth::user();})->name('auth.user');
-Route::get('/user/{user:user_name}', function (App\User $user) {return $user;})->name('user');
+Route::apiResource('pictures', 'PictureController');
+Route::apiResource('tracks', 'TrackController');
+Route::apiResource('artworks', 'ArtworkController');
+Route::apiResource('users', 'UserController');
+
+// Route::put('/user-profiles/{user:user_name}', 'UserProfileController@update');
+// Route::get('/user/{user:user_name}', function (App\User $user) {return $user;})->name('user');
+
+Route::get('/auth/user', 'ReturnAuthenticatedUserController@returnAuthenticatedUser')->name('auth.user');

@@ -9,7 +9,7 @@
             <v-progress-linear v-model="percentage" height="5" @click.native="setPosition()" :disabled="!loaded"></v-progress-linear>
             <span>{{ currentTime }} / {{ duration }}</span>
         </v-card-text>
-        <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file"></audio>
+        <audio v-if="file" id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file.url"></audio>
     </v-card>
   </v-footer>
 </template>
@@ -18,7 +18,7 @@
     export default {
         props: {
             file: {
-                type: String,
+                type: Object,
                 default: null
             },
             autoPlay: {
@@ -38,6 +38,9 @@
             duration: function () {
                 return this.audio ? formatTime(this.totalDuration) : ''
             },
+            // nowPlaying () {
+            //   return this.$store.getters['track/track']
+            // }
         },
         data () {
             return {
@@ -71,15 +74,15 @@
                 this.paused = !this.paused;
                 (this.paused) ? this.audio.pause() : this.audio.play()
             },
-            download () {
-                this.audio.pause()
-                window.open(this.file, 'download')
-            },
-            mute () {
-                this.isMuted = !this.isMuted
-                this.audio.muted = this.isMuted
-                this.volumeValue = this.isMuted ? 0 : 75
-            },
+            // download () {
+            //     this.audio.pause()
+            //     window.open(this.file, 'download')
+            // },
+            // mute () {
+            //     this.isMuted = !this.isMuted
+            //     this.audio.muted = this.isMuted
+            //     this.volumeValue = this.isMuted ? 0 : 75
+            // },
             reload () {
                 this.audio.load();
             },

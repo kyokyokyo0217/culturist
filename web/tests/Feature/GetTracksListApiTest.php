@@ -34,7 +34,9 @@ class GetTracksListApiTest extends TestCase
                 'title' => $track->title,
                 'artist' => [
                   'name' => $track->artist->name,
-                  'user_name' => $track->artist->user_name
+                  'user_name' => $track->artist->user_name,
+                  'bio' => $track->artist->bio,
+                  'location' => $track->artist->location
                 ],
                 'artwork' => [
                   'id' => $track->artwork->id,

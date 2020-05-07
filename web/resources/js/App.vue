@@ -3,7 +3,7 @@
     <navigation-drawer v-if="isLogin"></navigation-drawer>
     <app-bar></app-bar>
     <main-view></main-view>
-    <audio-player :file="audio" v-if="isLogin"></audio-player>
+    <audio-player v-if="visible" :file="nowPlaying"></audio-player>
   </v-app>
 </template>
 
@@ -21,14 +21,21 @@
     },
     data(){
       return{
-        audio: '/audio/jinglebells.mp3',
-        auth: false
+        visible: false,
       }
     },
     computed: {
       isLogin () {
         return this.$store.getters['auth/check']
       },
+      nowPlaying () {
+        return this.$store.getters['track/track']
+      }
     },
+    watch: {
+      nowPlaying (val, old) {
+        this.visible = true
+      }
+    }
   }
 </script>

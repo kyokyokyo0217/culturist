@@ -32,7 +32,9 @@ class GetPictureListApiTest extends TestCase
               'title' => $picture->title,
               'artist' => [
                   'name' => $picture->artist->name,
-                  'user_name' => $picture->artist->user_name
+                  'user_name' => $picture->artist->user_name,
+                  'bio' => $picture->artist->bio,
+                  'location' => $picture->artist->location
               ],
           ];
       })

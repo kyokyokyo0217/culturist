@@ -10,6 +10,7 @@
       contain
       :class="{'image-clickable': hover}"
       :gradient="hover ? 'to top, rgba(0, 0, 0, 0.4) 0%, transparent 180px' : undefined"
+      @click="playTrack"
     >
       <v-row
         class="fill-height ma-0"
@@ -44,6 +45,11 @@ export default{
     item: {
        type:Object,
        required: true
+     }
+   },
+   methods:{
+     playTrack(){
+       this.$store.dispatch('track/nowPlaying', this.item)
      }
    }
 }

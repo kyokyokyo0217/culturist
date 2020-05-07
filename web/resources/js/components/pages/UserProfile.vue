@@ -1,7 +1,8 @@
 <template>
+  <v-form>
   <v-card tile flat width="100%" height="100%">
     <v-img
-      :src="background_src"
+      :src="getCoverPhotoUrl()"
       max-height="400px"
       :gradient="edit ? 'to bottom, rgba(0,0,0,0), rgba(100,100,100,25)' : undefined"
     >
@@ -25,7 +26,22 @@
                   Change Cover Photo
                 </v-btn>
               </template>
-              <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card>
+
+              <!-- <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card> -->
+
+              <v-card>
+                <v-card-title>
+                  <span>Add Image</span>
+                  <v-spacer></v-spacer>
+                  <v-btn icon x-small @click="backgroundMenu = !backgroundMenu">
+                    <v-icon>mdi-close-thick</v-icon>
+                  </v-btn>
+                </v-card-title>
+
+                <v-file-input @change="onCoverPhotoFileChange"></v-file-input>
+              </v-card>
+
+
             </v-menu>
           </v-col>
         </v-row>
@@ -37,8 +53,8 @@
       <v-container class="profile-nm px-12">
         <v-row>
           <v-col class="text-right">
-            <v-list-item-avatar size="200" color="orange">
-              <v-img :src="avator_src">
+            <v-list-item-avatar size="200" color="white">
+              <v-img :src="getProfilePictureUrl()">
                 <v-menu
                   v-if="edit"
                   v-model="avatarMenu"
@@ -56,7 +72,22 @@
                       Change
                     </v-btn>
                   </template>
-                  <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card>
+                  <!-- <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card> -->
+
+                  <v-card>
+                    <v-card-title>
+                      <span>Add Image</span>
+                      <v-spacer></v-spacer>
+                      <v-btn icon x-small @click="avatarMenu = !avatarMenu">
+                        <v-icon>mdi-close-thick</v-icon>
+                      </v-btn>
+                    </v-card-title>
+
+                    <v-file-input @change="onProfilePictureFileChange"></v-file-input>
+                  </v-card>
+
+
+
                 </v-menu>
               </v-img>
             </v-list-item-avatar>
@@ -72,15 +103,17 @@
             </v-list-item-content>
           </v-col>
           <v-col align-self="end" class="mb-12 text-center">
-            <v-btn v-if="auth && edit" color="black" outlined @click="saveChange">
-              Save Changes
-            </v-btn>
-            <v-btn  v-else-if="auth" color="black" outlined @click="edit =! edit">
-              Edit Page
-            </v-btn>
-            <v-btn v-else color="black" outlined>
-              Follow
-            </v-btn>
+            <template v-if="isLogin">
+              <v-btn v-if=" isAuthenticatedUser && edit" color="black" outlined @click="saveChange">
+                Save Changes
+              </v-btn>
+              <v-btn  v-else-if="isAuthenticatedUser" color="black" outlined @click="edit =! edit">
+                Edit Page
+              </v-btn>
+              <v-btn v-else color="black" outlined>
+                Follow
+              </v-btn>
+            </template>
           </v-col>
         </v-row>
       </v-container>
@@ -96,27 +129,29 @@
                   row-height="15"
                   background-color="white"
                   placeholder="About You"
+                  v-model="bio"
                 ></v-textarea>
                 <!-- enterでイベント走っちゃう -->
                 <v-text-field
                   outlined
                   background-color="white"
                   placeholder="Location"
+                  v-model="location"
                 ></v-text-field>
               </v-form>
             </v-card>
 
             <v-card-text v-else>
               <p>
-                It can contain an avatar, content, actions, subheaders and much more. Lists present content in a way that makes it easy to identify a specific item in a collection. They provide a consistent styling for organizing groups of text and images.
+                {{ user.bio }}
               </p>
-              <p>location</p>
+              <p>{{ user.location }}</p>
               <p>joined Feburary 2020</p>
             </v-card-text>
 
           </v-col>
           <v-col cols="8">
-            <works-index :cols="6"></works-index>
+            <works-index :cols="6" :tracks="user.tracks"></works-index>
           </v-col>
         </v-row>
       </v-container>
@@ -124,6 +159,7 @@
     </v-card>
 
   </v-card>
+</v-form>
 </template>
 <script>
   import ImageUploadCard from '../shared/ImageUploadCard.vue'
@@ -139,23 +175,111 @@
     data(){
       return{
         background_src: '/img/background.jpg',
-        avator_src: '/img/avator.png',
+        avatar_src: '/img/avator.png',
         muscle_src: '/img/muscle.png',
-        auth: true,
         edit: false,
         avatarMenu: false,
         backgroundMenu: false,
-        user: null
+        user: null,
+        coverPhotoPreview: null,
+        profilePicturePreview: null,
+        coverPhotoFile: null,
+        profilePictureFile: null,
+        bio: '',
+        location: '',
+        coverPhotoSrc: '/img/background.jpg'
       }
     },
+    computed: {
+      isLogin(){
+        return this.$store.getters['auth/check']
+      },
+      // 名前微妙
+      isAuthenticatedUser(){
+        return this.$store.getters['auth/username'] == this.user.user_name
+      },
+    },
     methods: {
-      saveChange(){
-        console.log('save change');
+      getCoverPhotoUrl(){
+         if(this.coverPhotoPreview){
+           return this.coverPhotoPreview
+         }else if(this.user.cover_photo != null){
+           return this.user.cover_photo.url
+         }else{
+           return this.background_src
+         }
+       },
+       getProfilePictureUrl(){
+          if(this.profilePicturePreview){
+            return this.profilePicturePreview
+          }else if(this.user.profile_picture != null){
+            return this.user.profile_picture.url
+          }else{
+            return this.avatar_src
+          }
+        },
+      onCoverPhotoFileChange (event) {
+
+        if (event.length === 0) {
+          return false
+        }
+
+        const imageReader = new FileReader()
+
+        imageReader.onload = e => {
+          this.coverPhotoPreview = e.target.result
+        }
+
+        imageReader.readAsDataURL(event)
+
+        this.coverPhotoFile = event
+      },
+      onProfilePictureFileChange (event) {
+
+        if (event.length === 0) {
+          return false
+        }
+
+        const imageReader = new FileReader()
+
+        imageReader.onload = e => {
+          this.profilePicturePreview = e.target.result
+        }
+
+        imageReader.readAsDataURL(event)
+
+        this.profilePictureFile = event
+      },
+
+
+      // reset () {
+      //   this.preview = ''
+      //   this.file = null
+      //   this.$el.querySelector('input[type="file"]').value = null
+      // },
+
+      async saveChange(){
+        const formData = new FormData()
+        formData.append('profile_picture', this.profilePictureFile)
+        formData.append('cover_photo', this.coverPhotoFile)
+        formData.append('bio', this.bio)
+        formData.append('location', this.location)
+// バグ putではfileを送れないためpost, headderでputに書き換え
+        const response = await axios.post(`/api/users/${this.$route.params.username}`, formData, {
+          headers: {
+            'X-HTTP-Method-Override': 'PUT'
+          }
+        })
         this.edit =! this.edit;
+        this.fetchUser();
       },
       async fetchUser(){
-        const response = await axios.get(`/api/user/${this.$route.params.username}`)
+        // route直す
+        const response = await axios.get(`/api/users/${this.$route.params.username}`)
+
         this.user = response.data
+
+        this.getImageUrl()
       }
     },
     watch: {
