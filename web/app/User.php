@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 
 class User extends Authenticatable
@@ -26,8 +27,12 @@ class User extends Authenticatable
    * @var array
    */
    protected $visible = [
-     'name', 'user_name', 'pictures', 'tracks', 'bio', 'location', 'profile_picture', 'cover_photo'
+     'name', 'user_name', 'pictures', 'tracks', 'bio', 'location', 'profile_picture', 'cover_photo', 'followed_by_user'
    ];
+
+    protected $appends = [
+      'followed_by_user',
+    ];
 
   /**
    * The attributes that should be cast to native types.
@@ -42,6 +47,17 @@ class User extends Authenticatable
   public function getRouteKeyName()
   {
       return 'user_name';
+  }
+
+  public function getFollowedByUserAttribute()
+  {
+      if (Auth::guest()) {
+          return false;
+      }
+
+      return $this->followers->contains(function ($user) {
+          return $user->id === Auth::user()->id;
+      });
   }
 
 
@@ -63,5 +79,15 @@ class User extends Authenticatable
   public function cover_photo()
   {
     return $this->hasOne('App\CoverPhoto');
+  }
+
+  public function follows()
+  {
+    return $this->belongsToMany('App\User', 'follows', 'follow_id', 'follower_id')->withTimestamps();
+  }
+
+  public function followers()
+  {
+    return $this->belongsToMany('App\User', 'follows', 'follower_id', 'follow_id')->withTimestamps();
   }
 }

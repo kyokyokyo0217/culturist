@@ -21,6 +21,9 @@ Route::apiResource('tracks', 'TrackController');
 Route::apiResource('artworks', 'ArtworkController');
 Route::apiResource('users', 'UserController');
 
+Route::post('/{user}/follow', 'FollowController@follow');
+Route::delete('/{user}/follow', 'FollowController@unfollow');
+
 // Route::put('/user-profiles/{user:user_name}', 'UserProfileController@update');
 // Route::get('/user/{user:user_name}', function (App\User $user) {return $user;})->name('user');
 

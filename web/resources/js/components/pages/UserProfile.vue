@@ -104,15 +104,22 @@
           </v-col>
           <v-col align-self="end" class="mb-12 text-center">
             <template v-if="isLogin">
-              <v-btn v-if=" isAuthenticatedUser && edit" color="black" outlined @click="saveChange">
-                Save Changes
-              </v-btn>
-              <v-btn  v-else-if="isAuthenticatedUser" color="black" outlined @click="edit =! edit">
-                Edit Page
-              </v-btn>
-              <v-btn v-else color="black" outlined>
-                Follow
-              </v-btn>
+              <template v-if="isAuthenticatedUser">
+                <v-btn v-if="edit" color="black" outlined @click="saveChange">
+                  Save Changes
+                </v-btn>
+                <v-btn  v-else color="black" outlined @click="edit =! edit">
+                  Edit Page
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn v-if="!user.followed_by_user" color="black" outlined @click="followUser">
+                  Follow
+                </v-btn>
+                <v-btn  v-else color="black" outlined @click="unfollowUser">
+                  Following
+                </v-btn>
+              </template>
             </template>
           </v-col>
         </v-row>
@@ -284,7 +291,16 @@
 
         this.getImageUrl()
       },
-
+      async followUser(){
+        const response = await axios.post(`/api/${this.$route.params.username}/follow`)
+        this.user.followed_by_user = true
+        console.log('success!')
+      },
+      async unfollowUser(){
+        const response = await axios.delete(`/api/${this.$route.params.username}/follow`)
+        this.user.followed_by_user = false
+        console.log('success!')
+      }
     },
     watch: {
       $route: {

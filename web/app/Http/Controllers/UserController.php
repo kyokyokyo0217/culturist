@@ -47,7 +47,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-      return $user->load('profile_picture', 'cover_photo');
+      return $user->load('profile_picture', 'cover_photo',);
     }
 
     /**
