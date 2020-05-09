@@ -4,6 +4,7 @@
       Feed
     </template>
     <template v-slot:content>
+      <select-chip></select-chip>
       <works-index :cols="3" :pictures=pictures :tracks=tracks></works-index>
     </template>
   </content-layout>
@@ -11,15 +12,22 @@
 <script>
   import ContentLayout from '../core/ContentLayout.vue'
   import WorksIndex from '../shared/WorksIndex.vue'
+  import SelectChip from '../shared/SelectChip.vue'
   export default {
     components: {
       ContentLayout,
-      WorksIndex
+      WorksIndex,
+      SelectChip
     },
     data: function(){
       return{
         pictures: [],
         tracks: []
+      }
+    },
+    computed: {
+      selectedChip(){
+        return this.$store.getters['selectChip/selectedChip']
       }
     },
     methods:{
@@ -39,10 +47,13 @@
       }
     },
     watch: {
-      $route: {
+      selectedChip: {
         async handler () {
-          await this.fetchTracks()
-          // await this.fetchPhotos()
+          if(this.selectedChip ==  "music"){
+            await this.fetchTracks()
+          }else if (this.selectedChip ==  "picture") {
+            await this.fetchPhotos()
+          }
         },
         immediate: true
       }

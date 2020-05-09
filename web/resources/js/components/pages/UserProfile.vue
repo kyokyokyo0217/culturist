@@ -151,6 +151,7 @@
 
           </v-col>
           <v-col cols="8">
+            <select-chip></select-chip>
             <works-index :cols="6" :tracks="user.tracks"></works-index>
           </v-col>
         </v-row>
@@ -164,10 +165,12 @@
 <script>
   import ImageUploadCard from '../shared/ImageUploadCard.vue'
   import WorksIndex from '../shared/WorksIndex.vue'
+  import SelectChip from '../shared/SelectChip.vue'
   export default {
     components:{
       ImageUploadCard,
-      WorksIndex
+      WorksIndex,
+      SelectChip
     },
     props:{
       cols: Number
@@ -280,7 +283,8 @@
         this.user = response.data
 
         this.getImageUrl()
-      }
+      },
+
     },
     watch: {
       $route: {

@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col
-        v-if="selectMusic"
+        v-if="selectedChip == 'music'"
         v-for="(track, index) in tracks"
         :key="index"
         class="d-flex child-flex"
@@ -11,7 +11,7 @@
         <track-card :item=track></track-card>
       </v-col>
       <v-col
-        v-if="selectPicture"
+        v-if="selectedChip == 'picture'"
         v-for="(picture, index) in pictures"
         :key="index"
         class="d-flex child-flex"
@@ -35,27 +35,11 @@ export default {
     pictures: Array,
     tracks: Array
   },
-  mounted: function () {
-    this.$eventHub.$on('selectMusic', this.getMusic)
-    this.$eventHub.$on('selectPicture', this.getPicture)
-  },
-  data(){
-    return{
-      selectMusic: true,
-      selectPicture: false,
+  // すまーとじゃない
+  computed: {
+    selectedChip(){
+      return this.$store.getters['selectChip/selectedChip']
     }
   },
-  methods:{
-    getMusic(){
-      this.selectMusic = !this.selectMusic
-      this.selectPicture = !this.selectPicture
-      console.log('get music!')
-    },
-    getPicture(){
-      this.selectMusic = !this.selectMusic
-      this.selectPicture = !this.selectPicture
-      console.log('get picture!')
-    }
-  }
 }
 </script>
