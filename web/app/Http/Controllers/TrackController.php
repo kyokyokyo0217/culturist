@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Track;
 use App\Http\Controllers\ArtworkController;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class TrackController extends Controller
 // クエリ少なくしたい
     public function getTracksFeed()
     {
-      $tracks = Track::whereHas('artist', function($query) {
+      $tracks = Track::whereHas('artist', function(Builder $query) {
           $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
       })->with(['artist', 'artwork'])
         ->orderBy(Track::CREATED_AT, 'desc')
@@ -40,6 +41,17 @@ class TrackController extends Controller
         ->paginate();
 
         return $tracks;
+    }
+
+    public function getUserProfileTracks(User $user)
+    {
+      $tracks = Track::whereHas('artist', function (Builder $query) use($user) {
+          $query->where('id', $user->id);
+      })->with(['artist', 'artwork'])
+        ->orderBy(Track::CREATED_AT, 'desc')
+        ->paginate();
+
+      return $tracks;
     }
 
     /**

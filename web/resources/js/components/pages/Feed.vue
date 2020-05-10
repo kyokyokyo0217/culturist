@@ -33,12 +33,6 @@
     methods:{
       async fetchPhotos () {
         const response = await axios.get('/api/pictures/feed')
-
-        // if (response.status !== OK) {
-        //   this.$store.commit('error/setCode', response.status)
-        //   return false
-        // }
-
         this.pictures = response.data.data
       },
       async fetchTracks () {

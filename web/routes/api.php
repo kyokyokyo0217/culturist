@@ -18,9 +18,11 @@ Auth::routes();
 
 Route::get('/pictures/feed', 'PictureController@getPicturesFeed');
 Route::get('/pictures/likes', 'PictureController@getLikedPictures');
+Route::get('/pictures/user/{user}', 'PictureController@getUserProfilePictures');
 Route::apiResource('pictures', 'PictureController');
 Route::get('/tracks/feed', 'TrackController@getTracksFeed');
 Route::get('/tracks/likes', 'TrackController@getLikedTracks');
+Route::get('/tracks/user/{user}', 'TrackController@getUserProfileTracks');
 Route::apiResource('tracks', 'TrackController');
 Route::apiResource('artworks', 'ArtworkController');
 Route::apiResource('users', 'UserController');

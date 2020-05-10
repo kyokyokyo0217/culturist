@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Picture;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePicture;
@@ -19,7 +20,7 @@ class PictureController extends Controller
 
     public function getPicturesFeed()
     {
-      $pictures = Picture::whereHas('artist', function($query) {
+      $pictures = Picture::whereHas('artist', function(Builder $query) {
           $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
       })->with(['artist', 'artist.profile_picture'])
         ->orderBy(Picture::CREATED_AT, 'desc')
@@ -36,11 +37,22 @@ class PictureController extends Controller
         ->orderBy(Picture::CREATED_AT, 'desc')
         ->paginate();
 
-        return $pictures;
+      return $pictures;
+    }
+
+    public function getUserProfilePictures(User $user)
+    {
+      $pictures = Picture::whereHas('artist', function (Builder $query) use($user){
+          $query->where('id', $user->id);
+      })->with(['artist', 'artist.profile_picture'])
+        ->orderBy(Picture::CREATED_AT, 'desc')
+        ->paginate();
+
+      return $pictures;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resouce in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response

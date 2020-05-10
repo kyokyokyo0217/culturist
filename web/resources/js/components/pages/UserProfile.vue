@@ -159,7 +159,7 @@
           </v-col>
           <v-col cols="8">
             <select-chip></select-chip>
-            <works-index :cols="6" :tracks="user.tracks"></works-index>
+            <works-index :cols="6" :tracks=tracks :pictures=pictures></works-index>
           </v-col>
         </v-row>
       </v-container>
@@ -197,7 +197,9 @@
         profilePictureFile: null,
         bio: '',
         location: '',
-        coverPhotoSrc: '/img/background.jpg'
+        coverPhotoSrc: '/img/background.jpg',
+        pictures: [],
+        tracks: []
       }
     },
     computed: {
@@ -208,6 +210,9 @@
       isAuthenticatedUser(){
         return this.$store.getters['auth/username'] == this.user.user_name
       },
+      selectedChip(){
+        return this.$store.getters['selectChip/selectedChip']
+      }
     },
     methods: {
       getCoverPhotoUrl(){
@@ -300,7 +305,18 @@
         const response = await axios.delete(`/api/${this.$route.params.username}/follow`)
         this.user.followed_by_user = false
         console.log('success!')
+      },
+      async fetchPhotos () {
+        const response = await axios.get(`/api/pictures/user/${this.$route.params.username}`)
+        this.pictures = response.data.data
+      },
+      async fetchTracks () {
+        const response = await axios.get(`/api/tracks/user/${this.$route.params.username}`)
+        this.tracks = response.data.data
       }
+    },
+    mounted(){
+        this.$store.commit('selectChip/selectChip', 'music')
     },
     watch: {
       $route: {
@@ -308,8 +324,18 @@
           await this.fetchUser()
         },
         immediate: true
+      },
+      selectedChip: {
+        async handler () {
+          if(this.selectedChip ==  "music"){
+            await this.fetchTracks()
+          }else if (this.selectedChip ==  "picture") {
+            await this.fetchPhotos()
+          }
+        },
+        immediate: true
       }
-    },
+    }
   }
 </script>
 <style scoped>

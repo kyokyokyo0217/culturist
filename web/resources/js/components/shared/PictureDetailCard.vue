@@ -10,7 +10,7 @@
     >
       <v-list-item>
         <v-list-item-avatar color="white">
-          <v-img :src="item.artist.profile_picture.url ? item.artist.profile_picture.url : avatar_src"></v-img>
+          <v-img :src="getProfilePictureUrl()"></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title class="headline">{{ item.title }}</v-list-item-title>
@@ -69,6 +69,13 @@ export default{
     closeDetail(){
       this.$emit('closeDetail')
     },
+    getProfilePictureUrl(){
+      if(this.item.artist.profile_picture != null){
+       return this.item.artist.profile_picture.url
+      }else{
+       return this.avatar_src
+      }
+     },
     async likePicture(){
       const response = await axios.post(`/api/picture/${this.item.id}/like`)
       this.item.liked_by_user = true
