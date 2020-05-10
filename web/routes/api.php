@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get('/pictures/feed', 'PictureController@getPicturesFeed');
+Route::get('/pictures/likes', 'PictureController@getLikedPictures');
 Route::apiResource('pictures', 'PictureController');
+Route::get('/tracks/feed', 'TrackController@getTracksFeed');
+Route::get('/tracks/likes', 'TrackController@getLikedTracks');
 Route::apiResource('tracks', 'TrackController');
 Route::apiResource('artworks', 'ArtworkController');
 Route::apiResource('users', 'UserController');
@@ -24,7 +28,9 @@ Route::apiResource('users', 'UserController');
 Route::post('/{user}/follow', 'FollowController@follow');
 Route::delete('/{user}/follow', 'FollowController@unfollow');
 
-// Route::put('/user-profiles/{user:user_name}', 'UserProfileController@update');
-// Route::get('/user/{user:user_name}', function (App\User $user) {return $user;})->name('user');
+Route::post('/picture/{picture}/like', 'LikeController@likePicture');
+Route::delete('/picture/{picture}/like', 'LikeController@unlikePicture');
+Route::post('/track/{track}/like', 'LikeController@likeTrack');
+Route::delete('/track/{track}/like', 'LikeController@unlikeTrack');
 
 Route::get('/auth/user', 'ReturnAuthenticatedUserController@returnAuthenticatedUser')->name('auth.user');

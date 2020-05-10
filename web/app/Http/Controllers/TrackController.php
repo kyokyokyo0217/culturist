@@ -10,22 +10,34 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Database\Eloquent\Builder;
 
 class TrackController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index']);
+        $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+// クエリ少なくしたい
+    public function getTracksFeed()
     {
-        $tracks = Track::with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')->paginate();
+      $tracks = Track::whereHas('artist', function($query) {
+          $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
+      })->with(['artist', 'artwork'])
+        ->orderBy(Track::CREATED_AT, 'desc')
+        ->paginate();
+
+      return $tracks;
+    }
+
+    public function getLikedTracks()
+    {
+      $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
+          $query->where('id', Auth::id());
+      })->with(['artist', 'artwork'])
+        ->orderBy(Track::CREATED_AT, 'desc')
+        ->paginate();
 
         return $tracks;
     }

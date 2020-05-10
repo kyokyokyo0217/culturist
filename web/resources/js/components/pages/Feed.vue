@@ -32,7 +32,7 @@
     },
     methods:{
       async fetchPhotos () {
-        const response = await axios.get('/api/pictures')
+        const response = await axios.get('/api/pictures/feed')
 
         // if (response.status !== OK) {
         //   this.$store.commit('error/setCode', response.status)
@@ -42,10 +42,14 @@
         this.pictures = response.data.data
       },
       async fetchTracks () {
-        const response = await axios.get('/api/tracks')
+        const response = await axios.get('/api/tracks/feed')
         this.tracks = response.data.data
       }
     },
+    mounted(){
+        this.$store.commit('selectChip/selectChip', 'music')
+    },
+    // 最初pictureの時がある バグ
     watch: {
       selectedChip: {
         async handler () {

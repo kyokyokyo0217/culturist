@@ -8,22 +8,33 @@ use App\Http\Requests\StorePicture;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class PictureController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index']);
+        $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function getPicturesFeed()
     {
-        $pictures = Picture::with(['artist'])
-            ->orderBy(Picture::CREATED_AT, 'desc')->paginate();
+      $pictures = Picture::whereHas('artist', function($query) {
+          $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
+      })->with(['artist', 'artist.profile_picture'])
+        ->orderBy(Picture::CREATED_AT, 'desc')
+        ->paginate();
+
+      return $pictures;
+    }
+
+    public function getLikedPictures()
+    {
+      $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
+          $query->where('id', Auth::id());
+      })->with(['artist', 'artist.profile_picture'])
+        ->orderBy(Picture::CREATED_AT, 'desc')
+        ->paginate();
 
         return $pictures;
     }

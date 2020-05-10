@@ -9,7 +9,9 @@
       class="mx-auto"
     >
       <v-list-item>
-        <v-list-item-avatar color="grey"></v-list-item-avatar>
+        <v-list-item-avatar color="white">
+          <v-img :src="item.artist.profile_picture.url ? item.artist.profile_picture.url : avatar_src"></v-img>
+        </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title class="headline">{{ item.title }}</v-list-item-title>
           <v-list-item-subtitle>
@@ -22,10 +24,10 @@
             </router-link>
           </v-list-item-subtitle>
         </v-list-item-content>
-        <v-btn icon color="pink" @click="unlike" v-if="liked">
+        <v-btn icon color="pink" @click="unlikePicture" v-if="item.liked_by_user">
           <v-icon>mdi-heart</v-icon>
         </v-btn>
-        <v-btn icon color="pink" @click="like" v-if="!liked">
+        <v-btn icon color="pink" @click="likePicture" v-if="!item.liked_by_user">
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
         <v-btn
@@ -60,19 +62,22 @@ export default{
   data(){
     return{
       overlay: false,
-      liked: false
+      avatar_src: '/img/avator.png',
     }
   },
   methods:{
     closeDetail(){
       this.$emit('closeDetail')
     },
-    like(){
-      this.liked = true
+    async likePicture(){
+      const response = await axios.post(`/api/picture/${this.item.id}/like`)
+      this.item.liked_by_user = true
     },
-    unlike(){
-      this.liked = false
-    }
+    async unlikePicture(){
+      const response = await axios.delete(`/api/picture/${this.item.id}/like`)
+      this.item.liked_by_user = false
+    },
+
   }
 }
 </script>

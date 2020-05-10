@@ -90,4 +90,15 @@ class User extends Authenticatable
   {
     return $this->belongsToMany('App\User', 'follows', 'follower_id', 'follow_id')->withTimestamps();
   }
+
+  public function picture_likes()
+  {
+    return $this->belongsToMany('App\Picture', 'picture_likes', 'user_id', 'piture_id')->withTimestamps();
+  }
+
+  public function track_likes()
+  {
+    return $this->belongsToMany('App\Track', 'track_likes', 'user_id', 'track_id')->withTimestamps();
+  }
+
 }

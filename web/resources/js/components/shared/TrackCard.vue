@@ -36,6 +36,12 @@
       >
         {{ item.artist.user_name }}
       </router-link>
+      <v-btn icon color="pink" @click="unlikePicture" v-if="item.liked_by_user">
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+      <v-btn icon color="pink" @click="likePicture" v-if="!item.liked_by_user">
+        <v-icon>mdi-heart-outline</v-icon>
+      </v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -50,7 +56,15 @@ export default{
    methods:{
      playTrack(){
        this.$store.dispatch('track/nowPlaying', this.item)
-     }
+     },
+     async likePicture(){
+       const response = await axios.post(`/api/track/${this.item.id}/like`)
+       this.item.liked_by_user = true
+     },
+     async unlikePicture(){
+       const response = await axios.delete(`/api/track/${this.item.id}/like`)
+       this.item.liked_by_user = false
+     },
    }
 }
 </script>
