@@ -36,3 +36,4 @@ Route::post('/track/{track}/like', 'LikeController@likeTrack');
 Route::delete('/track/{track}/like', 'LikeController@unlikeTrack');
 
 Route::get('/auth/user', 'ReturnAuthenticatedUserController@returnAuthenticatedUser')->name('auth.user');
+Route::post('/search', 'SearchController@search');

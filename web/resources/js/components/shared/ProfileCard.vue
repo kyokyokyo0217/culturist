@@ -3,13 +3,13 @@
     <!-- v-card直下にv-avatar置くとradiusが消える -->
     <div class="text-center">
       <v-avatar size="124" >
-        <v-img :src="item.src"></v-img>
+        <v-img :src="getProfilePictureUrl()"></v-img>
       </v-avatar>
     </div>
     <!-- v-card-titleはなぜかflexらしい -->
    <v-card-title class="justify-center">
      <router-link
-       to="/user"
+       :to="{ name: 'user', params:{username: item.user_name}}"
        class="user-link"
      >
        {{ item.name }}
@@ -24,6 +24,20 @@ export default{
        type:Object,
        required: true
      }
+   },
+   data(){
+     return{
+       avatar_src: '/img/avator.png',
+     }
+   },
+   methods:{
+     getProfilePictureUrl(){
+       if(this.item.profile_picture != null){
+        return this.item.profile_picture.url
+       }else{
+        return this.avatar_src
+       }
+      },
    }
 }
 </script>
