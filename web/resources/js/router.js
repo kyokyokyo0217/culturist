@@ -5,14 +5,17 @@ import store from './store'
 
 import Login from './components/pages/Login.vue'
 import SignUp from './components/pages/SignUp.vue'
+import Explore from './components/pages/Explore.vue'
 import Feed from './components/pages/Feed.vue'
 import Trending from './components/pages/Trending.vue'
 import Likes from './components/pages/Likes.vue'
-import History from './components/pages/History.vue'
 import Upload from './components/pages/Upload.vue'
 import UserProfile from './components/pages/UserProfile.vue'
 import SearchResult from  './components/pages/SearchResult.vue'
 import UploadTrack from './components/pages/UploadTrack.vue'
+
+import SystemError from './components/errors/SystemError.vue'
+import NotFoundError from './components/errors/NotFoundError.vue'
 
 Vue.use(VueRouter)
 
@@ -22,15 +25,23 @@ const routes = [
     component: Login,
     beforeEnter (to, from, next) {
       if (store.getters['auth/check']) {
-        next('/feed')
+        next('/explore')
       } else {
         next()
       }
     }
   },
   {
+    path: '/',
+    redirect: '/explore'
+  },
+  {
     path: '/signup',
     component: SignUp,
+  },
+  {
+    path: '/explore',
+    component: Explore,
   },
   {
     path: '/feed',
@@ -43,10 +54,6 @@ const routes = [
   {
     path: '/likes',
     component: Likes
-  },
-  {
-    path: '/history',
-    component: History
   },
   {
     path: '/upload',
@@ -64,7 +71,15 @@ const routes = [
   {
     path: '/uploadtrack',
     component: UploadTrack,
-  }
+  },
+  {
+    path: '/500',
+    component: SystemError
+  },
+  {
+    path: '*',
+    component: NotFoundError
+  },
 ]
 
 const router = new VueRouter({

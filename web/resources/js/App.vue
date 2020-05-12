@@ -8,34 +8,59 @@
 </template>
 
 <script>
-  import NavigationDrawer from './components//core/NavigationDrawer.vue'
-  import AudioPlayer from './components/core/AudioPlayer.vue'
-  import MainView from './components/core/MainView.vue'
-  import AppBar from './components/core/AppBar.vue'
-  export default {
-    components: {
-      NavigationDrawer,
-      AppBar,
-      MainView,
-      AudioPlayer,
+import { INTERNAL_SERVER_ERROR, UNAUTHORIZED, NOT_FOUND } from './util'
+import NavigationDrawer from './components//core/NavigationDrawer.vue'
+import AudioPlayer from './components/core/AudioPlayer.vue'
+import MainView from './components/core/MainView.vue'
+import AppBar from './components/core/AppBar.vue'
+
+export default {
+  components: {
+    NavigationDrawer,
+    AppBar,
+    MainView,
+    AudioPlayer,
+  },
+  data(){
+    return{
+      visible: false,
+    }
+  },
+  computed: {
+    isLogin () {
+      return this.$store.getters['auth/check']
     },
-    data(){
-      return{
-        visible: false,
-      }
+    errorCode(){
+      return this.$store.state.error.code
     },
-    computed: {
-      isLogin () {
-        return this.$store.getters['auth/check']
+    apiStatus(){
+      return this.$store.state.status.apiStatus
+    },
+    nowPlaying () {
+      return this.$store.getters['track/track']
+    }
+  },
+  watch: {
+    nowPlaying (val, old) {
+      this.visible = true
+    },
+    errorCode: {
+      async handler(val) {
+        if (val === INTERNAL_SERVER_ERROR) {
+          this.$router.push('/500')
+        // }else if(val === UNAUTHORIZED){
+        //   await axios.get('/api/refresh-token')
+        //   this.$store.commit('auth/setUser', null)
+        //   this.$router.push('/login')
+        }else if(val === NOT_FOUND){
+          this.$router.push('/404')
+        }
       },
-      nowPlaying () {
-        return this.$store.getters['track/track']
-      }
+      immediate: true
     },
-    watch: {
-      nowPlaying (val, old) {
-        this.visible = true
-      }
+    $route () {
+      this.$store.commit('error/setCode', null)
     }
   }
+}
 </script>

@@ -15,7 +15,16 @@ class PictureController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->only('store');
+    }
+
+    public function getNewPictures()
+    {
+      $pictures = Picture::with(['artist', 'artist.profile_picture'])
+        ->orderBy(Picture::CREATED_AT, 'desc')
+        ->paginate();
+
+      return $pictures;
     }
 
     public function getPicturesFeed()

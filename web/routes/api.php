@@ -18,10 +18,12 @@ Auth::routes();
 
 Route::get('/pictures/feed', 'PictureController@getPicturesFeed');
 Route::get('/pictures/likes', 'PictureController@getLikedPictures');
+Route::get('/pictures/explore', 'PictureController@getNewPictures');
 Route::get('/pictures/user/{user}', 'PictureController@getUserProfilePictures');
 Route::apiResource('pictures', 'PictureController');
 Route::get('/tracks/feed', 'TrackController@getTracksFeed');
 Route::get('/tracks/likes', 'TrackController@getLikedTracks');
+Route::get('/tracks/explore', 'TrackController@getNewTracks');
 Route::get('/tracks/user/{user}', 'TrackController@getUserProfileTracks');
 Route::apiResource('tracks', 'TrackController');
 Route::apiResource('artworks', 'ArtworkController');
@@ -37,3 +39,8 @@ Route::delete('/track/{track}/like', 'LikeController@unlikeTrack');
 
 Route::get('/auth/user', 'ReturnAuthenticatedUserController@returnAuthenticatedUser')->name('auth.user');
 Route::post('/search', 'SearchController@search');
+
+Route::get('/reflesh-token', function (Illuminate\Http\Request $request) {
+    $request->session()->regenerateToken();
+    return response()->json();
+});

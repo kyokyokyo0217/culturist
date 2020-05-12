@@ -33,13 +33,6 @@
         tracks: []
       }
     },
-    // async mounted (){
-    //   this.$store.commit('selectChip/selectChip', 'music')
-    //   const response = await axios.post('/api/search', {keyword: this.$route.query.result});
-    //   this.users = response.data.users
-    //   this.pictures = response.data.pictures
-    //   this.tracks = response.data.tracks
-    // },
     watch: {
       $route: {
         async handler () {

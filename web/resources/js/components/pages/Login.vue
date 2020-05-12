@@ -30,10 +30,21 @@ export default {
       }
     }
   },
+  computed: {
+    apiStatus () {
+      return this.$store.state.auth.apiStatus
+    },
+    loginErrorMessages(){
+      return this.$store.state.auth.loginErrorMessages
+    },
+  },
   methods:{
     async login(){
       await this.$store.dispatch('auth/login', this.loginFormData)
-      this.$router.push('/feed')
+
+      if(this.apiStatus){
+          this.$router.push('/explore')
+      }
     }
   }
 }

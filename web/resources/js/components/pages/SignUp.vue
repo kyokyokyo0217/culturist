@@ -50,11 +50,20 @@
         }
       }
     },
+    computed:{
+      apiStatus(){
+        return this.$store.state.auth.apiStatus
+      },
+      registerErrorMessages(){
+        return this.$store.state.auth.registerErrorMessages
+      }
+    },
     methods:{
       async register(){
         await this.$store.dispatch('auth/register', this.registerFormData)
-        this.$router.push('/feed')
-        console.log('registered!')
+        if(this.apiStatus){
+            this.$router.push('/explore')
+        }
       }
     }
   }

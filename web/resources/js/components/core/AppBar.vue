@@ -8,27 +8,6 @@
   >
     <search-box></search-box>
     <v-spacer></v-spacer>
-    <v-chip-group
-      mandatory
-      active-class="black accent-4 white--text disable-events"
-
-    >
-      <v-spacer></v-spacer>
-      <v-chip
-       small
-       value="music"
-       @click="selectMusic"
-      >
-        Music
-      </v-chip>
-      <v-chip
-        small
-        value="picture"
-        @click="selectPicture"
-      >
-        Picture
-      </v-chip>
-    </v-chip-group>
     <v-btn v-if="isLogin" small outlined @click="logout" class="ml-2">
       <!-- なぜか大文字になる -->
       L<span class="text-lowercase">ogout</span>
@@ -62,7 +41,6 @@
     data: function() {
       return {
         showTabsControl: false,
-        selectedChip: 'music',
         activeTab: 0,
         tabsTitles: {
           trending: [
@@ -79,7 +57,6 @@
     watch: {
       // tab使うページが増えたら困る
       '$route'(to, from) {
-        this.selectedChip = 'music'
         if(this.$route.path === '/trending'){
           this.showTabsControl = true;
         }else{
@@ -89,12 +66,6 @@
       }
     },
     methods: {
-      selectMusic(){
-        this.$eventHub.$emit('selectMusic')
-      },
-      selectPicture(){
-        this.$eventHub.$emit('selectPicture')
-      },
       async logout () {
         await this.$store.dispatch('auth/logout')
         this.$router.push('/login')

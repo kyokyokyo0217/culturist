@@ -159,7 +159,7 @@
           </v-col>
           <v-col cols="8">
             <select-chip></select-chip>
-            <works-index :cols="6" :tracks=tracks :pictures=pictures></works-index>
+            <works-index :cols="4" :tracks=tracks :pictures=pictures></works-index>
           </v-col>
         </v-row>
       </v-container>

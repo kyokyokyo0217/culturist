@@ -9,12 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function likePicture(Request $request, Picture $picture)
     {
 
-      // if (! $picture) {
-      //     abort(404);
-      // }
+      if (! $picture) {
+          abort(404);
+      }
 
       $picture->picture_liked_by()->detach(Auth::id());
       $picture->picture_liked_by()->attach(Auth::id());
@@ -31,9 +36,9 @@ class LikeController extends Controller
     public function likeTrack(Request $request, Track $track)
     {
 
-      // if (! $picture) {
-      //     abort(404);
-      // }
+      if (! $track) {
+          abort(404);
+      }
 
       $track->track_liked_by()->detach(Auth::id());
       $track->track_liked_by()->attach(Auth::id());

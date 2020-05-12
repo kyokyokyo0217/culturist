@@ -17,7 +17,16 @@ class TrackController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->only('store');
+    }
+
+    public function getNewTracks()
+    {
+      $tracks = Track::with(['artist', 'artwork'])
+        ->orderBy(Track::CREATED_AT, 'desc')
+        ->paginate();
+
+      return $tracks;
     }
 
 // クエリ少なくしたい

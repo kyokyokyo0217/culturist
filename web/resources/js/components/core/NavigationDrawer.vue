@@ -61,10 +61,10 @@
     data () {
       return {
         items: [
+          { title: 'Explore', path: '/explore'},
           { title: 'Feed', path: '/feed'},
           { title: 'Trending', path: '/trending'},
           { title: 'Likes', path: '/likes'},
-          { title: 'History', path: '/history'}
         ],
         logo_src: '/img/logo.png',
         right: null,
