@@ -24,7 +24,8 @@ class StorePicture extends FormRequest
     public function rules()
     {
       return [
-          'picture' => 'required|file|mimes:jpg,jpeg,png'
+          'picture' => 'required|file|mimes:jpg,jpeg,png',
+          'title' => 'required|string|max:255'
       ];
     }
 }

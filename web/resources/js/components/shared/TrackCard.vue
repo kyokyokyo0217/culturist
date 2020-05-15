@@ -36,16 +36,17 @@
       >
         {{ item.artist.user_name }}
       </router-link>
-      <v-btn icon color="pink" @click="unlikePicture" v-if="item.liked_by_user">
+      <v-btn icon color="pink" @click="unlikeTrack" v-if="item.liked_by_user">
         <v-icon>mdi-heart</v-icon>
       </v-btn>
-      <v-btn icon color="pink" @click="likePicture" v-if="!item.liked_by_user">
+      <v-btn icon color="pink" @click="likeTrack" v-if="!item.liked_by_user">
         <v-icon>mdi-heart-outline</v-icon>
       </v-btn>
     </v-card-text>
   </v-card>
 </template>
 <script>
+import { CREATED, NO_CONTENT} from '../../util'
 export default{
   props: {
     item: {
@@ -57,12 +58,26 @@ export default{
      playTrack(){
        this.$store.dispatch('track/nowPlaying', this.item)
      },
-     async likePicture(){
+
+     async likeTrack(){
        const response = await axios.post(`/api/track/${this.item.id}/like`)
+
+       if (response.status !== CREATED) {
+         this.$store.commit('error/setCode', response.status)
+         return false
+       }
+
        this.item.liked_by_user = true
      },
-     async unlikePicture(){
+
+     async unlikeTrack(){
        const response = await axios.delete(`/api/track/${this.item.id}/like`)
+
+       if (response.status !== NO_CONTENT) {
+         this.$store.commit('error/setCode', response.status)
+         return false
+       }
+
        this.item.liked_by_user = false
      },
    }

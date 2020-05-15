@@ -29,7 +29,12 @@ class LikeController extends Controller
 
     public function unlikePicture(Request $request, Picture $picture)
     {
+      if (! $picture) {
+          abort(404);
+      }
+
       $picture->picture_liked_by()->detach(Auth::id());
+
       return response('', 204);
     }
 
@@ -48,7 +53,12 @@ class LikeController extends Controller
 
     public function unlikeTrack(Request $request, Track $track)
     {
+      if (! $track) {
+          abort(404);
+      }
+
       $track->track_liked_by()->detach(Auth::id());
+
       return response('', 204);
     }
 }

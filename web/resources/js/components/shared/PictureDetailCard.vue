@@ -52,6 +52,7 @@
   </v-overlay>
 </template>
 <script>
+import { CREATED, NO_CONTENT} from '../../util'
 export default{
   props: {
     item: {
@@ -69,6 +70,7 @@ export default{
     closeDetail(){
       this.$emit('closeDetail')
     },
+
     getProfilePictureUrl(){
       if(this.item.artist.profile_picture != null){
        return this.item.artist.profile_picture.url
@@ -76,12 +78,26 @@ export default{
        return this.avatar_src
       }
      },
+
     async likePicture(){
       const response = await axios.post(`/api/picture/${this.item.id}/like`)
+
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
       this.item.liked_by_user = true
     },
+
     async unlikePicture(){
       const response = await axios.delete(`/api/picture/${this.item.id}/like`)
+
+      if (response.status !== NO_CONTENT) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
       this.item.liked_by_user = false
     },
 

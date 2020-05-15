@@ -24,7 +24,9 @@ class StoreTrack extends FormRequest
     public function rules()
     {
         return [
-            //
+            'track' => 'required|file|mimes:jpg,jpeg,png',
+            'artwork' => 'required|file|mimes:mp3, m4a',
+            'title' => 'required|string|max:255'
         ];
     }
 }
