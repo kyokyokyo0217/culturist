@@ -10,6 +10,7 @@
   </content-layout>
 </template>
 <script>
+import { OK } from '../../util'
   import ContentLayout from '../core/ContentLayout.vue'
   import WorksIndex from '../shared/WorksIndex.vue'
   import SelectChip from '../shared/SelectChip.vue'
@@ -33,11 +34,23 @@
     methods:{
       async fetchPhotos () {
         const response = await axios.get('/api/pictures/likes')
+
+        if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
+
         this.pictures = response.data.data
 
       },
       async fetchTracks () {
         const response = await axios.get('/api/tracks/likes')
+
+        if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
+
         this.tracks = response.data.data
       }
     },

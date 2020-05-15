@@ -24,7 +24,10 @@ class UpdateUserProfile extends FormRequest
     public function rules()
     {
         return [
-            //
+            'profile_picture' => 'nullable|file|mimes:jpg,jpeg,png',
+            'cover_photo' => 'nullable|file|mimes:jpg,jpeg,png',
+            'bio' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255'
         ];
     }
 }

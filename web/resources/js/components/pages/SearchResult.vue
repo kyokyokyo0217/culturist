@@ -15,6 +15,7 @@
   </content-layout>
 </template>
 <script>
+import { OK } from '../../util'
   import ContentLayout from '../core/ContentLayout.vue'
   import ProfilesIndex from '../shared/ProfilesIndex.vue'
   import WorksIndex from '../shared/WorksIndex.vue'
@@ -37,7 +38,13 @@
       $route: {
         async handler () {
           this.$store.commit('selectChip/selectChip', 'music')
-          const response = await axios.post('/api/search', {keyword: this.$route.query.result});
+          const response = await axios.post('/api/search', {keyword: this.$route.query.result})
+
+          if (response.status !== OK) {
+            this.$store.commit('error/setCode', response.status)
+            return false
+          }
+
           this.users = response.data.users
           this.pictures = response.data.pictures
           this.tracks = response.data.tracks

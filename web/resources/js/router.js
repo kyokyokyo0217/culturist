@@ -12,7 +12,6 @@ import Likes from './components/pages/Likes.vue'
 import Upload from './components/pages/Upload.vue'
 import UserProfile from './components/pages/UserProfile.vue'
 import SearchResult from  './components/pages/SearchResult.vue'
-import UploadTrack from './components/pages/UploadTrack.vue'
 
 import SystemError from './components/errors/SystemError.vue'
 import NotFoundError from './components/errors/NotFoundError.vue'
@@ -67,10 +66,6 @@ const routes = [
     path: '/user/:username',
     component: UserProfile,
     name: 'user'
-  },
-  {
-    path: '/uploadtrack',
-    component: UploadTrack,
   },
   {
     path: '/500',

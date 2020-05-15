@@ -34,7 +34,7 @@ export default {
       return this.$store.state.error.code
     },
     apiStatus(){
-      return this.$store.state.status.apiStatus
+      return this.$store.state.auth.apiStatus
     },
     nowPlaying () {
       return this.$store.getters['track/track']
@@ -48,19 +48,19 @@ export default {
       async handler(val) {
         if (val === INTERNAL_SERVER_ERROR) {
           this.$router.push('/500')
-        // }else if(val === UNAUTHORIZED){
-        //   await axios.get('/api/refresh-token')
-        //   this.$store.commit('auth/setUser', null)
-        //   this.$router.push('/login')
+        }else if(val === UNAUTHORIZED){
+          await axios.get('/api/refresh-token')
+          this.$store.commit('auth/setUser', null)
+          this.$router.push('/login')
         }else if(val === NOT_FOUND){
           this.$router.push('/404')
         }
       },
       immediate: true
     },
-    $route () {
-      this.$store.commit('error/setCode', null)
-    }
+    // $route () {
+    //   this.$store.commit('error/setCode', null)
+    // }
   }
 }
 </script>

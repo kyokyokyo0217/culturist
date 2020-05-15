@@ -38,7 +38,7 @@
                   </v-btn>
                 </v-card-title>
 
-                <v-file-input @change="onCoverPhotoFileChange"></v-file-input>
+                <v-file-input id="cover" @change="onCoverPhotoFileChange"></v-file-input>
               </v-card>
 
 
@@ -83,7 +83,7 @@
                       </v-btn>
                     </v-card-title>
 
-                    <v-file-input @change="onProfilePictureFileChange"></v-file-input>
+                    <v-file-input id="profile" @change="onProfilePictureFileChange"></v-file-input>
                   </v-card>
 
 
@@ -170,6 +170,7 @@
 </v-form>
 </template>
 <script>
+import { OK, CREATED,  NO_CONTENT, UNPROCESSABLE_ENTITY} from '../../util'
   import ImageUploadCard from '../shared/ImageUploadCard.vue'
   import WorksIndex from '../shared/WorksIndex.vue'
   import SelectChip from '../shared/SelectChip.vue'
@@ -178,9 +179,6 @@
       ImageUploadCard,
       WorksIndex,
       SelectChip
-    },
-    props:{
-      cols: Number
     },
     data(){
       return{
@@ -197,9 +195,9 @@
         profilePictureFile: null,
         bio: '',
         location: '',
-        coverPhotoSrc: '/img/background.jpg',
         pictures: [],
-        tracks: []
+        tracks: [],
+        errors: null
       }
     },
     computed: {
@@ -215,6 +213,7 @@
       }
     },
     methods: {
+
       getCoverPhotoUrl(){
          if(this.coverPhotoPreview){
            return this.coverPhotoPreview
@@ -224,6 +223,7 @@
            return this.background_src
          }
        },
+
        getProfilePictureUrl(){
           if(this.profilePicturePreview){
             return this.profilePicturePreview
@@ -233,50 +233,65 @@
             return this.avatar_src
           }
         },
+
       onCoverPhotoFileChange (event) {
 
-        if (event.length === 0) {
+        if (!event) {
+          this.coverPhotoFileReset()
           return false
         }
 
-        const imageReader = new FileReader()
+        const coverPhotoReader = new FileReader()
 
-        imageReader.onload = e => {
+        coverPhotoReader.onload = e => {
           this.coverPhotoPreview = e.target.result
         }
 
-        imageReader.readAsDataURL(event)
+        coverPhotoReader.readAsDataURL(event)
 
         this.coverPhotoFile = event
       },
+
       onProfilePictureFileChange (event) {
 
-        if (event.length === 0) {
+        if (!event) {
+          this.profilePictureFileReset()
           return false
         }
 
-        const imageReader = new FileReader()
+        const profilePictureReader = new FileReader()
 
-        imageReader.onload = e => {
+        profilePictureReader.onload = e => {
           this.profilePicturePreview = e.target.result
         }
 
-        imageReader.readAsDataURL(event)
+        profilePictureReader.readAsDataURL(event)
 
         this.profilePictureFile = event
       },
 
+      coverPhotoFileReset () {
+        this.coverPhotoPreview = ''
+        this.coverPhotoFile = null
+        // Error: Cannot set property 'value' of null 原因不明 /uploadは問題なく動く
+        // this.$el.querySelector('#cover').value = null
+      },
 
-      // reset () {
-      //   this.preview = ''
-      //   this.file = null
-      //   this.$el.querySelector('input[type="file"]').value = null
-      // },
+      profilePictureFileReset () {
+        this.profilePicturePreview = ''
+        this.profilePictureFile = null
+        // this.$el.querySelector('#profile').value = null
+      },
 
       async saveChange(){
         const formData = new FormData()
-        formData.append('profile_picture', this.profilePictureFile)
-        formData.append('cover_photo', this.coverPhotoFile)
+        //  laravel側のvalidationでnullableを通すため ='null' ではなく =null にする
+        if(this.profilePictureFile){
+          formData.append('profile_picture', this.profilePictureFile)
+        }
+        if(this.coverPhotoFile){
+          formData.append('cover_photo', this.coverPhotoFile)
+        }
         formData.append('bio', this.bio)
         formData.append('location', this.location)
 // バグ putではfileを送れないためpost, headderでputに書き換え
@@ -285,39 +300,87 @@
             'X-HTTP-Method-Override': 'PUT'
           }
         })
-        this.edit =! this.edit;
-        this.fetchUser();
+
+        if (response.status === UNPROCESSABLE_ENTITY) {
+          this.errors = response.data.errors
+          return false
+        }
+
+        this.coverPhotoFileReset()
+        this.profilePictureFileReset()
+        this.avatarMenu = false
+        this.backgroundMenu= false
+        this.edit =! this.edit
+
+        if (response.status !== NO_CONTENT) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
+// navigationdrawerのプロフ画再取得したい
+        this.fetchUser()
       },
+
       async fetchUser(){
         // route直す
         const response = await axios.get(`/api/users/${this.$route.params.username}`)
 
-        this.user = response.data
+        if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
 
-        this.getImageUrl()
+        this.user = response.data
       },
-      async followUser(){
-        const response = await axios.post(`/api/${this.$route.params.username}/follow`)
-        this.user.followed_by_user = true
-        console.log('success!')
-      },
-      async unfollowUser(){
-        const response = await axios.delete(`/api/${this.$route.params.username}/follow`)
-        this.user.followed_by_user = false
-        console.log('success!')
-      },
+
       async fetchPhotos () {
         const response = await axios.get(`/api/pictures/user/${this.$route.params.username}`)
+
+        if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
+
         this.pictures = response.data.data
       },
+
       async fetchTracks () {
         const response = await axios.get(`/api/tracks/user/${this.$route.params.username}`)
+
+        if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
+
         this.tracks = response.data.data
-      }
+      },
+
+      async followUser(){
+        const response = await axios.post(`/api/${this.$route.params.username}/follow`)
+
+        if (response.status !== CREATED) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
+
+        this.user.followed_by_user = true
+      },
+
+      async unfollowUser(){
+        const response = await axios.delete(`/api/${this.$route.params.username}/follow`)
+
+        if (response.status !== NO_CONTENT) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
+        
+        this.user.followed_by_user = false
+      },
     },
+
     mounted(){
         this.$store.commit('selectChip/selectChip', 'music')
     },
+
     watch: {
       $route: {
         async handler () {
@@ -325,6 +388,7 @@
         },
         immediate: true
       },
+
       selectedChip: {
         async handler () {
           if(this.selectedChip ==  "music"){
