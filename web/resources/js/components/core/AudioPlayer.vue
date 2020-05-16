@@ -1,4 +1,40 @@
 <template>
+ <v-footer app padless color="white">
+     <v-row>
+       <v-col cols="1" class="pl-4">
+         <v-img :src="file.artwork.url" height="80px" width="80px"></v-img>
+       </v-col>
+       <v-col cols="2">
+         <p class="ma-0 subtitle-1 black--text">{{ file.title }}</p>
+         <router-link
+           :to="{ name: 'user', params:{username: file.artist.user_name}}"
+           class="user-link"
+         >
+           {{ file.artist.user_name }}
+         </router-link>
+       </v-col>
+       <v-col cols="6" class="text-center">
+             <v-btn outlined icon small class="mb-2" @click.native="playing ? pause() : play()" :disabled="!loaded">
+               <v-icon v-if="!playing || paused">mdi-play</v-icon>
+               <v-icon v-else>mdi-pause</v-icon>
+             </v-btn>
+             <v-progress-linear
+              v-model="percentage"
+              @click.native="setPosition()"
+              :disabled="!loaded"
+              height="4"
+              rounded
+              striped
+             ></v-progress-linear>
+             <span>{{ currentTime }} / {{ duration }}</span>
+           <audio id="player" ref="player" :src="file.url"></audio>
+       </v-col>
+       <v-col cols="3">
+       </v-col>
+     </v-row>
+ </v-footer>
+</template>
+<!-- <template>
  <v-footer app padless>
   <v-card flat tile width="100%">
     <v-card-text class="text-center">
@@ -9,10 +45,10 @@
       <v-progress-linear v-model="percentage" height="5" @click.native="setPosition()" :disabled="!loaded"></v-progress-linear>
       <span>{{ currentTime }} / {{ duration }}</span>
     </v-card-text>
-    <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file.url"></audio>
+    <audio id="player" ref="player" :src="file.url"></audio>
     </v-card>
   </v-footer>
-</template>
+</template> -->
 <script>
 const formatTime = second => new Date(second * 1000).toISOString().substr(11, 8);
 export default {
@@ -20,19 +56,7 @@ export default {
     file: {
       type: Object,
       default: null
-    },
-    autoPlay: {
-        type: Boolean,
-        default: false
-    },
-    ended: {
-        type: Function,
-        default: () => {},
-    },
-    canPlay: {
-        type: Function,
-        default: () => {},
-    },
+    }
   },
   computed: {
     duration: function () {
@@ -50,6 +74,7 @@ export default {
       currentTime: '00:00:00',
       audio: undefined,
       totalDuration: 0,
+      autoPlay: true
     }
   },
   methods: {
@@ -116,33 +141,23 @@ export default {
       this.audio.removeEventListener('pause', this._handlePlayPause)
       this.audio.removeEventListener('play', this._handlePlayPause)
       this.audio.removeEventListener('ended', this._handleEnded)
-      this.firstPlay = true
     }
   },
   mounted () {
     this.audio = this.$refs.player
     this.init()
-    this.play()
   },
-  // beforeDestroy () {
-  //   this.reset()
-  // },
-  watch: {
-    file: {
-      handler(val){
-        // this.audio = this.$refs.player
-        this.stop()
-        console.log(this.percentage)
-        this.percentage = this.audio.currentTime / this.audio.duration * 100
-        console.log(this.percentage)
-
-        this.reset()
-        this.init()
-        this.play()
-
-      },
-      // immediate: true
-    }
-  }
+  beforeDestroy () {
+    this.reset()
+  },
 }
 </script>
+<style scoped>
+  .user-link{
+    text-decoration: none;
+    color: grey;
+  }
+  .user-link:hover{
+    color:black;
+  }
+</style>
