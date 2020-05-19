@@ -1,7 +1,8 @@
 <template>
+  <v-form>
   <v-card tile flat width="100%" height="100%">
     <v-img
-      :src="background_src"
+      :src="getCoverPhotoUrl()"
       max-height="400px"
       :gradient="edit ? 'to bottom, rgba(0,0,0,0), rgba(100,100,100,25)' : undefined"
     >
@@ -25,7 +26,22 @@
                   Change Cover Photo
                 </v-btn>
               </template>
-              <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card>
+
+              <!-- <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card> -->
+
+              <v-card class="pa-4">
+                <v-card-title>
+                  <span>Add Image</span>
+                  <v-spacer></v-spacer>
+                  <v-btn icon x-small @click="backgroundMenu = !backgroundMenu">
+                    <v-icon>mdi-close-thick</v-icon>
+                  </v-btn>
+                </v-card-title>
+                <validation-errors-alert v-if="errors" :errors=errors.cover_photo></validation-errors-alert>
+                <v-file-input id="cover" @change="onCoverPhotoFileChange"></v-file-input>
+              </v-card>
+
+
             </v-menu>
           </v-col>
         </v-row>
@@ -37,8 +53,8 @@
       <v-container class="profile-nm px-12">
         <v-row>
           <v-col class="text-right">
-            <v-list-item-avatar size="200" color="orange">
-              <v-img :src="avator_src">
+            <v-list-item-avatar size="200" color="white">
+              <v-img :src="getProfilePictureUrl()">
                 <v-menu
                   v-if="edit"
                   v-model="avatarMenu"
@@ -56,7 +72,22 @@
                       Change
                     </v-btn>
                   </template>
-                  <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card>
+                  <!-- <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card> -->
+
+                  <v-card class="pa-4">
+                    <v-card-title>
+                      <span>Add Image</span>
+                      <v-spacer></v-spacer>
+                      <v-btn icon x-small @click="avatarMenu = !avatarMenu">
+                        <v-icon>mdi-close-thick</v-icon>
+                      </v-btn>
+                    </v-card-title>
+                    <validation-errors-alert v-if="errors" :errors=errors.profile_picture></validation-errors-alert>
+                    <v-file-input id="profile" @change="onProfilePictureFileChange"></v-file-input>
+                  </v-card>
+
+
+
                 </v-menu>
               </v-img>
             </v-list-item-avatar>
@@ -64,23 +95,41 @@
           <v-col align-self="end" class="mb-6">
             <v-list-item-content>
               <v-list-item-title class="display-2">
-                Name namename
+                  {{ user.name }}
               </v-list-item-title>
               <v-list-item-subtitle class="headline">
-                  @username
+                  @{{ user.user_name }}
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-col>
           <v-col align-self="end" class="mb-12 text-center">
-            <v-btn v-if="auth && edit" color="black" outlined @click="saveChange">
-              Save Changes
-            </v-btn>
-            <v-btn  v-else-if="auth" color="black" outlined @click="edit =! edit">
-              Edit Page
-            </v-btn>
-            <v-btn v-else color="black" outlined>
-              Follow
-            </v-btn>
+            <template v-if="isLogin">
+              <template v-if="isAuthenticatedUser">
+                <template v-if="edit">
+                  <v-btn v-if="!loading" color="black" outlined @click="saveChange">
+                    Save Changes
+                  </v-btn>
+                  <v-progress-circular
+                    v-if="loading"
+                    indeterminate
+                    color="grey"
+                    width="2"
+                    size="28"
+                  ></v-progress-circular>
+                </template>
+                <v-btn  v-else color="black" outlined @click="edit =! edit">
+                  Edit Page
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn v-if="!user.followed_by_user" color="black" outlined @click="followUser">
+                  Follow
+                </v-btn>
+                <v-btn  v-else color="black" outlined @click="unfollowUser">
+                  Following
+                </v-btn>
+              </template>
+            </template>
           </v-col>
         </v-row>
       </v-container>
@@ -90,33 +139,38 @@
           <v-col cols="4" class="pa-8">
             <v-card v-if="edit" class="pa-8" flat>
               <v-form>
+                <validation-errors-alert v-if="errors" :errors=errors.bio></validation-errors-alert>
+                <!-- default value が効かない -->
                 <v-textarea
                   outlined
                   rows="5"
                   row-height="15"
                   background-color="white"
                   placeholder="About You"
+                  v-model="bio"
                 ></v-textarea>
                 <!-- enterでイベント走っちゃう -->
+                <validation-errors-alert v-if="errors" :errors=errors.location></validation-errors-alert>
                 <v-text-field
                   outlined
                   background-color="white"
                   placeholder="Location"
+                  v-model="location"
                 ></v-text-field>
               </v-form>
             </v-card>
 
             <v-card-text v-else>
               <p>
-                It can contain an avatar, content, actions, subheaders and much more. Lists present content in a way that makes it easy to identify a specific item in a collection. They provide a consistent styling for organizing groups of text and images.
+                {{ user.bio }}
               </p>
-              <p>location</p>
-              <p>joined Feburary 2020</p>
+              <p>{{ user.location }}</p>
             </v-card-text>
 
           </v-col>
           <v-col cols="8">
-            <works-index :cols="6"></works-index>
+            <select-chip></select-chip>
+            <works-index :cols="4" :tracks=tracks :pictures=pictures></works-index>
           </v-col>
         </v-row>
       </v-container>
@@ -124,36 +178,244 @@
     </v-card>
 
   </v-card>
+</v-form>
 </template>
 <script>
-  import ImageUploadCard from '../shared/ImageUploadCard.vue'
-  import WorksIndex from '../shared/WorksIndex.vue'
-  export default {
-    components:{
-      ImageUploadCard,
-      WorksIndex
+import { OK, CREATED,  NO_CONTENT, UNPROCESSABLE_ENTITY} from '../../util'
+import ValidationErrorsAlert from '../shared/ValidationErrorsAlert.vue'
+import ImageUploadCard from '../shared/ImageUploadCard.vue'
+import WorksIndex from '../shared/WorksIndex.vue'
+import SelectChip from '../shared/SelectChip.vue'
+export default {
+  components:{
+    ImageUploadCard,
+    WorksIndex,
+    SelectChip,
+    ValidationErrorsAlert
+  },
+  data(){
+    return{
+      background_src: '/img/background.jpg',
+      avatar_src: '/img/avator.png',
+      edit: false,
+      avatarMenu: false,
+      backgroundMenu: false,
+      user: null,
+      coverPhotoPreview: null,
+      profilePicturePreview: null,
+      coverPhotoFile: null,
+      profilePictureFile: null,
+      bio: '',
+      location: '',
+      pictures: [],
+      tracks: [],
+      errors: null,
+      loading: false
+    }
+  },
+  computed: {
+    isLogin(){
+      return this.$store.getters['auth/check']
     },
-    props:{
-      cols: Number
+    // 名前微妙
+    isAuthenticatedUser(){
+      return this.$store.getters['auth/username'] == this.user.user_name
     },
-    data(){
-      return{
-        background_src: '/img/background.jpg',
-        avator_src: '/img/avator.png',
-        muscle_src: '/img/muscle.png',
-        auth: true,
-        edit: false,
-        avatarMenu: false,
-        backgroundMenu: false
+    selectedChip(){
+      return this.$store.getters['selectChip/selectedChip']
+    }
+  },
+  methods: {
+    getCoverPhotoUrl(){
+       if(this.coverPhotoPreview){
+         return this.coverPhotoPreview
+       }else if(this.user.cover_photo != null){
+         return this.user.cover_photo.url
+       }else{
+         return this.background_src
+       }
+     },
+
+     getProfilePictureUrl(){
+        if(this.profilePicturePreview){
+          return this.profilePicturePreview
+        }else if(this.user.profile_picture != null){
+          return this.user.profile_picture.url
+        }else{
+          return this.avatar_src
+        }
+      },
+
+    onCoverPhotoFileChange (event) {
+
+      if (!event) {
+        this.coverPhotoFileReset()
+        return false
       }
-    },
-    methods: {
-      saveChange(){
-        console.log('save change');
-        this.edit =! this.edit;
+
+      const coverPhotoReader = new FileReader()
+
+      coverPhotoReader.onload = e => {
+        this.coverPhotoPreview = e.target.result
       }
+
+      coverPhotoReader.readAsDataURL(event)
+
+      this.coverPhotoFile = event
+    },
+
+    onProfilePictureFileChange (event) {
+
+      if (!event) {
+        this.profilePictureFileReset()
+        return false
+      }
+
+      const profilePictureReader = new FileReader()
+
+      profilePictureReader.onload = e => {
+        this.profilePicturePreview = e.target.result
+      }
+
+      profilePictureReader.readAsDataURL(event)
+
+      this.profilePictureFile = event
+    },
+
+    coverPhotoFileReset () {
+      this.coverPhotoPreview = ''
+      this.coverPhotoFile = null
+      // Error: Cannot set property 'value' of null 原因不明 /uploadは問題なく動く
+      // this.$el.querySelector('#cover').value = null
+    },
+
+    profilePictureFileReset () {
+      this.profilePicturePreview = ''
+      this.profilePictureFile = null
+      // this.$el.querySelector('#profile').value = null
+    },
+
+    async saveChange(){
+      this.loading = true
+      const formData = new FormData()
+      //  laravel側のvalidationでnullableを通すため ='null' ではなく =null にする
+      if(this.profilePictureFile){
+        formData.append('profile_picture', this.profilePictureFile)
+      }
+      if(this.coverPhotoFile){
+        formData.append('cover_photo', this.coverPhotoFile)
+      }
+      formData.append('bio', this.bio)
+      formData.append('location', this.location)
+// バグ putではfileを送れないためpost, headderでputに書き換え
+      const response = await axios.post(`/api/users/${this.$route.params.username}`, formData, {
+        headers: {
+          'X-HTTP-Method-Override': 'PUT'
+        }
+      })
+
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.errors = response.data.errors
+        this.loading = false
+        return false
+      }
+
+      this.coverPhotoFileReset()
+      this.profilePictureFileReset()
+      this.avatarMenu = false
+      this.backgroundMenu= false
+      this.edit =! this.edit
+
+      if (response.status !== NO_CONTENT) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.loading = false
+// navigationdrawerのプロフ画再取得したい
+      this.fetchUser()
+    },
+
+    async fetchUser(){
+      const response = await axios.get(`/api/users/${this.$route.params.username}`)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.user = response.data
+    },
+
+    async fetchPhotos () {
+      const response = await axios.get(`/api/pictures/user/${this.$route.params.username}`)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.pictures = response.data.data
+    },
+
+    async fetchTracks () {
+      const response = await axios.get(`/api/tracks/user/${this.$route.params.username}`)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.tracks = response.data.data
+    },
+
+    async followUser(){
+      const response = await axios.post(`/api/${this.$route.params.username}/follow`)
+
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.user.followed_by_user = true
+    },
+
+    async unfollowUser(){
+      const response = await axios.delete(`/api/${this.$route.params.username}/follow`)
+
+      if (response.status !== NO_CONTENT) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.user.followed_by_user = false
+    },
+  },
+
+  mounted(){
+      this.$store.commit('selectChip/selectChip', 'music')
+  },
+
+  watch: {
+    $route: {
+      async handler () {
+        await this.fetchUser()
+      },
+      immediate: true
+    },
+
+    selectedChip: {
+      async handler () {
+        if(this.selectedChip ==  "music"){
+          await this.fetchTracks()
+        }else if (this.selectedChip ==  "picture") {
+          await this.fetchPhotos()
+        }
+      },
+      immediate: true
     }
   }
+}
 </script>
 <style scoped>
   .profile-nm{

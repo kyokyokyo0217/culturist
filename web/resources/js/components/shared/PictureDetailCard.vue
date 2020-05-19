@@ -9,23 +9,25 @@
       class="mx-auto"
     >
       <v-list-item>
-        <v-list-item-avatar color="grey"></v-list-item-avatar>
+        <v-list-item-avatar color="white">
+          <v-img :src="getProfilePictureUrl()"></v-img>
+        </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title class="headline">Picture Title</v-list-item-title>
+          <v-list-item-title class="headline">{{ item.title }}</v-list-item-title>
           <v-list-item-subtitle>
             by
             <router-link
-              to="/user"
+              :to="{ name: 'user', params:{username: item.artist.user_name}}"
               class="user-link"
             >
-              username
+              {{ item.artist.name }}
             </router-link>
           </v-list-item-subtitle>
         </v-list-item-content>
-        <v-btn icon color="pink" @click="unlike" v-if="liked">
+        <v-btn icon color="pink" @click="unlikePicture" v-if="item.liked_by_user">
           <v-icon>mdi-heart</v-icon>
         </v-btn>
-        <v-btn icon color="pink" @click="like" v-if="!liked">
+        <v-btn icon color="pink" @click="likePicture" v-if="!item.liked_by_user">
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
         <v-btn
@@ -39,7 +41,7 @@
 
       <v-row justify="center">
         <v-img
-          :src="item.src"
+          :src="item.url"
           max-width="1000px"
           max-height="500px"
           contain
@@ -50,6 +52,7 @@
   </v-overlay>
 </template>
 <script>
+import { CREATED, NO_CONTENT} from '../../util'
 export default{
   props: {
     item: {
@@ -60,19 +63,44 @@ export default{
   data(){
     return{
       overlay: false,
-      liked: false
+      avatar_src: '/img/avator.png',
     }
   },
   methods:{
     closeDetail(){
       this.$emit('closeDetail')
     },
-    like(){
-      this.liked = true
+
+    getProfilePictureUrl(){
+      if(this.item.artist.profile_picture != null){
+       return this.item.artist.profile_picture.url
+      }else{
+       return this.avatar_src
+      }
+     },
+
+    async likePicture(){
+      const response = await axios.post(`/api/picture/${this.item.id}/like`)
+
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.item.liked_by_user = true
     },
-    unlike(){
-      this.liked = false
-    }
+
+    async unlikePicture(){
+      const response = await axios.delete(`/api/picture/${this.item.id}/like`)
+
+      if (response.status !== NO_CONTENT) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.item.liked_by_user = false
+    },
+
   }
 }
 </script>

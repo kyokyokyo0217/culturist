@@ -2,13 +2,22 @@
   <v-container fluid>
     <v-row>
       <v-col
-        v-for="(work, index) in works"
+        v-if="selectedChip == 'music'"
+        v-for="(track, index) in tracks"
         :key="index"
         class="d-flex child-flex"
         :cols="cols"
       >
-      <track-card :item=work v-if="selectMusic"></track-card>
-      <picture-card :item=work v-if="selectPicture"></picture-card>
+        <track-card :item=track></track-card>
+      </v-col>
+      <v-col
+        v-if="selectedChip == 'picture'"
+        v-for="(picture, index) in pictures"
+        :key="index"
+        class="d-flex child-flex"
+        :cols="cols"
+      >
+        <picture-card :item=picture></picture-card>
       </v-col>
     </v-row>
   </v-container>
@@ -22,34 +31,15 @@ export default {
     PictureCard
   },
   props:{
-    cols: Number
+    cols: Number,
+    pictures: Array,
+    tracks: Array
   },
-  mounted: function () {
-    this.$eventHub.$on('selectMusic', this.getMusic)
-    this.$eventHub.$on('selectPicture', this.getPicture)
-  },
-  data(){
-    return{
-      selectMusic: true,
-      selectPicture: false,
-      works:[
-          {title: 'muscle', userName: 'muscleman', src: '/img/muscle.png'},
-          {title: 'avatar', userName: 'avatarman', src: '/img/avator.png'},
-          {title: 'back', userName: 'photoman', src: '/img/background.jpg'}
-      ]
+  // すまーとじゃない
+  computed: {
+    selectedChip(){
+      return this.$store.getters['selectChip/selectedChip']
     }
   },
-  methods:{
-    getMusic(){
-      this.selectMusic = !this.selectMusic
-      this.selectPicture = !this.selectPicture
-      console.log('get music!')
-    },
-    getPicture(){
-      this.selectMusic = !this.selectMusic
-      this.selectPicture = !this.selectPicture
-      console.log('get picture!')
-    }
-  }
 }
 </script>

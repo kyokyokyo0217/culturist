@@ -19,16 +19,8 @@ export default {
     ProfileCard
   },
   props:{
-    cols: Number
-  },
-  data(){
-    return{
-      users:[
-          {name: 'muscle',src: '/img/muscle.png'},
-          {name: 'avatar', src: '/img/avator.png'},
-          {name: 'back', src: '/img/background.jpg'}
-      ]
-    }
+    cols: Number,
+    users: Array
   },
 }
 </script>

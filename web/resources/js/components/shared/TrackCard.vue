@@ -5,11 +5,12 @@
   >
     <v-hover v-slot:default="{ hover }">
     <v-img
-      :src="item.src"
+      :src="item.artwork.url"
       aspect-ratio="1"
       contain
       :class="{'image-clickable': hover}"
       :gradient="hover ? 'to top, rgba(0, 0, 0, 0.4) 0%, transparent 180px' : undefined"
+      @click="playTrack"
     >
       <v-row
         class="fill-height ma-0"
@@ -30,21 +31,55 @@
     <v-card-text class="py-0">
       <p class="ma-0 subtitle-1 black--text">{{ item.title }}</p>
       <router-link
-        to="/user"
+        :to="{ name: 'user', params:{username: item.artist.user_name}}"
         class="user-link"
       >
-        {{ item.userName }}
+        {{ item.artist.user_name }}
       </router-link>
+      <v-btn icon color="pink" @click="unlikeTrack" v-if="item.liked_by_user">
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+      <v-btn icon color="pink" @click="likeTrack" v-if="!item.liked_by_user">
+        <v-icon>mdi-heart-outline</v-icon>
+      </v-btn>
     </v-card-text>
   </v-card>
 </template>
 <script>
+import { CREATED, NO_CONTENT} from '../../util'
 export default{
   props: {
     item: {
        type:Object,
        required: true
      }
+   },
+   methods:{
+     playTrack(){
+       this.$store.dispatch('track/nowPlaying', this.item)
+     },
+
+     async likeTrack(){
+       const response = await axios.post(`/api/track/${this.item.id}/like`)
+
+       if (response.status !== CREATED) {
+         this.$store.commit('error/setCode', response.status)
+         return false
+       }
+
+       this.item.liked_by_user = true
+     },
+
+     async unlikeTrack(){
+       const response = await axios.delete(`/api/track/${this.item.id}/like`)
+
+       if (response.status !== NO_CONTENT) {
+         this.$store.commit('error/setCode', response.status)
+         return false
+       }
+
+       this.item.liked_by_user = false
+     },
    }
 }
 </script>
