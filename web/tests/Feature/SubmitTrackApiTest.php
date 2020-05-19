@@ -41,7 +41,7 @@ class SubmitTrackApiTest extends TestCase
                  'artwork' => UploadedFile::fake()->image('artwork.jpg'),
                  'title' => 'untitled'
              ]);
-
+        $response->dump();
          $response->assertStatus(201);
 
          $track = Track::first();

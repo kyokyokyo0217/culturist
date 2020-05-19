@@ -29,7 +29,7 @@
 
               <!-- <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card> -->
 
-              <v-card>
+              <v-card class="pa-4">
                 <v-card-title>
                   <span>Add Image</span>
                   <v-spacer></v-spacer>
@@ -37,7 +37,7 @@
                     <v-icon>mdi-close-thick</v-icon>
                   </v-btn>
                 </v-card-title>
-
+                <validation-errors-alert v-if="errors" :errors=errors.cover_photo></validation-errors-alert>
                 <v-file-input id="cover" @change="onCoverPhotoFileChange"></v-file-input>
               </v-card>
 
@@ -74,7 +74,7 @@
                   </template>
                   <!-- <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card> -->
 
-                  <v-card>
+                  <v-card class="pa-4">
                     <v-card-title>
                       <span>Add Image</span>
                       <v-spacer></v-spacer>
@@ -82,7 +82,7 @@
                         <v-icon>mdi-close-thick</v-icon>
                       </v-btn>
                     </v-card-title>
-
+                    <validation-errors-alert v-if="errors" :errors=errors.profile_picture></validation-errors-alert>
                     <v-file-input id="profile" @change="onProfilePictureFileChange"></v-file-input>
                   </v-card>
 
@@ -105,9 +105,18 @@
           <v-col align-self="end" class="mb-12 text-center">
             <template v-if="isLogin">
               <template v-if="isAuthenticatedUser">
-                <v-btn v-if="edit" color="black" outlined @click="saveChange">
-                  Save Changes
-                </v-btn>
+                <template v-if="edit">
+                  <v-btn v-if="!loading" color="black" outlined @click="saveChange">
+                    Save Changes
+                  </v-btn>
+                  <v-progress-circular
+                    v-if="loading"
+                    indeterminate
+                    color="grey"
+                    width="2"
+                    size="28"
+                  ></v-progress-circular>
+                </template>
                 <v-btn  v-else color="black" outlined @click="edit =! edit">
                   Edit Page
                 </v-btn>
@@ -130,6 +139,8 @@
           <v-col cols="4" class="pa-8">
             <v-card v-if="edit" class="pa-8" flat>
               <v-form>
+                <validation-errors-alert v-if="errors" :errors=errors.bio></validation-errors-alert>
+                <!-- default value が効かない -->
                 <v-textarea
                   outlined
                   rows="5"
@@ -139,6 +150,7 @@
                   v-model="bio"
                 ></v-textarea>
                 <!-- enterでイベント走っちゃう -->
+                <validation-errors-alert v-if="errors" :errors=errors.location></validation-errors-alert>
                 <v-text-field
                   outlined
                   background-color="white"
@@ -153,7 +165,6 @@
                 {{ user.bio }}
               </p>
               <p>{{ user.location }}</p>
-              <p>joined Feburary 2020</p>
             </v-card-text>
 
           </v-col>
@@ -171,236 +182,240 @@
 </template>
 <script>
 import { OK, CREATED,  NO_CONTENT, UNPROCESSABLE_ENTITY} from '../../util'
-  import ImageUploadCard from '../shared/ImageUploadCard.vue'
-  import WorksIndex from '../shared/WorksIndex.vue'
-  import SelectChip from '../shared/SelectChip.vue'
-  export default {
-    components:{
-      ImageUploadCard,
-      WorksIndex,
-      SelectChip
+import ValidationErrorsAlert from '../shared/ValidationErrorsAlert.vue'
+import ImageUploadCard from '../shared/ImageUploadCard.vue'
+import WorksIndex from '../shared/WorksIndex.vue'
+import SelectChip from '../shared/SelectChip.vue'
+export default {
+  components:{
+    ImageUploadCard,
+    WorksIndex,
+    SelectChip,
+    ValidationErrorsAlert
+  },
+  data(){
+    return{
+      background_src: '/img/background.jpg',
+      avatar_src: '/img/avator.png',
+      edit: false,
+      avatarMenu: false,
+      backgroundMenu: false,
+      user: null,
+      coverPhotoPreview: null,
+      profilePicturePreview: null,
+      coverPhotoFile: null,
+      profilePictureFile: null,
+      bio: '',
+      location: '',
+      pictures: [],
+      tracks: [],
+      errors: null,
+      loading: false
+    }
+  },
+  computed: {
+    isLogin(){
+      return this.$store.getters['auth/check']
     },
-    data(){
-      return{
-        background_src: '/img/background.jpg',
-        avatar_src: '/img/avator.png',
-        muscle_src: '/img/muscle.png',
-        edit: false,
-        avatarMenu: false,
-        backgroundMenu: false,
-        user: null,
-        coverPhotoPreview: null,
-        profilePicturePreview: null,
-        coverPhotoFile: null,
-        profilePictureFile: null,
-        bio: '',
-        location: '',
-        pictures: [],
-        tracks: [],
-        errors: null
-      }
+    // 名前微妙
+    isAuthenticatedUser(){
+      return this.$store.getters['auth/username'] == this.user.user_name
     },
-    computed: {
-      isLogin(){
-        return this.$store.getters['auth/check']
-      },
-      // 名前微妙
-      isAuthenticatedUser(){
-        return this.$store.getters['auth/username'] == this.user.user_name
-      },
-      selectedChip(){
-        return this.$store.getters['selectChip/selectedChip']
-      }
-    },
-    methods: {
+    selectedChip(){
+      return this.$store.getters['selectChip/selectedChip']
+    }
+  },
+  methods: {
+    getCoverPhotoUrl(){
+       if(this.coverPhotoPreview){
+         return this.coverPhotoPreview
+       }else if(this.user.cover_photo != null){
+         return this.user.cover_photo.url
+       }else{
+         return this.background_src
+       }
+     },
 
-      getCoverPhotoUrl(){
-         if(this.coverPhotoPreview){
-           return this.coverPhotoPreview
-         }else if(this.user.cover_photo != null){
-           return this.user.cover_photo.url
-         }else{
-           return this.background_src
-         }
-       },
-
-       getProfilePictureUrl(){
-          if(this.profilePicturePreview){
-            return this.profilePicturePreview
-          }else if(this.user.profile_picture != null){
-            return this.user.profile_picture.url
-          }else{
-            return this.avatar_src
-          }
-        },
-
-      onCoverPhotoFileChange (event) {
-
-        if (!event) {
-          this.coverPhotoFileReset()
-          return false
+     getProfilePictureUrl(){
+        if(this.profilePicturePreview){
+          return this.profilePicturePreview
+        }else if(this.user.profile_picture != null){
+          return this.user.profile_picture.url
+        }else{
+          return this.avatar_src
         }
-
-        const coverPhotoReader = new FileReader()
-
-        coverPhotoReader.onload = e => {
-          this.coverPhotoPreview = e.target.result
-        }
-
-        coverPhotoReader.readAsDataURL(event)
-
-        this.coverPhotoFile = event
       },
 
-      onProfilePictureFileChange (event) {
+    onCoverPhotoFileChange (event) {
 
-        if (!event) {
-          this.profilePictureFileReset()
-          return false
-        }
-
-        const profilePictureReader = new FileReader()
-
-        profilePictureReader.onload = e => {
-          this.profilePicturePreview = e.target.result
-        }
-
-        profilePictureReader.readAsDataURL(event)
-
-        this.profilePictureFile = event
-      },
-
-      coverPhotoFileReset () {
-        this.coverPhotoPreview = ''
-        this.coverPhotoFile = null
-        // Error: Cannot set property 'value' of null 原因不明 /uploadは問題なく動く
-        // this.$el.querySelector('#cover').value = null
-      },
-
-      profilePictureFileReset () {
-        this.profilePicturePreview = ''
-        this.profilePictureFile = null
-        // this.$el.querySelector('#profile').value = null
-      },
-
-      async saveChange(){
-        const formData = new FormData()
-        //  laravel側のvalidationでnullableを通すため ='null' ではなく =null にする
-        if(this.profilePictureFile){
-          formData.append('profile_picture', this.profilePictureFile)
-        }
-        if(this.coverPhotoFile){
-          formData.append('cover_photo', this.coverPhotoFile)
-        }
-        formData.append('bio', this.bio)
-        formData.append('location', this.location)
-// バグ putではfileを送れないためpost, headderでputに書き換え
-        const response = await axios.post(`/api/users/${this.$route.params.username}`, formData, {
-          headers: {
-            'X-HTTP-Method-Override': 'PUT'
-          }
-        })
-
-        if (response.status === UNPROCESSABLE_ENTITY) {
-          this.errors = response.data.errors
-          return false
-        }
-
+      if (!event) {
         this.coverPhotoFileReset()
-        this.profilePictureFileReset()
-        this.avatarMenu = false
-        this.backgroundMenu= false
-        this.edit =! this.edit
-
-        if (response.status !== NO_CONTENT) {
-          this.$store.commit('error/setCode', response.status)
-          return false
-        }
-// navigationdrawerのプロフ画再取得したい
-        this.fetchUser()
-      },
-
-      async fetchUser(){
-        // route直す
-        const response = await axios.get(`/api/users/${this.$route.params.username}`)
-
-        if (response.status !== OK) {
-          this.$store.commit('error/setCode', response.status)
-          return false
-        }
-
-        this.user = response.data
-      },
-
-      async fetchPhotos () {
-        const response = await axios.get(`/api/pictures/user/${this.$route.params.username}`)
-
-        if (response.status !== OK) {
-          this.$store.commit('error/setCode', response.status)
-          return false
-        }
-
-        this.pictures = response.data.data
-      },
-
-      async fetchTracks () {
-        const response = await axios.get(`/api/tracks/user/${this.$route.params.username}`)
-
-        if (response.status !== OK) {
-          this.$store.commit('error/setCode', response.status)
-          return false
-        }
-
-        this.tracks = response.data.data
-      },
-
-      async followUser(){
-        const response = await axios.post(`/api/${this.$route.params.username}/follow`)
-
-        if (response.status !== CREATED) {
-          this.$store.commit('error/setCode', response.status)
-          return false
-        }
-
-        this.user.followed_by_user = true
-      },
-
-      async unfollowUser(){
-        const response = await axios.delete(`/api/${this.$route.params.username}/follow`)
-
-        if (response.status !== NO_CONTENT) {
-          this.$store.commit('error/setCode', response.status)
-          return false
-        }
-        
-        this.user.followed_by_user = false
-      },
-    },
-
-    mounted(){
-        this.$store.commit('selectChip/selectChip', 'music')
-    },
-
-    watch: {
-      $route: {
-        async handler () {
-          await this.fetchUser()
-        },
-        immediate: true
-      },
-
-      selectedChip: {
-        async handler () {
-          if(this.selectedChip ==  "music"){
-            await this.fetchTracks()
-          }else if (this.selectedChip ==  "picture") {
-            await this.fetchPhotos()
-          }
-        },
-        immediate: true
+        return false
       }
+
+      const coverPhotoReader = new FileReader()
+
+      coverPhotoReader.onload = e => {
+        this.coverPhotoPreview = e.target.result
+      }
+
+      coverPhotoReader.readAsDataURL(event)
+
+      this.coverPhotoFile = event
+    },
+
+    onProfilePictureFileChange (event) {
+
+      if (!event) {
+        this.profilePictureFileReset()
+        return false
+      }
+
+      const profilePictureReader = new FileReader()
+
+      profilePictureReader.onload = e => {
+        this.profilePicturePreview = e.target.result
+      }
+
+      profilePictureReader.readAsDataURL(event)
+
+      this.profilePictureFile = event
+    },
+
+    coverPhotoFileReset () {
+      this.coverPhotoPreview = ''
+      this.coverPhotoFile = null
+      // Error: Cannot set property 'value' of null 原因不明 /uploadは問題なく動く
+      // this.$el.querySelector('#cover').value = null
+    },
+
+    profilePictureFileReset () {
+      this.profilePicturePreview = ''
+      this.profilePictureFile = null
+      // this.$el.querySelector('#profile').value = null
+    },
+
+    async saveChange(){
+      this.loading = true
+      const formData = new FormData()
+      //  laravel側のvalidationでnullableを通すため ='null' ではなく =null にする
+      if(this.profilePictureFile){
+        formData.append('profile_picture', this.profilePictureFile)
+      }
+      if(this.coverPhotoFile){
+        formData.append('cover_photo', this.coverPhotoFile)
+      }
+      formData.append('bio', this.bio)
+      formData.append('location', this.location)
+// バグ putではfileを送れないためpost, headderでputに書き換え
+      const response = await axios.post(`/api/users/${this.$route.params.username}`, formData, {
+        headers: {
+          'X-HTTP-Method-Override': 'PUT'
+        }
+      })
+
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.errors = response.data.errors
+        this.loading = false
+        return false
+      }
+
+      this.coverPhotoFileReset()
+      this.profilePictureFileReset()
+      this.avatarMenu = false
+      this.backgroundMenu= false
+      this.edit =! this.edit
+
+      if (response.status !== NO_CONTENT) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.loading = false
+// navigationdrawerのプロフ画再取得したい
+      this.fetchUser()
+    },
+
+    async fetchUser(){
+      const response = await axios.get(`/api/users/${this.$route.params.username}`)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.user = response.data
+    },
+
+    async fetchPhotos () {
+      const response = await axios.get(`/api/pictures/user/${this.$route.params.username}`)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.pictures = response.data.data
+    },
+
+    async fetchTracks () {
+      const response = await axios.get(`/api/tracks/user/${this.$route.params.username}`)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.tracks = response.data.data
+    },
+
+    async followUser(){
+      const response = await axios.post(`/api/${this.$route.params.username}/follow`)
+
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.user.followed_by_user = true
+    },
+
+    async unfollowUser(){
+      const response = await axios.delete(`/api/${this.$route.params.username}/follow`)
+
+      if (response.status !== NO_CONTENT) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.user.followed_by_user = false
+    },
+  },
+
+  mounted(){
+      this.$store.commit('selectChip/selectChip', 'music')
+  },
+
+  watch: {
+    $route: {
+      async handler () {
+        await this.fetchUser()
+      },
+      immediate: true
+    },
+
+    selectedChip: {
+      async handler () {
+        if(this.selectedChip ==  "music"){
+          await this.fetchTracks()
+        }else if (this.selectedChip ==  "picture") {
+          await this.fetchPhotos()
+        }
+      },
+      immediate: true
     }
   }
+}
 </script>
 <style scoped>
   .profile-nm{

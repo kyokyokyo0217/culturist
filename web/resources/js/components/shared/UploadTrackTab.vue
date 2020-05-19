@@ -3,17 +3,27 @@
     <v-container>
       <v-row>
         <v-col cols="8">
+          <validation-errors-alert v-if="errors" :errors=errors.title></validation-errors-alert>
           <v-text-field
             v-model="title"
             label="Title"
             required
           ></v-text-field>
+          <validation-errors-alert v-if="errors" :errors=errors.track></validation-errors-alert>
           <v-file-input id="audio" label="Audio File" @change="onAudioFileChange">
           </v-file-input>
+          <validation-errors-alert v-if="errors" :errors=errors.artwork></validation-errors-alert>
           <v-file-input id="artwork" label="Artwork" @change="onArtworkFileChange">
           </v-file-input>
           <v-col class="text-right">
-            <v-btn @click="uploadFile">submit</v-btn>
+            <v-btn v-if="!loading" @click="uploadFile">submit</v-btn>
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              color="grey"
+              width="2"
+              size="28"
+            ></v-progress-circular>
           </v-col>
         </v-col>
         <v-col cols="4">
@@ -28,14 +38,19 @@
 </template>
 <script>
 import { CREATED, UNPROCESSABLE_ENTITY } from '../../util'
+import ValidationErrorsAlert from '../shared/ValidationErrorsAlert.vue'
 export default {
+  components: {
+    ValidationErrorsAlert
+  },
   data: function () {
     return {
       title: '',
       preview: null,
       imageFile: null,
       audioFile: null,
-      errors: null
+      errors: null,
+      loading: false
     }
   },
   methods: {
@@ -83,6 +98,7 @@ export default {
     },
 
     async uploadFile(){
+      this.loading = true
       const formData = new FormData()
       formData.append('artwork', this.imageFile)
       formData.append('track', this.audioFile)
@@ -91,6 +107,7 @@ export default {
 
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
+        this.loading = false
         return false
       }
 
@@ -101,6 +118,8 @@ export default {
         this.$store.commit('error/setCode', response.status)
         return false
       }
+
+      this.loading = false
 
       this.$router.push('/explore')
 

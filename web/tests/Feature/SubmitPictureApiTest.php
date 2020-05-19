@@ -61,6 +61,7 @@ class SubmitPictureApiTest extends TestCase
         $response = $this->actingAs($this->user)
             ->postJson('api/pictures', [
                 'picture' => UploadedFile::fake()->image('photo.jpg'),
+                'title' => 'untitled'
             ]);
 
         $response->assertStatus(500);
@@ -80,6 +81,7 @@ class SubmitPictureApiTest extends TestCase
         $response = $this->actingAs($this->user)
             ->postJson('api/pictures', [
                 'picture' => UploadedFile::fake()->image('photo.jpg'),
+                'title' => 'untitled'
             ]);
 
         $response->assertStatus(500);
