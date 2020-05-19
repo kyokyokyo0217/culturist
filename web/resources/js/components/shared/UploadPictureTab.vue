@@ -3,15 +3,24 @@
     <v-container>
       <v-row>
         <v-col cols="8">
+          <validation-errors-alert v-if="errors" :errors=errors.title></validation-errors-alert>
           <v-text-field
             v-model="title"
             label="Title"
             required
           ></v-text-field>
+          <validation-errors-alert v-if="errors" :errors=errors.picture></validation-errors-alert>
           <v-file-input label="File Input" @change="onFileChange" id="picture">
           </v-file-input>
           <v-col class="text-right">
-            <v-btn @click="uploadFile">submit</v-btn>
+            <v-btn v-if="!loading" @click="uploadFile">submit</v-btn>
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              color="grey"
+              width="2"
+              size="28"
+            ></v-progress-circular>
           </v-col>
         </v-col>
         <v-col cols="4">
@@ -26,13 +35,18 @@
 </template>
 <script>
 import { CREATED, UNPROCESSABLE_ENTITY } from '../../util'
+import ValidationErrorsAlert from '../shared/ValidationErrorsAlert.vue'
 export default {
+  components: {
+    ValidationErrorsAlert
+  },
   data: function () {
     return {
       title: '',
       preview: null,
       file: null,
-      errors: null
+      errors: null,
+      loading: false
     }
   },
   methods: {
@@ -61,6 +75,7 @@ export default {
 
     },
     async uploadFile(){
+      this.loading = true
       const formData = new FormData()
       formData.append('picture', this.file)
       formData.append('title', this.title)
@@ -68,6 +83,7 @@ export default {
 
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
+        this.loading = false
         return false
       }
 
@@ -77,6 +93,8 @@ export default {
         this.$store.commit('error/setCode', response.status)
         return false
       }
+
+      this.loading = false
 
       this.$router.push('/explore')
     }

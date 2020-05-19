@@ -63,7 +63,6 @@
         items: [
           { title: 'Explore', path: '/explore'},
           { title: 'Feed', path: '/feed'},
-          { title: 'Trending', path: '/trending'},
           { title: 'Likes', path: '/likes'},
         ],
         logo_src: '/img/logo.png',

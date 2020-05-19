@@ -28,21 +28,21 @@
   </content-layout>
 </template>
 <script>
-  import ContentLayout from '../core/ContentLayout.vue'
-  import UploadPictureTab from '../shared/UploadPictureTab.vue'
-  import UploadTrackTab from '../shared/UploadTrackTab.vue'
-  export default {
-    components: {
-      ContentLayout,
-      UploadPictureTab,
-      UploadTrackTab
-    },
-    data: function () {
-      return {
-        tab: 0,
-      }
-    },
-  }
+import ContentLayout from '../core/ContentLayout.vue'
+import UploadPictureTab from '../shared/UploadPictureTab.vue'
+import UploadTrackTab from '../shared/UploadTrackTab.vue'
+export default {
+  components: {
+    ContentLayout,
+    UploadPictureTab,
+    UploadTrackTab,
+  },
+  data: function () {
+    return {
+      tab: 0,
+    }
+  },
+}
 </script>
 <style scoped>
  .container-height{
