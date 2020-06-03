@@ -24,12 +24,14 @@
             </router-link>
           </v-list-item-subtitle>
         </v-list-item-content>
-        <v-btn icon color="pink" @click="unlikePicture" v-if="item.liked_by_user">
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-        <v-btn icon color="pink" @click="likePicture" v-if="!item.liked_by_user">
-          <v-icon>mdi-heart-outline</v-icon>
-        </v-btn>
+        <template v-if="isLogin">
+          <v-btn icon color="pink" @click="unlikePicture" v-if="item.liked_by_user">
+            <v-icon>mdi-heart</v-icon>
+          </v-btn>
+          <v-btn icon color="pink" @click="likePicture" v-if="!item.liked_by_user">
+            <v-icon>mdi-heart-outline</v-icon>
+          </v-btn>
+        </template>
         <v-btn
           icon
           @click="closeDetail"
@@ -64,6 +66,11 @@ export default{
     return{
       overlay: false,
       avatar_src: '/img/avator.png',
+    }
+  },
+  computed:{
+    isLogin () {
+      return this.$store.getters['auth/check']
     }
   },
   methods:{

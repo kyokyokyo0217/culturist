@@ -6,11 +6,29 @@
     <template v-slot:content>
       <v-subheader>Users</v-subheader>
       <v-divider></v-divider>
+      <div class="d-flex justify-center">
+        <v-progress-circular
+          v-if="loading"
+          :size="70"
+          :width="7"
+          indeterminate
+          class="mt-12"
+        ></v-progress-circular>
+      </div>
       <p v-if="noUser">Seems Like Your Search Did Not Match Any Users ...</p>
       <profiles-index :cols="3" :users=users></profiles-index>
       <v-subheader>Works</v-subheader>
       <select-chip></select-chip>
       <v-divider></v-divider>
+      <div class="d-flex justify-center">
+        <v-progress-circular
+          v-if="loading"
+          :size="70"
+          :width="7"
+          indeterminate
+          class="mt-12"
+        ></v-progress-circular>
+      </div>
       <p v-if="noPicture && selectedChip === 'picture'">Seems Like Your Search Did Not Match Any Pictures ...</p>
       <p v-if="noTrack && selectedChip === 'music'">Seems Like Your Search Did Not Match Any Tracks ...</p>
       <works-index :cols="4" :pictures=pictures :tracks=tracks></works-index>
@@ -37,7 +55,8 @@ export default {
       tracks: [],
       noUser: false,
       noPicture: false,
-      noTrack: false
+      noTrack: false,
+      loading: false
     }
   },
   computed: {
@@ -45,9 +64,13 @@ export default {
       return this.$store.getters['selectChip/selectedChip']
     }
   },
+  mounted(){
+      this.$store.commit('selectChip/selectChip', 'music')
+  },
   watch: {
     $route: {
       async handler () {
+        this.loading = true
         this.$store.commit('selectChip/selectChip', 'music')
         this.noUser = false
         this.noTrack =  false
@@ -56,10 +79,13 @@ export default {
 
         if (response.status !== OK) {
           this.$store.commit('error/setCode', response.status)
+          this.loading = false
           return false
         }
         // 無駄が多い気がする
         this.users = response.data.users
+        this.loading = false
+
         if(this.users.length === 0){
           this.noUser = true
         }

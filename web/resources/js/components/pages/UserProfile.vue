@@ -106,16 +106,9 @@
             <template v-if="isLogin">
               <template v-if="isAuthenticatedUser">
                 <template v-if="edit">
-                  <v-btn v-if="!loading" color="black" outlined @click="saveChange">
+                  <v-btn color="black" outlined @click="saveChange" :loading="loading">
                     Save Changes
                   </v-btn>
-                  <v-progress-circular
-                    v-if="loading"
-                    indeterminate
-                    color="grey"
-                    width="2"
-                    size="28"
-                  ></v-progress-circular>
                 </template>
                 <v-btn  v-else color="black" outlined @click="edit =! edit">
                   Edit Page
@@ -125,7 +118,7 @@
                 <v-btn v-if="!user.followed_by_user" color="black" outlined @click="followUser">
                   Follow
                 </v-btn>
-                <v-btn  v-else color="black" outlined @click="unfollowUser">
+                <v-btn  v-else color="black" class="white--text" flat @click="unfollowUser">
                   Following
                 </v-btn>
               </template>
@@ -170,6 +163,15 @@
           </v-col>
           <v-col cols="8">
             <select-chip></select-chip>
+            <div class="d-flex justify-center">
+              <v-progress-circular
+                v-if="loadingWorks"
+                :size="70"
+                :width="7"
+                indeterminate
+                class="mt-12"
+              ></v-progress-circular>
+            </div>
             <works-index :cols="4" :tracks=tracks :pictures=pictures></works-index>
           </v-col>
         </v-row>
@@ -210,7 +212,8 @@ export default {
       pictures: [],
       tracks: [],
       errors: null,
-      loading: false
+      loading: false,
+      loadingWorks: false
     }
   },
   computed: {
@@ -348,25 +351,31 @@ export default {
     },
 
     async fetchPhotos () {
+      this.loadingWorks = true
       const response = await axios.get(`/api/pictures/user/${this.$route.params.username}`)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
+        this.loadingWorks = false
         return false
       }
 
       this.pictures = response.data.data
+      this.loadingWorks = false
     },
 
     async fetchTracks () {
+      this.loadingWorks = true
       const response = await axios.get(`/api/tracks/user/${this.$route.params.username}`)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
+        this.loadingWorks = false
         return false
       }
 
       this.tracks = response.data.data
+      this.loadingWorks = false
     },
 
     async followUser(){

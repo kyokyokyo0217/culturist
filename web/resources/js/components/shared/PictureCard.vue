@@ -3,17 +3,6 @@
     tile
     outlined
   >
-    <!-- <v-hover v-slot:default="{ hover }">
-      <v-img
-        @click="overlay = true"
-        :src="item.src"
-        aspect-ratio="1"
-        :class="{'image-clickable': hover}"
-        :gradient="hover ? 'to top, rgba(0, 0, 0, 0.4) 0%, transparent 180px' : undefined"
-      >
-      </v-img>
-    </v-hover> -->
-
     <v-img
       @click="overlay = true"
       :src="item.url"

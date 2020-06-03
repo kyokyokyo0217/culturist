@@ -64,7 +64,7 @@ class UserController extends Controller
             'bio' => $request->bio,
             'location' => $request->location
         ])->save();
-        
+
 
         if ($request->hasFile('profile_picture')) {
 
@@ -105,7 +105,7 @@ class UserController extends Controller
 
         }
 
-        if ($request->hasFile('profile_picture')) {
+        if ($request->hasFile('cover_photo')) {
 
             $current_cover_photo = CoverPhoto::firstWhere('user_id', $user->id);
 

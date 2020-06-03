@@ -5,6 +5,15 @@
     </template>
     <template v-slot:content>
       <select-chip></select-chip>
+      <div class="d-flex justify-center">
+        <v-progress-circular
+          v-if="loading"
+          :size="70"
+          :width="7"
+          indeterminate
+          class="mt-12"
+        ></v-progress-circular>
+      </div>
       <works-index :cols="3" :pictures=pictures :tracks=tracks></works-index>
     </template>
   </content-layout>
@@ -23,7 +32,8 @@
     data: function(){
       return{
         pictures: [],
-        tracks: []
+        tracks: [],
+        loading: false
       }
     },
     computed: {
@@ -33,24 +43,30 @@
     },
     methods:{
       async fetchPhotos () {
+        this.loading = true
         const response = await axios.get('/api/pictures/explore')
 
         if (response.status !== OK) {
           this.$store.commit('error/setCode', response.status)
+          this.loading = false
           return false
         }
 
         this.pictures = response.data.data
+        this.loading = false
       },
       async fetchTracks () {
+        this.loading = true
         const response = await axios.get('/api/tracks/explore')
 
         if (response.status !== OK) {
           this.$store.commit('error/setCode', response.status)
+          this.loading = false
           return false
         }
 
         this.tracks = response.data.data
+        this.loading = false
       }
     },
     mounted(){

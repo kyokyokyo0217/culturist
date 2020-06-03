@@ -36,12 +36,14 @@
       >
         {{ item.artist.user_name }}
       </router-link>
-      <v-btn icon color="pink" @click="unlikeTrack" v-if="item.liked_by_user">
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-      <v-btn icon color="pink" @click="likeTrack" v-if="!item.liked_by_user">
-        <v-icon>mdi-heart-outline</v-icon>
-      </v-btn>
+      <template v-if="isLogin">
+        <v-btn icon color="pink" @click="unlikeTrack" v-if="item.liked_by_user">
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+        <v-btn icon color="pink" @click="likeTrack" v-if="!item.liked_by_user">
+          <v-icon>mdi-heart-outline</v-icon>
+        </v-btn>
+      </template>
     </v-card-text>
   </v-card>
 </template>
@@ -53,6 +55,11 @@ export default{
        type:Object,
        required: true
      }
+   },
+   computed:{
+     isLogin () {
+       return this.$store.getters['auth/check']
+     },
    },
    methods:{
      playTrack(){
