@@ -6,12 +6,10 @@ import 'vuetify/dist/vuetify.min.css'
 import '@mdi/font/css/materialdesignicons.css'
 import store from './store'
 import router from './router'
-import EventHub from './EventHub'
 
 import App from './App.vue'
 
 Vue.use(Vuetify)
-Vue.use(EventHub)
 
 const createApp = async () => {
   await store.dispatch('auth/currentUser')

@@ -6,6 +6,7 @@
     dense
     hide-details
     height="4"
+    color="black"
     class="compact-form"
     v-on:keyup.enter="search"
     v-model="text"

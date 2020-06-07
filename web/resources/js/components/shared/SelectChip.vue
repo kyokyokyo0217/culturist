@@ -2,7 +2,6 @@
   <v-chip-group
     mandatory
     active-class="black accent-4 white--text disable-events"
-
   >
     <v-chip
      small

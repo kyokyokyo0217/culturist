@@ -8,9 +8,15 @@
             v-model="title"
             label="Title"
             required
+            color="black"
           ></v-text-field>
           <validation-errors-alert v-if="errors" :errors=errors.picture></validation-errors-alert>
-          <v-file-input label="File Input" @change="onFileChange" id="picture">
+          <v-file-input
+            label="File Input"
+            @change="onFileChange"
+            id="picture"
+            color="black"
+          >
           </v-file-input>
           <v-col class="text-right">
             <v-btn color="black" outlined @click="uploadFile" :loading="loading">submit</v-btn>

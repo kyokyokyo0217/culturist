@@ -9,7 +9,7 @@
         <v-tabs
           v-model="tab"
           background-color="transparent"
-          color="basil"
+          color="black"
         >
           <v-tab>Picture</v-tab>
           <v-tab>Track</v-tab>
@@ -44,8 +44,3 @@ export default {
   },
 }
 </script>
-<style scoped>
- .container-height{
-   height: 100%;
- }
-</style>

@@ -42,8 +42,7 @@
 
     <v-divider></v-divider>
 
-    <v-col class="text-center">
-      <!-- activeのとき黒にしたい -->
+    <div class="text-center mt-4">
       <v-btn
         to="/upload"
         outlined
@@ -52,7 +51,7 @@
         <v-icon class="mr-2">mdi-cloud-upload</v-icon>
         Upload
       </v-btn>
-    </v-col>
+    </div>
   </v-navigation-drawer>
 </template>
 

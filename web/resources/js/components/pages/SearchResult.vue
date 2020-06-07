@@ -15,7 +15,9 @@
           class="mt-12"
         ></v-progress-circular>
       </div>
-      <p v-if="noUser">Seems Like Your Search Did Not Match Any Users ...</p>
+      <div class="pt-4">
+        <p v-if="noUser">Seems Like Your Search Did Not Match Any Users ...</p>
+      </div>
       <profiles-index :cols="3" :users=users></profiles-index>
       <v-subheader>Works</v-subheader>
       <select-chip></select-chip>
@@ -29,8 +31,10 @@
           class="mt-12"
         ></v-progress-circular>
       </div>
-      <p v-if="noPicture && selectedChip === 'picture'">Seems Like Your Search Did Not Match Any Pictures ...</p>
-      <p v-if="noTrack && selectedChip === 'music'">Seems Like Your Search Did Not Match Any Tracks ...</p>
+      <div class="pt-4">
+        <p v-if="noPicture && selectedChip === 'picture'">Seems Like Your Search Did Not Match Any Pictures ...</p>
+        <p v-if="noTrack && selectedChip === 'music'">Seems Like Your Search Did Not Match Any Tracks ...</p>
+      </div>
       <works-index :cols="4" :pictures=pictures :tracks=tracks></works-index>
     </template>
   </content-layout>

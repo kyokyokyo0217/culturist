@@ -8,12 +8,23 @@
             v-model="title"
             label="Title"
             required
+            color="black"
           ></v-text-field>
           <validation-errors-alert v-if="errors" :errors=errors.track></validation-errors-alert>
-          <v-file-input id="audio" label="Audio File" @change="onAudioFileChange">
+          <v-file-input
+            id="audio"
+            label="Audio File"
+            @change="onAudioFileChange"
+            color="black"
+          >
           </v-file-input>
           <validation-errors-alert v-if="errors" :errors=errors.artwork></validation-errors-alert>
-          <v-file-input id="artwork" label="Artwork" @change="onArtworkFileChange">
+          <v-file-input
+            id="artwork"
+            label="Artwork"
+            @change="onArtworkFileChange"
+            color="black"
+          >
           </v-file-input>
           <v-col class="text-right">
             <v-btn color="black" outlined @click="uploadFile" :loading="loading">submit</v-btn>
