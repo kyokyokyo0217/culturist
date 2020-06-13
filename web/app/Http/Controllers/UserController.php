@@ -83,6 +83,7 @@ class UserController extends Controller
                   DB::rollBack();
                   Storage::cloud()
                       ->putFileAs('', $current_profile_piture, $current_profile_piture->filename, 'public');
+                  throw $exception;
               }
           }
 
@@ -122,6 +123,7 @@ class UserController extends Controller
                     DB::rollBack();
                     Storage::cloud()
                         ->putFileAs('', $current_cover_photo, $current_cover_photo->filename, 'public');
+                    throw $exception;
                 }
             }
 

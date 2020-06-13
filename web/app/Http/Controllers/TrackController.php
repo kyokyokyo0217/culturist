@@ -133,8 +133,22 @@ class TrackController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Track $track)
     {
-        //
+        Storage::cloud()->delete($track->filename);
+
+        DB::beginTransaction();
+
+        try {
+            $track->delete();
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Storage::cloud()
+                ->putFileAs('', $track, $track->filename, 'public');
+            throw $exception;
+        }
+
+      return response('', 204);        
     }
 }

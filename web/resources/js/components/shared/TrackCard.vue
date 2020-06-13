@@ -37,12 +37,42 @@
         {{ item.artist.user_name }}
       </router-link>
       <template v-if="isLogin">
-        <v-btn icon color="pink" @click="unlikeTrack" v-if="item.liked_by_user">
+        <v-btn v-if="item.liked_by_user" icon color="pink" @click="unlikeTrack">
           <v-icon>mdi-heart</v-icon>
         </v-btn>
-        <v-btn icon color="pink" @click="likeTrack" v-if="!item.liked_by_user">
+        <v-btn v-if="!item.liked_by_user" icon color="pink" @click="likeTrack">
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
+        <v-btn v-if="edit" small color="red" outlined @click.stop="dialog = true">
+          Delete
+        </v-btn>
+        <v-dialog
+          v-model="dialog"
+          max-width="290"
+        >
+          <v-card>
+            <v-card-title>
+              Are You Sure ?
+            </v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                @click="dialog = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                color="red"
+                outlined
+                @click="deleteTrack"
+                :loading = loading
+              >
+                Delete
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
     </v-card-text>
   </v-card>
@@ -54,6 +84,15 @@ export default{
     item: {
        type:Object,
        required: true
+     },
+     edit: {
+       type: Boolean,
+     }
+   },
+   data (){
+     return {
+       dialog: false,
+       loading: false
      }
    },
    computed:{
@@ -87,6 +126,23 @@ export default{
 
        this.item.liked_by_user = false
      },
+
+     async deleteTrack(){
+       this.loading = true
+       const response = await axios.delete(`/api/tracks/${this.item.id}`)
+
+       if (response.status !== NO_CONTENT) {
+         this.$store.commit('error/setCode', response.status)
+         return false
+       }
+
+       this.dialog = false
+       this.loading = false
+
+       this.$emit('fetchTracks')
+       // リフレッシュできてない
+       // this.$router.replace({path: this.$router.currentRoute.path}).catch(err => {})
+     }
    }
 }
 </script>

@@ -31,8 +31,8 @@
           </v-col>
         </v-col>
         <v-col cols="4">
-          <v-card color="grey" min-height="300px" min-width="300px">
-            <v-img :src="preview" v-if="preview" width="300px" height="300px" min-height="300px" min-width="300px">
+          <v-card color="grey" width="300px" height="300px">
+            <v-img :src="preview" v-if="preview" width="300px" height="300px">
             </v-img>
           </v-card>
         </v-col>

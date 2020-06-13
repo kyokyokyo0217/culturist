@@ -8,7 +8,7 @@
         class="d-flex child-flex"
         :cols="cols"
       >
-        <track-card :item=track></track-card>
+        <track-card :item=track :edit=edit @fetchTracks="fetchTracks"></track-card>
       </v-col>
       <v-col
         v-if="selectedChip == 'picture'"
@@ -17,6 +17,7 @@
         class="d-flex child-flex"
         :cols="cols"
       >
+            {{index}}
         <picture-card :item=picture></picture-card>
       </v-col>
     </v-row>
@@ -33,7 +34,8 @@ export default {
   props:{
     cols: Number,
     pictures: Array,
-    tracks: Array
+    tracks: Array,
+    edit: Boolean
   },
   // すまーとじゃない
   computed: {
@@ -41,5 +43,10 @@ export default {
       return this.$store.getters['selectChip/selectedChip']
     }
   },
+  methods:{
+    fetchTracks(){
+      this.$emit('fetchTracks')
+    }
+  }
 }
 </script>

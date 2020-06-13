@@ -143,7 +143,6 @@
                     v-model="bio"
                     color="black"
                   ></v-textarea>
-                  <!-- enterでイベント走っちゃう -->
                   <validation-errors-alert v-if="errors" :errors=errors.location></validation-errors-alert>
                   <v-text-field
                     outlined
@@ -175,7 +174,13 @@
                   class="mt-12"
                 ></v-progress-circular>
               </div>
-              <works-index :cols="4" :tracks=tracks :pictures=pictures></works-index>
+              <works-index
+                :cols="4"
+                :tracks=tracks
+                :pictures=pictures
+                :edit=edit
+                @fetchTracks="fetchTracks"
+              ></works-index>
             </v-col>
           </v-row>
         </v-container>
