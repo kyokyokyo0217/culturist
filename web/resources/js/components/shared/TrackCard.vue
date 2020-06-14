@@ -140,7 +140,7 @@ export default{
        this.loading = false
 
        this.$emit('fetchTracks')
-       // リフレッシュできてない
+       
        // this.$router.replace({path: this.$router.currentRoute.path}).catch(err => {})
      }
    }

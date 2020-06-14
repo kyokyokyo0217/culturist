@@ -122,8 +122,22 @@ class PictureController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Picture $picture)
     {
-        //
+        Storage::cloud()->delete($picture->filename);
+
+        DB::beginTransaction();
+
+        try {
+            $picture->delete();
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Storage::cloud()
+                ->putFileAs('', $picture, $picture->filename, 'public');
+            throw $exception;
+        }
+
+        return response('', 204);   
     }
 }

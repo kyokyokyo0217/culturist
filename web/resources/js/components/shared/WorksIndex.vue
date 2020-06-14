@@ -17,8 +17,7 @@
         class="d-flex child-flex"
         :cols="cols"
       >
-            {{index}}
-        <picture-card :item=picture></picture-card>
+        <picture-card :item=picture :edit=edit @fetchPhotos="fetchPhotos"></picture-card>
       </v-col>
     </v-row>
   </v-container>
@@ -46,6 +45,9 @@ export default {
   methods:{
     fetchTracks(){
       this.$emit('fetchTracks')
+    },
+    fetchPhotos(){
+      this.$emit('fetchPhotos')
     }
   }
 }

@@ -180,6 +180,7 @@
                 :pictures=pictures
                 :edit=edit
                 @fetchTracks="fetchTracks"
+                @fetchPhotos="fetchPhotos"
               ></works-index>
             </v-col>
           </v-row>
