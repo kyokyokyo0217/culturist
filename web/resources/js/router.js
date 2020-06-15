@@ -8,6 +8,7 @@ import SignUp from './components/pages/SignUp.vue'
 import Explore from './components/pages/Explore.vue'
 import Feed from './components/pages/Feed.vue'
 import Trending from './components/pages/Trending.vue'
+import Setting from './components/pages/Setting.vue'
 import Likes from './components/pages/Likes.vue'
 import Upload from './components/pages/Upload.vue'
 import UserProfile from './components/pages/UserProfile.vue'
@@ -53,6 +54,10 @@ const routes = [
   {
     path: '/likes',
     component: Likes
+  },
+  {
+    path: '/setting',
+    component: Setting
   },
   {
     path: '/upload',
