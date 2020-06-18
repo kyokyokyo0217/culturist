@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class SubmitTrackApiTest extends TestCase
+class StoreTrackApiTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -41,7 +41,6 @@ class SubmitTrackApiTest extends TestCase
                  'artwork' => UploadedFile::fake()->image('artwork.jpg'),
                  'title' => 'untitled'
              ]);
-        $response->dump();
          $response->assertStatus(201);
 
          $track = Track::first();

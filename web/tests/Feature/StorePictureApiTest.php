@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class SubmitPictureApiTest extends TestCase
+class StorePictureApiTest extends TestCase
 {
     use RefreshDatabase;
 
