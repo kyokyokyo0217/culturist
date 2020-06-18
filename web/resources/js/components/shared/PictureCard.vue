@@ -88,12 +88,6 @@ export default{
     }
   },
   methods:{
-    like(){
-      this.liked = true
-    },
-    unlike(){
-      this.liked = false
-    },
     async deletePicture(){
       this.loading = true
       const response = await axios.delete(`/api/pictures/${this.item.id}`)
