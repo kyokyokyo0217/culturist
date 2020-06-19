@@ -6,13 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\ProfilePicture;
+use App\Http\Resources\AuthenticatedUserResource;
 
 class ReturnAuthenticatedUserController extends Controller
 {
   public function returnAuthenticatedUser ()
   {
+    // profile_pictureの有無でリレーションをロードするか分岐
+    // optional()もあり？
+
     // if (Auth::check()) {
-    //   if(!Auth::user()->profile_picture->where('user_id', Auth::id())->isEmpty()){
+    //   if(ProfilePicture::firstWhere('user_id', Auth::id())){
     //       return Auth::user()->load('profile_picture');
     //   }else{
     //       return Auth::user();
@@ -21,13 +25,11 @@ class ReturnAuthenticatedUserController extends Controller
 
     if (Auth::check()) {
       if(ProfilePicture::firstWhere('user_id', Auth::id())){
-          return Auth::user()->load('profile_picture');
+          return new AuthenticatedUserResource(Auth::user()->load('profile_picture'));
       }else{
-          return Auth::user();
+          return new AuthenticatedUserResource(Auth::user());
       }
     }
-    // optional()もあり？
-    // return Auth::user()->load('profile_picture');
   }
 
 }

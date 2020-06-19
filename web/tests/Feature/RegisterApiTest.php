@@ -14,7 +14,7 @@ class RegisterApiTest extends TestCase
     /**
      * @test
      */
-    public function should_create_and_return_new_user()
+    public function should_create_and_return_new_user(): void
     {
         $data = [
             'name' => 'dumy user',

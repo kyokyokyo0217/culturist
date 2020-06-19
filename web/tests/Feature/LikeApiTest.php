@@ -17,22 +17,26 @@ class LikeApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        factory(User::class)->create()->each(function ($user) {
+            factory(Picture::class)->create(['user_id' => $user->id]);
+            factory(Track::class)->create(['user_id' => $user->id]);
+        });
 
-        factory(Picture::class)->create();
+        $this->user = User::first();
         $this->picture = Picture::first();
-
-        factory(Track::class)->create();
         $this->track = Track::first();
     }
 
     /**
      * @test
      */
-    public function should_like_picture()
+    public function should_like_picture(): void
     {
         $response = $this->actingAs($this->user)
             ->postJson("api/picture/{$this->picture->id}/like");
+
+        $response->dump();
+
 
         $response->assertStatus(201);
 
@@ -42,7 +46,7 @@ class LikeApiTest extends TestCase
     /**
      * @test
      */
-    public function should_like_picture_only_once()
+    public function should_like_picture_only_once(): void
     {
         $param = $this->picture->id;
         $this->actingAs($this->user)->postJson("api/picture/{$param}/like");
@@ -54,7 +58,7 @@ class LikeApiTest extends TestCase
     /**
      * @test
      */
-    public function should_unlike_picture()
+    public function should_unlike_picture(): void
     {
         $this->picture->picture_liked_by()->attach($this->user->id);
 
@@ -69,7 +73,7 @@ class LikeApiTest extends TestCase
     /**
      * @test
      */
-    public function should_like_track()
+    public function should_like_track(): void
     {
         $response = $this->actingAs($this->user)
             ->postJson("api/track/{$this->track->id}/like");
@@ -82,7 +86,7 @@ class LikeApiTest extends TestCase
     /**
      * @test
      */
-    public function should_like_track_only_once()
+    public function should_like_track_only_once(): void
     {
         $param = $this->track->id;
         $this->actingAs($this->user)->postJson("api/track/{$param}/like");
@@ -94,7 +98,7 @@ class LikeApiTest extends TestCase
     /**
      * @test
      */
-    public function should_unlike_track()
+    public function should_unlike_track(): void
     {
         $this->track->track_liked_by()->attach($this->user->id);
 

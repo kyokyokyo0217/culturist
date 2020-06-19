@@ -22,7 +22,7 @@ class FollowUserApiTest extends TestCase
     /**
      * @test
      */
-    public function should_follow_user()
+    public function should_follow_user(): void
     {
         $response = $this->actingAs($this->authUser)
             ->postJson("/api/{$this->followedUser->user_name}/follow");
@@ -35,7 +35,7 @@ class FollowUserApiTest extends TestCase
     /**
      * @test
      */
-    public function should_follow_user_only_once()
+    public function should_follow_user_only_once(): void
     {
         $param = $this->followedUser->user_name;
         $this->actingAs($this->authUser)->postJson("api/{$param}/follow");
@@ -47,7 +47,7 @@ class FollowUserApiTest extends TestCase
     /**
      * @test
      */
-    public function should_unfollow_user()
+    public function should_unfollow_user(): void
     {
         $this->followedUser->followers()->attach($this->authUser->id);
 

@@ -40,70 +40,70 @@
   </content-layout>
 </template>
 <script>
-import { OK } from '../../util'
-import ContentLayout from '../core/ContentLayout.vue'
-import ProfilesIndex from '../shared/ProfilesIndex.vue'
-import WorksIndex from '../shared/WorksIndex.vue'
-import SelectChip from '../shared/SelectChip.vue'
-export default {
-  components: {
-    ContentLayout,
-    ProfilesIndex,
-    WorksIndex,
-    SelectChip
-  },
-  data(){
-    return{
-      users: [],
-      pictures: [],
-      tracks: [],
-      noUser: false,
-      noPicture: false,
-      noTrack: false,
-      loading: false
-    }
-  },
-  computed: {
-    selectedChip(){
-      return this.$store.getters['selectChip/selectedChip']
-    }
-  },
-  mounted(){
-      this.$store.commit('selectChip/selectChip', 'music')
-  },
-  watch: {
-    $route: {
-      async handler () {
-        this.loading = true
-        this.$store.commit('selectChip/selectChip', 'music')
-        this.noUser = false
-        this.noTrack =  false
-        this.noPicture = false
-        const response = await axios.post('/api/search', {keyword: this.$route.query.result})
-
-        if (response.status !== OK) {
-          this.$store.commit('error/setCode', response.status)
-          this.loading = false
-          return false
-        }
-        // 無駄が多い気がする
-        this.users = response.data.users
-        this.loading = false
-
-        if(this.users.length === 0){
-          this.noUser = true
-        }
-        this.pictures = response.data.pictures
-        if(this.pictures.length === 0){
-          this.noPicture = true
-        }
-        this.tracks = response.data.tracks
-        if(this.tracks.length === 0){
-          this.noTrack = true
-        }
-      },
-      immediate: true
+  import { OK } from '../../util'
+  import ContentLayout from '../core/ContentLayout.vue'
+  import ProfilesIndex from '../shared/ProfilesIndex.vue'
+  import WorksIndex from '../shared/WorksIndex.vue'
+  import SelectChip from '../shared/SelectChip.vue'
+  export default {
+    components: {
+      ContentLayout,
+      ProfilesIndex,
+      WorksIndex,
+      SelectChip
     },
+    data(){
+      return{
+        users: [],
+        pictures: [],
+        tracks: [],
+        noUser: false,
+        noPicture: false,
+        noTrack: false,
+        loading: false
+      }
+    },
+    computed: {
+      selectedChip(){
+        return this.$store.getters['selectChip/selectedChip']
+      }
+    },
+    mounted(){
+        this.$store.commit('selectChip/selectChip', 'music')
+    },
+    watch: {
+      $route: {
+        async handler () {
+          this.loading = true
+          this.$store.commit('selectChip/selectChip', 'music')
+          this.noUser = false
+          this.noTrack =  false
+          this.noPicture = false
+          const response = await axios.post('/api/search', {keyword: this.$route.query.result})
+
+          if (response.status !== OK) {
+            this.$store.commit('error/setCode', response.status)
+            this.loading = false
+            return false
+          }
+          // 無駄が多い気がする
+          this.users = response.data.users
+          this.loading = false
+
+          if(this.users.length === 0){
+            this.noUser = true
+          }
+          this.pictures = response.data.pictures
+          if(this.pictures.length === 0){
+            this.noPicture = true
+          }
+          this.tracks = response.data.tracks
+          if(this.tracks.length === 0){
+            this.noTrack = true
+          }
+        },
+        immediate: true
+      },
+    }
   }
-}
 </script>

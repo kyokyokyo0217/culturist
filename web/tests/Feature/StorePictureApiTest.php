@@ -25,7 +25,7 @@ class StorePictureApiTest extends TestCase
     /**
      * @test
      */
-    public function should_upload_file()
+    public function should_upload_file(): void
     {
         Storage::fake('s3');
 
@@ -52,7 +52,7 @@ class StorePictureApiTest extends TestCase
     /**
      * @test
      */
-    public function should_not_store_file_in_case_of_DBerror()
+    public function should_not_store_file_in_case_of_DBerror(): void
     {
         Schema::drop('pictures');
 
@@ -72,7 +72,7 @@ class StorePictureApiTest extends TestCase
     /**
      * @test
      */
-    public function should_not_insert_file_to_DB_in_case_of_storeerror()
+    public function should_not_insert_file_to_DB_in_case_of_storeerror(): void
     {
         Storage::shouldReceive('cloud')
             ->once()

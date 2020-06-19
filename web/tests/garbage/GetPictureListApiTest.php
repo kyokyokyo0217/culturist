@@ -45,5 +45,6 @@ class GetPictureListApiTest extends TestCase
           ->assertJsonFragment([
               'data' => $expected_data,
           ]);
+    }
 
 }
