@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Track;
+use App\Artwork;
 use App\Http\Controllers\ArtworkController;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTrack;
@@ -135,20 +136,25 @@ class TrackController extends Controller
      */
     public function destroy(Track $track)
     {
+        $artwork = $track->artwork;
         Storage::cloud()->delete($track->filename);
+        Storage::cloud()->delete($artwork->filename);
 
         DB::beginTransaction();
 
         try {
             $track->delete();
+            $artwork->delete();
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
             Storage::cloud()
                 ->putFileAs('', $track, $track->filename, 'public');
+            Storage::cloud()
+                ->putFileAs('', $artwork, $artwork->filename, 'public');
             throw $exception;
         }
 
-      return response('', 204);        
+      return response('', 204);
     }
 }

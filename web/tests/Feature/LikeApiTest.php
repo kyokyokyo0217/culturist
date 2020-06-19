@@ -35,9 +35,6 @@ class LikeApiTest extends TestCase
         $response = $this->actingAs($this->user)
             ->postJson("api/picture/{$this->picture->id}/like");
 
-        $response->dump();
-
-
         $response->assertStatus(201);
 
         $this->assertEquals(1, $this->picture->picture_liked_by()->count());
