@@ -15,7 +15,7 @@ class PictureController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only('store');
+        $this->middleware('auth')->only(['store', 'destroy']);
     }
 
     public function getNewPictures()
@@ -138,6 +138,6 @@ class PictureController extends Controller
             throw $exception;
         }
 
-        return response('', 204);   
+        return response('', 204);
     }
 }

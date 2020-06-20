@@ -15,14 +15,6 @@ class ReturnAuthenticatedUserController extends Controller
     // profile_pictureの有無でリレーションをロードするか分岐
     // optional()もあり？
 
-    // if (Auth::check()) {
-    //   if(ProfilePicture::firstWhere('user_id', Auth::id())){
-    //       return Auth::user()->load('profile_picture');
-    //   }else{
-    //       return Auth::user();
-    //   }
-    // }
-
     if (Auth::check()) {
       if(ProfilePicture::firstWhere('user_id', Auth::id())){
           return new AuthenticatedUserResource(Auth::user()->load('profile_picture'));
