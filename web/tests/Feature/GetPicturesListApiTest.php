@@ -136,7 +136,7 @@ class getPicturesListApiTest extends TestCase
             $query->where('id', $this->authUser->id);
         })->with(['artist', 'artist.profile_picture'])
           ->orderBy(Picture::CREATED_AT, 'desc')
-          ->paginate();
+          ->get();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -166,4 +166,47 @@ class getPicturesListApiTest extends TestCase
                 'data' => $expected_data,
             ]);
     }
+
+    /**
+     * @test
+     */
+     public function should_get_user_profile_pictures() :void
+     {
+        $user = User::first();
+
+        $response = $this->getJson("/api/pictures/user/{$user->user_name}");
+
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+              ->where('user_id', $user->id)
+              ->orderBy(Picture::CREATED_AT, 'desc')
+              ->get();
+
+        $expected_data = $pictures->map(function ($picture) {
+            return [
+                'id' => $picture->id,
+                'url' => $picture->url,
+                'title' => $picture->title,
+                'liked_by_user' => $picture->liked_by_user,
+                'artist' => [
+                    'name' => $picture->artist->name,
+                    'user_name' => $picture->artist->user_name,
+                    'bio' => $picture->artist->bio,
+                    'location' => $picture->artist->location,
+                    'followed_by_user' => $picture->artist->followed_by_user,
+                    'profile_picture' => [
+                      'id' => $picture->artist->profile_picture->id,
+                      'url' => $picture->artist->profile_picture->url,
+                      'filename' => $picture->artist->profile_picture->filename
+                    ]
+                ],
+            ];
+        })
+        ->all();
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1, 'data')
+            ->assertJsonFragment([
+                'data' => $expected_data,
+            ]);
+     }
 }

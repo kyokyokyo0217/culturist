@@ -55,11 +55,16 @@ class TrackController extends Controller
 
     public function getUserProfileTracks(User $user)
     {
-      $tracks = Track::whereHas('artist', function (Builder $query) use($user) {
-          $query->where('id', $user->id);
-      })->with(['artist', 'artwork'])
-        ->orderBy(Track::CREATED_AT, 'desc')
-        ->paginate();
+      // $tracks = Track::whereHas('artist', function (Builder $query) use($user) {
+      //     $query->where('id', $user->id);
+      // })->with(['artist', 'artwork'])
+      //   ->orderBy(Track::CREATED_AT, 'desc')
+      //   ->paginate();
+
+      $tracks = Track::with(['artist', 'artwork'])
+          ->where('user_id', $user->id)
+          ->orderBy(Track::CREATED_AT, 'desc')
+          ->paginate();
 
       return $tracks;
     }

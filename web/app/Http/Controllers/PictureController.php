@@ -51,11 +51,16 @@ class PictureController extends Controller
 
     public function getUserProfilePictures(User $user)
     {
-      $pictures = Picture::whereHas('artist', function (Builder $query) use($user){
-          $query->where('id', $user->id);
-      })->with(['artist', 'artist.profile_picture'])
-        ->orderBy(Picture::CREATED_AT, 'desc')
-        ->paginate();
+      $pictures = Picture::with(['artist', 'artist.profile_picture'])
+      ->where('user_id', $user->id)
+      ->orderBy(Picture::CREATED_AT, 'desc')
+      ->paginate();
+
+      // $pictures = Picture::whereHas('artist', function (Builder $query) use($user){
+      //     $query->where('id', $user->id);
+      // })->with(['artist', 'artist.profile_picture'])
+      //   ->orderBy(Picture::CREATED_AT, 'desc')
+      //   ->paginate();
 
       return $pictures;
     }

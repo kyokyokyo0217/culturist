@@ -162,6 +162,47 @@ class getTracksListApiTest extends TestCase
                 ->assertJsonFragment([
                     'data' => $expected_data,
                 ]);
-
       }
+
+      /**
+       * @test
+       */
+       public function should_get_user_profile_pictures() :void
+       {
+          $user = User::first();
+
+          $response = $this->getJson("/api/tracks/user/{$user->user_name}");
+
+          $tracks = Track::with(['artist', 'artwork'])
+              ->where('user_id', $user->id)
+              ->orderBy(Track::CREATED_AT, 'desc')
+              ->get();
+
+          $expected_data = $tracks->map(function ($track) {
+              return [
+                  'id' => $track->id,
+                  'url' => $track->url,
+                  'title' => $track->title,
+                  'liked_by_user' => $track->liked_by_user,
+                  'artist' => [
+                      'name' => $track->artist->name,
+                      'user_name' => $track->artist->user_name,
+                      'bio' => $track->artist->bio,
+                      'location' => $track->artist->location,
+                      'followed_by_user' => $track->artist->followed_by_user,
+                  ],
+                  'artwork' => [
+                      'id' => $track->artwork->id,
+                      'url' => $track->artwork->url,
+                  ]
+               ];
+            })
+            ->all();
+
+            $response->assertStatus(200)
+                ->assertJsonCount(1, 'data')
+                ->assertJsonFragment([
+                    'data' => $expected_data,
+                ]);
+       }
 }
