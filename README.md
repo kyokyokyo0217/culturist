@@ -1,6 +1,6 @@
-<img width="1440" alt="Screen Shot 2020-06-24 at 8 38 11" src="https://user-images.githubusercontent.com/53022680/85478534-64264280-b5f7-11ea-918e-e7c05b1c937f.png">
 # Culturist
 #### 写真や音楽といった芸術作品をお互いにシェアできる、SNS型の写真、音楽共有サイトです。
+<img width="1440" alt="Screen Shot 2020-06-24 at 8 38 11" src="https://user-images.githubusercontent.com/53022680/85478534-64264280-b5f7-11ea-918e-e7c05b1c937f.png">
 ## 使用言語、フレームワーク
 - PHP 7.2.5
 - Laravel 7.0
