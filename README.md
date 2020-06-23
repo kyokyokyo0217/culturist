@@ -35,3 +35,4 @@ Docker, docker-compose
 - クエリのN+1問題への配慮
 - Vuexによる認証状態の保持、認証状態取得API
 - SPA化(Single Page Application)によるUXの向上
+- APIテスト
