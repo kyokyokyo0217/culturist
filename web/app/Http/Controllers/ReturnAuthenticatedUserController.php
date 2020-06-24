@@ -14,6 +14,7 @@ class ReturnAuthenticatedUserController extends Controller
   {
     // profile_pictureの有無でリレーションをロードするか分岐
     // optional()もあり？
+    // dataでのラップ要確認
 
     if (Auth::check()) {
       if(ProfilePicture::firstWhere('user_id', Auth::id())){

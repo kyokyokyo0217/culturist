@@ -4,6 +4,8 @@
       <v-img
         :src="logo_src"
         width="200"
+        height="60"
+        alt="logo"
       ></v-img>
     </v-card>
 

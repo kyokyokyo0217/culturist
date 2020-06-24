@@ -86,7 +86,8 @@ const actions = {
   async currentUser (context) {
     context.commit('setApiStatus', null)
     const response = await axios.get('/api/auth/user')
-    const user = response.data || null
+
+    const user = response.data.data || null
 
     if (response.status === OK) {
       context.commit('setApiStatus', true)
