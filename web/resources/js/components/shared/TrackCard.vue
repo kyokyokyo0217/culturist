@@ -30,6 +30,7 @@
   </v-hover>
     <v-card-text class="py-0">
       <p class="ma-0 subtitle-1 black--text">{{ item.title }}</p>
+      <span>by</span>
       <router-link
         :to="{ name: 'user', params:{username: item.artist.user_name}}"
         class="user-link"
@@ -140,7 +141,7 @@ export default{
        this.loading = false
 
        this.$emit('fetchTracks')
-       
+
        // this.$router.replace({path: this.$router.currentRoute.path}).catch(err => {})
      }
    }
