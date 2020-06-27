@@ -10,6 +10,7 @@ use App\Track;
 use App\Artwork;
 use App\ProfilePicture;
 use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
 
 class getTracksListApiTest extends TestCase
 {
@@ -50,6 +51,7 @@ class getTracksListApiTest extends TestCase
                     'bio' => $track->artist->bio,
                     'location' => $track->artist->location,
                     'followed_by_user' => $track->artist->followed_by_user,
+                    'created_at' => $track->artist->created_at->format('Y/m/d')
                 ],
                 'artwork' => [
                     'id' => $track->artwork->id,
@@ -100,6 +102,7 @@ class getTracksListApiTest extends TestCase
                      'bio' => $track->artist->bio,
                      'location' => $track->artist->location,
                      'followed_by_user' => $track->artist->followed_by_user,
+                     'created_at' => $track->artist->created_at->format('Y/m/d')
                  ],
                  'artwork' => [
                      'id' => $track->artwork->id,
@@ -148,6 +151,7 @@ class getTracksListApiTest extends TestCase
                       'bio' => $track->artist->bio,
                       'location' => $track->artist->location,
                       'followed_by_user' => $track->artist->followed_by_user,
+                      'created_at' => $track->artist->created_at->format('Y/m/d')
                   ],
                   'artwork' => [
                       'id' => $track->artwork->id,
@@ -190,6 +194,7 @@ class getTracksListApiTest extends TestCase
                       'bio' => $track->artist->bio,
                       'location' => $track->artist->location,
                       'followed_by_user' => $track->artist->followed_by_user,
+                      'created_at' => $track->artist->created_at->format('Y/m/d')
                   ],
                   'artwork' => [
                       'id' => $track->artwork->id,

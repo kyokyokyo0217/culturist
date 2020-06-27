@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use DateTimeInterface;
 
 
 class User extends Authenticatable
@@ -26,13 +27,13 @@ class User extends Authenticatable
    *
    * @var array
    */
-   protected $visible = [
-     'name', 'user_name', 'pictures', 'tracks', 'bio', 'location', 'profile_picture', 'cover_photo', 'followed_by_user'
-   ];
+  protected $visible = [
+   'name', 'user_name', 'pictures', 'tracks', 'bio', 'location', 'profile_picture', 'cover_photo', 'followed_by_user', 'created_at'
+  ];
 
-    protected $appends = [
-      'followed_by_user',
-    ];
+  protected $appends = [
+    'followed_by_user'
+  ];
 
   /**
    * The attributes that should be cast to native types.
@@ -60,6 +61,16 @@ class User extends Authenticatable
       });
   }
 
+  /**
+   * Prepare a date for array / JSON serialization.
+   *
+   * @param  \DateTimeInterface  $date
+   * @return string
+   */
+  protected function serializeDate(DateTimeInterface $date)
+  {
+      return $date->format('Y/m/d');
+  }
 
   public function pictures()
   {

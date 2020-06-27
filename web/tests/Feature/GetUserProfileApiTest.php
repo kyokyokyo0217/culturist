@@ -9,6 +9,7 @@ use App\User;
 use App\ProfilePicture;
 use App\CoverPhoto;
 use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
 
 class GetUserProfileApiTest extends TestCase
 {
@@ -41,6 +42,7 @@ class GetUserProfileApiTest extends TestCase
                   'bio' => $user->bio,
                   'location' => $user->location,
                   'followed_by_user' => $user->followed_by_user,
+                  'created_at' => $user->created_at->format('Y/m/d'),
                   'profile_picture' => [
                     'id' => $user->profile_picture->id,
                     'url' => $user->profile_picture->url,

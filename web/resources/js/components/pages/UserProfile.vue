@@ -73,6 +73,7 @@
                         Change
                       </v-btn>
                     </template>
+                    
                     <!-- <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card> -->
 
                     <v-card class="pa-4">
@@ -86,8 +87,6 @@
                       <validation-errors-alert v-if="errors" :errors=errors.profile_picture></validation-errors-alert>
                       <v-file-input id="profile" @change="onProfilePictureFileChange"></v-file-input>
                     </v-card>
-
-
 
                   </v-menu>
                 </v-img>

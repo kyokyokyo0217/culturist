@@ -9,6 +9,7 @@ use App\User;
 use App\Picture;
 use App\ProfilePicture;
 use Illuminate\Database\Eloquent\Builder;
+use Carbon\Crabon;
 
 class getPicturesListApiTest extends TestCase
 {
@@ -47,6 +48,7 @@ class getPicturesListApiTest extends TestCase
                     'bio' => $picture->artist->bio,
                     'location' => $picture->artist->location,
                     'followed_by_user' => $picture->artist->followed_by_user,
+                    'created_at' => $picture->artist->created_at->format('Y/m/d'),
                     'profile_picture' => [
                       'id' => $picture->artist->profile_picture->id,
                       'url' => $picture->artist->profile_picture->url,
@@ -98,6 +100,7 @@ class getPicturesListApiTest extends TestCase
                     'bio' => $picture->artist->bio,
                     'location' => $picture->artist->location,
                     'followed_by_user' => $picture->artist->followed_by_user,
+                    'created_at' => $picture->artist->created_at->format('Y/m/d'),
                     'profile_picture' => [
                       'id' => $picture->artist->profile_picture->id,
                       'url' => $picture->artist->profile_picture->url,
@@ -150,6 +153,7 @@ class getPicturesListApiTest extends TestCase
                     'bio' => $picture->artist->bio,
                     'location' => $picture->artist->location,
                     'followed_by_user' => $picture->artist->followed_by_user,
+                    'created_at' => $picture->artist->created_at->format('Y/m/d'),
                     'profile_picture' => [
                       'id' => $picture->artist->profile_picture->id,
                       'url' => $picture->artist->profile_picture->url,
@@ -193,6 +197,7 @@ class getPicturesListApiTest extends TestCase
                     'bio' => $picture->artist->bio,
                     'location' => $picture->artist->location,
                     'followed_by_user' => $picture->artist->followed_by_user,
+                    'created_at' => $picture->artist->created_at->format('Y/m/d'),
                     'profile_picture' => [
                       'id' => $picture->artist->profile_picture->id,
                       'url' => $picture->artist->profile_picture->url,
