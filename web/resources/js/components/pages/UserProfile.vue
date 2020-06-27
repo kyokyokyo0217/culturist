@@ -73,7 +73,7 @@
                         Change
                       </v-btn>
                     </template>
-                    
+
                     <!-- <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card> -->
 
                     <v-card class="pa-4">
@@ -156,10 +156,13 @@
               </v-card>
 
               <v-card-text v-else>
+                <p>{{ user.bio }}</p>
                 <p>
-                  {{ user.bio }}
+                  {{ user.location }}
+                  <br>
+                  Joined {{ user.created_at}}
                 </p>
-                <p>{{ user.location }}</p>
+
               </v-card-text>
 
             </v-col>
