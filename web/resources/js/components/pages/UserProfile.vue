@@ -1,52 +1,53 @@
 <template>
   <v-form>
     <v-card tile flat width="100%" height="100%">
-      <v-img
-        :src="getCoverPhotoUrl()"
-        max-height="400px"
-        :gradient="edit ? 'to bottom, rgba(0,0,0,0), rgba(100,100,100,25)' : undefined"
-      >
-        <v-container fluid class="fill-height" v-if="edit">
-          <v-row>
-            <!-- align-selfが効いてない -->
-            <v-col cols="12" class="text-center" align-self="end">
-              <!-- close-on~~ :付けないと動かない-->
-              <v-menu
-                v-model="backgroundMenu"
-                :close-on-click="false"
-                :close-on-content-click="false"
-                :nudge-width="200"
-                offset-y
-              >
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    v-on="on"
-                  >
-                    <v-icon class="mr-2">mdi-camera</v-icon>
-                    Change Cover Photo
-                  </v-btn>
-                </template>
-
-                <!-- <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card> -->
-
-                <v-card class="pa-4">
-                  <v-card-title>
-                    <span>Add Image</span>
-                    <v-spacer></v-spacer>
-                    <v-btn icon x-small @click="backgroundMenu = !backgroundMenu">
-                      <v-icon>mdi-close-thick</v-icon>
+      <v-card width="100%" height="400px">
+        <v-img
+          :src="getCoverPhotoUrl()"
+          max-height="400px"
+          :gradient="edit ? 'to bottom, rgba(0,0,0,0), rgba(100,100,100,25)' : undefined"
+        >
+          <v-container fluid class="fill-height" v-if="edit">
+            <v-row>
+              <!-- align-selfが効いてない -->
+              <v-col cols="12" class="text-center" align-self="end">
+                <!-- close-on~~ :付けないと動かない-->
+                <v-menu
+                  v-model="backgroundMenu"
+                  :close-on-click="false"
+                  :close-on-content-click="false"
+                  :nudge-width="200"
+                  offset-y
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-on="on"
+                    >
+                      <v-icon class="mr-2">mdi-camera</v-icon>
+                      Change Cover Photo
                     </v-btn>
-                  </v-card-title>
-                  <validation-errors-alert v-if="errors" :errors=errors.cover_photo></validation-errors-alert>
-                  <v-file-input id="cover" @change="onCoverPhotoFileChange"></v-file-input>
-                </v-card>
+                  </template>
 
+                  <!-- <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card> -->
 
-              </v-menu>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-img>
+                  <v-card class="pa-4">
+                    <v-card-title>
+                      <span>Add Image</span>
+                      <v-spacer></v-spacer>
+                      <v-btn icon x-small @click="backgroundMenu = !backgroundMenu">
+                        <v-icon>mdi-close-thick</v-icon>
+                      </v-btn>
+                    </v-card-title>
+                    <validation-errors-alert v-if="errors" :errors=errors.cover_photo></validation-errors-alert>
+                    <v-file-input id="cover" @change="onCoverPhotoFileChange"></v-file-input>
+                  </v-card>
+
+                </v-menu>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-img>
+      </v-card>
 
       <v-card color="grey lighten-5" height="100%">
 
