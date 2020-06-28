@@ -6,7 +6,6 @@
           <slot name="title"></slot>
         </p>
       </v-container>
-      <!-- v-slot推奨 -->
       <slot name="content"></slot>
     </v-container>
   </v-sheet>

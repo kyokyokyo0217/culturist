@@ -232,7 +232,6 @@ export default {
     isLogin(){
       return this.$store.getters['auth/check']
     },
-    // 名前微妙
     isAuthenticatedUser(){
       return this.$store.getters['auth/username'] == this.user.user_name
     },
@@ -337,18 +336,21 @@ export default {
 
       this.coverPhotoFileReset()
       this.profilePictureFileReset()
-      this.avatarMenu = false
-      this.backgroundMenu= false
-      this.edit =! this.edit
 
       if (response.status !== NO_CONTENT) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
-      this.loading = false
-      // navigationdrawerのプロフ画も再取得したい
+      //laravel側のreturnで$userとして返す方が速い？
       this.fetchUser()
+
+      // navigationdrawerのプロフ画も再取得したい
+
+      this.avatarMenu = false
+      this.backgroundMenu= false
+      this.edit =! this.edit
+      this.loading = false
     },
 
     async fetchUser(){
@@ -360,6 +362,10 @@ export default {
       }
 
       this.user = response.data
+
+      //レンダリング用とフォーム用に分ける
+      this.bio = this.user.bio
+      this.location = this.user.location
     },
 
     async fetchPhotos () {
@@ -414,17 +420,14 @@ export default {
   },
 
   mounted(){
-      this.$store.commit('selectChip/selectChip', 'music')
+    this.$store.commit('selectChip/selectChip', 'music')
+  },
+
+  created(){
+    this.fetchUser()
   },
 
   watch: {
-    $route: {
-      async handler () {
-        await this.fetchUser()
-      },
-      immediate: true
-    },
-
     selectedChip: {
       async handler () {
         if(this.selectedChip ==  "music"){
