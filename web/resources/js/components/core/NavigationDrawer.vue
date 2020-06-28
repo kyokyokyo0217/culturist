@@ -28,7 +28,7 @@
     <v-divider></v-divider>
 
     <v-list dense flat class="px-0">
-      <v-list-item-group active-class="border" color="primary">
+      <v-list-item-group active-class="navigation-item-border">
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
@@ -68,7 +68,6 @@
           { title: 'Setting', path: '/setting'}
         ],
         logo_src: '/img/logo.png',
-        right: null,
       }
     },
     computed: {
@@ -86,7 +85,7 @@
 </script>
 
 <style scoped>
-  .border{
+  .navigation-item-border{
     border-left: 8px solid #000000;
   }
   .v-btn:hover{

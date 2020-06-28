@@ -162,7 +162,6 @@
                   <br>
                   Joined {{ user.created_at}}
                 </p>
-
               </v-card-text>
 
             </v-col>
@@ -219,6 +218,7 @@ export default {
       profilePicturePreview: null,
       coverPhotoFile: null,
       profilePictureFile: null,
+      //fetchしたの入れる？
       bio: '',
       location: '',
       pictures: [],
@@ -322,7 +322,7 @@ export default {
       }
       formData.append('bio', this.bio)
       formData.append('location', this.location)
-// バグ putではfileを送れないためpost, headderでputに書き換え
+      // バグ putではfileを送れないためpost, headderでputに書き換え
       const response = await axios.post(`/api/users/${this.$route.params.username}`, formData, {
         headers: {
           'X-HTTP-Method-Override': 'PUT'
@@ -347,7 +347,7 @@ export default {
       }
 
       this.loading = false
-// navigationdrawerのプロフ画再取得したい
+      // navigationdrawerのプロフ画も再取得したい
       this.fetchUser()
     },
 
