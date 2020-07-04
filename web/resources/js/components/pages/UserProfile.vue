@@ -13,7 +13,7 @@
     <div v-else>
       <v-card width="100%" height="400px">
         <v-img
-          :src="getCoverPhotoUrl()"
+          :src="coverPhotoSrc"
           max-height="400px"
           :gradient="edit ? 'to bottom, rgba(0,0,0,0), rgba(100,100,100,25)' : undefined"
         >
@@ -64,7 +64,7 @@
           <v-row>
             <v-col class="text-right">
               <v-list-item-avatar size="200" color="white">
-                <v-img :src="getProfilePictureUrl()">
+                <v-img :src="profilePictureSrc">
                   <v-menu
                     v-if="edit"
                     v-model="avatarMenu"
@@ -216,8 +216,6 @@ export default {
   },
   data(){
     return{
-      background_src: '/img/background.jpg',
-      avatar_src: '/img/avator.png',
       edit: false,
       avatarMenu: false,
       backgroundMenu: false,
@@ -245,46 +243,26 @@ export default {
     selectedChip(){
       return this.$store.getters['selectChip/selectedChip']
     },
-    // getProfilePictureUrl(){
-    //    if(this.profilePicturePreview){
-    //      return this.profilePicturePreview
-    //    }else if(this.user.profile_picture != null){
-    //      return this.user.profile_picture.url
-    //    }else{
-    //      return this.avatar_src
-    //    }
-    //  },
-    //  getCoverPhotoUrl(){
-    //     if(this.coverPhotoPreview){
-    //       return this.coverPhotoPreview
-    //     }else if(this.user.cover_photo != null){
-    //       return this.user.cover_photo.url
-    //     }else{
-    //       return this.background_src
-    //     }
-    //   },
-  },
-  methods: {
-    getCoverPhotoUrl(){
-       if(this.coverPhotoPreview){
-         return this.coverPhotoPreview
-       }else if(this.user != null){
-         return this.user.cover_photo.url
+    profilePictureSrc(){
+       if(this.profilePicturePreview){
+         return this.profilePicturePreview
+       }else if(this.user.profile_picture != null){
+         return this.user.profile_picture.url
        }else{
-         return this.background_src
+         return "/img/avator.png"
        }
      },
-
-     getProfilePictureUrl(){
-        if(this.profilePicturePreview){
-          return this.profilePicturePreview
-        }else if(this.user != null){
-          return this.user.profile_picture.url
-        }else{
-          return this.avatar_src
-        }
-      },
-
+    coverPhotoSrc(){
+      if(this.coverPhotoPreview){
+        return this.coverPhotoPreview
+      }else if(this.user.cover_photo != null){
+        return this.user.cover_photo.url
+      }else{
+        return "/img/background.jpg"
+      }
+    },
+  },
+  methods: {
     onCoverPhotoFileChange (event) {
 
       if (!event) {
