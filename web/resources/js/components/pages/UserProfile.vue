@@ -1,6 +1,16 @@
 <template>
-  <v-form>
-    <v-card tile flat width="100%" height="100%">
+  <v-card tile flat width="100%" height="100%">
+    <!-- CSS要精査 -->
+    <div v-if="!user" class="d-flex justify-center mt-12 pt-12">
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        indeterminate
+        class="mt-12"
+      ></v-progress-circular>
+    </div>
+
+    <div v-else>
       <v-card width="100%" height="400px">
         <v-img
           :src="getCoverPhotoUrl()"
@@ -9,7 +19,6 @@
         >
           <v-container fluid class="fill-height" v-if="edit">
             <v-row>
-              <!-- align-selfが効いてない -->
               <v-col cols="12" class="text-center" align-self="end">
                 <!-- close-on~~ :付けないと動かない-->
                 <v-menu
@@ -133,7 +142,6 @@
               <v-card v-if="edit" class="pa-8" flat>
                 <v-form>
                   <validation-errors-alert v-if="errors" :errors=errors.bio></validation-errors-alert>
-                  <!-- default value が効かない -->
                   <v-textarea
                     outlined
                     rows="5"
@@ -189,9 +197,9 @@
         </v-container>
 
       </v-card>
+    </div>
+  </v-card>
 
-    </v-card>
-  </v-form>
 </template>
 <script>
 import { OK, CREATED,  NO_CONTENT, UNPROCESSABLE_ENTITY} from '../../util'
@@ -218,7 +226,6 @@ export default {
       profilePicturePreview: null,
       coverPhotoFile: null,
       profilePictureFile: null,
-      //fetchしたの入れる？
       bio: '',
       location: '',
       pictures: [],
@@ -237,13 +244,33 @@ export default {
     },
     selectedChip(){
       return this.$store.getters['selectChip/selectedChip']
-    }
+    },
+    // getProfilePictureUrl(){
+    //    if(this.profilePicturePreview){
+    //      return this.profilePicturePreview
+    //    }else if(this.user.profile_picture != null){
+    //      return this.user.profile_picture.url
+    //    }else{
+    //      return this.avatar_src
+    //    }
+    //  },
+    //  getCoverPhotoUrl(){
+    //     if(this.coverPhotoPreview){
+    //       return this.coverPhotoPreview
+    //     }else if(this.user.cover_photo != null){
+    //       return this.user.cover_photo.url
+    //     }else{
+    //       return this.background_src
+    //     }
+    //   },
   },
   methods: {
     getCoverPhotoUrl(){
+      console.log('cp rendering')
+      console.log(this.user)
        if(this.coverPhotoPreview){
          return this.coverPhotoPreview
-       }else if(this.user.cover_photo != null){
+       }else if(this.user != null){
          return this.user.cover_photo.url
        }else{
          return this.background_src
@@ -253,7 +280,7 @@ export default {
      getProfilePictureUrl(){
         if(this.profilePicturePreview){
           return this.profilePicturePreview
-        }else if(this.user.profile_picture != null){
+        }else if(this.user != null){
           return this.user.profile_picture.url
         }else{
           return this.avatar_src
@@ -423,11 +450,13 @@ export default {
     this.$store.commit('selectChip/selectChip', 'music')
   },
 
-  created(){
-    this.fetchUser()
-  },
-
   watch: {
+    $route: {
+      async handler () {
+        await this.fetchUser()
+      },
+      immediate: true
+    },
     selectedChip: {
       async handler () {
         if(this.selectedChip ==  "music"){

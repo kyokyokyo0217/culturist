@@ -47,10 +47,6 @@ const routes = [
     path: '/feed',
     component: Feed,
   },
-  // {
-  //   path: '/trending',
-  //   component: Trending,
-  // },
   {
     path: '/likes',
     component: Likes
