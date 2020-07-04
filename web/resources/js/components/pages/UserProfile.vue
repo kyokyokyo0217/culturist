@@ -266,8 +266,6 @@ export default {
   },
   methods: {
     getCoverPhotoUrl(){
-      console.log('cp rendering')
-      console.log(this.user)
        if(this.coverPhotoPreview){
          return this.coverPhotoPreview
        }else if(this.user != null){
@@ -444,10 +442,6 @@ export default {
 
       this.user.followed_by_user = false
     },
-  },
-
-  mounted(){
-    this.$store.commit('selectChip/selectChip', 'music')
   },
 
   watch: {

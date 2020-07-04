@@ -28,6 +28,9 @@
       selectPicture(){
         this.$store.commit('selectChip/selectChip', 'picture')
       },
+    },
+    created(){
+      this.selectMusic()
     }
   }
 </script>

@@ -70,10 +70,6 @@
         this.loading = false
       }
     },
-    mounted(){
-        this.$store.commit('selectChip/selectChip', 'music')
-    },
-    // 最初pictureの時がある バグ
     watch: {
       selectedChip: {
         async handler () {

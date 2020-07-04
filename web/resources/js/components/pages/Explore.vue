@@ -69,9 +69,6 @@
         this.loading = false
       }
     },
-    mounted(){
-        this.$store.commit('selectChip/selectChip', 'music')
-    },
     watch: {
       selectedChip: {
         async handler () {
