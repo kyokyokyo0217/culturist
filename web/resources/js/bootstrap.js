@@ -11,7 +11,7 @@ try {
   window.$ = window.jQuery = require('jquery');
 
   require('bootstrap');
-} catch (e) {}
+} catch (e) { }
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -33,6 +33,7 @@ window.axios.interceptors.request.use(config => {
 
 window.axios.interceptors.response.use(
   response => response,
+  // 非同期が失敗した場合もreponseオブジェクトを代入→そのままstatuscodeとか使える
   error => error.response || error
 )
 

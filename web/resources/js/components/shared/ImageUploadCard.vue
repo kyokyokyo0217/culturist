@@ -12,14 +12,17 @@
   </v-card>
 </template>
 <script>
-  export default{
-    props:{
-      menu: Boolean
-    },
-    methods:{
-      closeMenu(){
-        this.$emit("closeMenu")
-      }
+export default {
+  props: {
+    menu: {
+      type: Boolean,
+      required: true
+    }
+  },
+  methods: {
+    closeMenu() {
+      this.$emit("closeMenu");
     }
   }
+};
 </script>
