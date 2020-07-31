@@ -9,6 +9,7 @@
         <v-text-field
           v-model="registerFormData.name"
           label="Name"
+          color="black"
         >
         </v-text-field>
         <validation-errors-alert v-if="registerErrorMessages" :errors=registerErrorMessages.user_name></validation-errors-alert>
@@ -16,12 +17,14 @@
           v-model="registerFormData.user_name"
           label="User Id"
           prefix="@"
+          color="black"
         >
         </v-text-field>
         <validation-errors-alert v-if="registerErrorMessages" :errors=registerErrorMessages.email></validation-errors-alert>
         <v-text-field
           v-model="registerFormData.email"
           label="Email"
+          color="black"
         >
         </v-text-field>
         <validation-errors-alert v-if="registerErrorMessages" :errors=registerErrorMessages.password></validation-errors-alert>
@@ -29,12 +32,14 @@
           v-model="registerFormData.password"
           label="Password"
           type="password"
+          color="black"
         >
         </v-text-field>
         <v-text-field
           v-model="registerFormData.password_confirmation"
           label="Password  (confirm)"
           type="password"
+          color="black"
         >
         </v-text-field>
         <div class="my-4">

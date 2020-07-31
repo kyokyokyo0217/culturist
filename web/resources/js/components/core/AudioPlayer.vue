@@ -1,54 +1,39 @@
 <template>
  <v-footer app padless color="white">
-     <v-row>
-       <v-col cols="1" class="pl-4">
-         <v-img :src="file.artwork.url" height="80px" width="80px"></v-img>
-       </v-col>
-       <v-col cols="2">
-         <p class="ma-0 subtitle-1 black--text">{{ file.title }}</p>
-         <router-link
-           :to="{ name: 'user', params:{username: file.artist.user_name}}"
-           class="user-link"
-         >
-           {{ file.artist.user_name }}
-         </router-link>
-       </v-col>
-       <v-col cols="6" class="text-center">
-             <v-btn outlined icon small class="mb-2" @click.native="playing ? pause() : play()" :disabled="!loaded">
-               <v-icon v-if="!playing || paused">mdi-play</v-icon>
-               <v-icon v-else>mdi-pause</v-icon>
-             </v-btn>
-             <v-progress-linear
-              v-model="percentage"
-              @click.native="setPosition()"
-              :disabled="!loaded"
-              height="4"
-              rounded
-              striped
-             ></v-progress-linear>
-             <span>{{ currentTime }} / {{ duration }}</span>
-           <audio id="player" ref="player" :src="file.url"></audio>
-       </v-col>
-       <v-col cols="3">
-       </v-col>
-     </v-row>
+   <v-row>
+     <v-col cols="1" class="pl-4">
+       <v-img :src="file.artwork.url" height="80px" width="80px"></v-img>
+     </v-col>
+     <v-col cols="2">
+       <p class="ma-0 subtitle-1 black--text">{{ file.title }}</p>
+       <router-link
+         :to="{ name: 'user', params:{username: file.artist.user_name}}"
+         class="user-link"
+       >
+         {{ file.artist.user_name }}
+       </router-link>
+     </v-col>
+     <v-col cols="6" class="text-center">
+       <v-btn outlined icon small class="mb-2" @click.native="playing ? pause() : play()" :disabled="!loaded">
+         <v-icon v-if="!playing || paused">mdi-play</v-icon>
+         <v-icon v-else>mdi-pause</v-icon>
+       </v-btn>
+       <v-progress-linear
+        v-model="percentage"
+        @click.native="setPosition()"
+        :disabled="!loaded"
+        height="4"
+        rounded
+        striped
+       ></v-progress-linear>
+       <span>{{ currentTime }} / {{ duration }}</span>
+       <audio id="player" ref="player" :src="file.url"></audio>
+     </v-col>
+     <v-col cols="3">
+     </v-col>
+   </v-row>
  </v-footer>
 </template>
-<!-- <template>
- <v-footer app padless>
-  <v-card flat tile width="100%">
-    <v-card-text class="text-center">
-      <v-btn outlined icon small class="mb-2" @click.native="playing ? pause() : play()" :disabled="!loaded">
-        <v-icon v-if="!playing || paused">mdi-play</v-icon>
-        <v-icon v-else>mdi-pause</v-icon>
-      </v-btn>
-      <v-progress-linear v-model="percentage" height="5" @click.native="setPosition()" :disabled="!loaded"></v-progress-linear>
-      <span>{{ currentTime }} / {{ duration }}</span>
-    </v-card-text>
-    <audio id="player" ref="player" :src="file.url"></audio>
-    </v-card>
-  </v-footer>
-</template> -->
 <script>
 const formatTime = second => new Date(second * 1000).toISOString().substr(11, 8);
 export default {

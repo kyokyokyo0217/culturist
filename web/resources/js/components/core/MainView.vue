@@ -3,5 +3,3 @@
     <RouterView />
   </v-content>
 </template>
-<script>
-</script>

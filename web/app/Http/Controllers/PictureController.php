@@ -15,7 +15,7 @@ class PictureController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only('store');
+        $this->middleware('auth')->only(['store', 'destroy']);
     }
 
     public function getNewPictures()
@@ -51,11 +51,16 @@ class PictureController extends Controller
 
     public function getUserProfilePictures(User $user)
     {
-      $pictures = Picture::whereHas('artist', function (Builder $query) use($user){
-          $query->where('id', $user->id);
-      })->with(['artist', 'artist.profile_picture'])
-        ->orderBy(Picture::CREATED_AT, 'desc')
-        ->paginate();
+      $pictures = Picture::with(['artist', 'artist.profile_picture'])
+      ->where('user_id', $user->id)
+      ->orderBy(Picture::CREATED_AT, 'desc')
+      ->paginate();
+
+      // $pictures = Picture::whereHas('artist', function (Builder $query) use($user){
+      //     $query->where('id', $user->id);
+      // })->with(['artist', 'artist.profile_picture'])
+      //   ->orderBy(Picture::CREATED_AT, 'desc')
+      //   ->paginate();
 
       return $pictures;
     }
@@ -122,8 +127,22 @@ class PictureController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Picture $picture)
     {
-        //
+        Storage::cloud()->delete($picture->filename);
+
+        DB::beginTransaction();
+
+        try {
+            $picture->delete();
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Storage::cloud()
+                ->putFileAs('', $picture, $picture->filename, 'public');
+            throw $exception;
+        }
+
+        return response('', 204);
     }
 }

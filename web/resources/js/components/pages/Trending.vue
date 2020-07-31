@@ -16,7 +16,5 @@
       ContentLayout,
       WorksIndex
     },
-    methods:{
-    }
   }
 </script>

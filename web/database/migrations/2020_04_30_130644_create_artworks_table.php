@@ -15,7 +15,8 @@ class CreateArtworksTable extends Migration
     {
         Schema::create('artworks', function (Blueprint $table) {
           $table->string('id')->primary();
-          $table->string('track_id')->unique();
+          // $table->string('track_id')->unique();
+          $table->string('track_id');
           $table->string('filename');
           $table->timestamps();
 

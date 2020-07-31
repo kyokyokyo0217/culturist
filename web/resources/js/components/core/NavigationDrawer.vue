@@ -4,6 +4,8 @@
       <v-img
         :src="logo_src"
         width="200"
+        height="60"
+        alt="logo"
       ></v-img>
     </v-card>
 
@@ -26,7 +28,7 @@
     <v-divider></v-divider>
 
     <v-list dense flat class="px-0">
-      <v-list-item-group active-class="border" color="primary">
+      <v-list-item-group active-class="navigation-item-border">
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
@@ -42,8 +44,7 @@
 
     <v-divider></v-divider>
 
-    <v-col class="text-center">
-      <!-- activeのとき黒にしたい -->
+    <div class="text-center mt-4">
       <v-btn
         to="/upload"
         outlined
@@ -52,7 +53,7 @@
         <v-icon class="mr-2">mdi-cloud-upload</v-icon>
         Upload
       </v-btn>
-    </v-col>
+    </div>
   </v-navigation-drawer>
 </template>
 
@@ -64,9 +65,9 @@
           { title: 'Explore', path: '/explore'},
           { title: 'Feed', path: '/feed'},
           { title: 'Likes', path: '/likes'},
+          { title: 'Setting', path: '/setting'}
         ],
         logo_src: '/img/logo.png',
-        right: null,
       }
     },
     computed: {
@@ -84,7 +85,7 @@
 </script>
 
 <style scoped>
-  .border{
+  .navigation-item-border{
     border-left: 8px solid #000000;
   }
   .v-btn:hover{

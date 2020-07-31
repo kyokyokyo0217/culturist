@@ -27,7 +27,7 @@ class SaveUserProfileChangesApiTest extends TestCase
   /**
    * @test
    */
-   public function should_update_changes()
+   public function should_update_profile(): void
    {
      Storage::fake('s3');
 

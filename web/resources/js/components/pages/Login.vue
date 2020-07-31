@@ -9,6 +9,7 @@
         <v-text-field
           v-model="loginFormData.email"
           label="Email"
+          color="black"
         >
         </v-text-field>
         <validation-errors-alert v-if="loginErrorMessages" :errors=loginErrorMessages.password></validation-errors-alert>
@@ -16,6 +17,7 @@
           v-model="loginFormData.password"
           label="Password"
           type="password"
+          color="black"
         >
         </v-text-field>
         <div class="my-4">

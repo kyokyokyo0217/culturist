@@ -21,7 +21,7 @@ class LoginApiTest extends TestCase
     /**
      * @test
      */
-    public function should_authenticate_and_return_registered_user()
+    public function should_authenticate_and_return_registered_user(): void
     {
         $response = $this->json('POST', route('login'), [
             'email' => $this->user->email,

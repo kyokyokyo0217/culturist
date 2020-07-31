@@ -8,24 +8,23 @@
             v-model="title"
             label="Title"
             required
+            color="black"
           ></v-text-field>
           <validation-errors-alert v-if="errors" :errors=errors.picture></validation-errors-alert>
-          <v-file-input label="File Input" @change="onFileChange" id="picture">
+          <v-file-input
+            label="File Input"
+            @change="onFileChange"
+            id="picture"
+            color="black"
+          >
           </v-file-input>
           <v-col class="text-right">
-            <v-btn v-if="!loading" @click="uploadFile">submit</v-btn>
-            <v-progress-circular
-              v-if="loading"
-              indeterminate
-              color="grey"
-              width="2"
-              size="28"
-            ></v-progress-circular>
+            <v-btn color="black" outlined @click="uploadFile" :loading="loading">submit</v-btn>
           </v-col>
         </v-col>
         <v-col cols="4">
           <v-card color="grey" min-height="300px" min-width="300px">
-            <v-img :src="preview" v-if="preview" min-height="300px" min-width="300px">
+            <v-img :src="preview" v-if="preview" width="300px" height="300px" min-height="300px" min-width="300px">
             </v-img>
           </v-card>
         </v-col>

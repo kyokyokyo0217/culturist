@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Track;
+use App\Artwork;
 use App\Http\Controllers\ArtworkController;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTrack;
@@ -17,7 +18,7 @@ class TrackController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only('store');
+        $this->middleware('auth')->only(['store', 'destroy']);
     }
 
     public function getNewTracks()
@@ -54,11 +55,16 @@ class TrackController extends Controller
 
     public function getUserProfileTracks(User $user)
     {
-      $tracks = Track::whereHas('artist', function (Builder $query) use($user) {
-          $query->where('id', $user->id);
-      })->with(['artist', 'artwork'])
-        ->orderBy(Track::CREATED_AT, 'desc')
-        ->paginate();
+      // $tracks = Track::whereHas('artist', function (Builder $query) use($user) {
+      //     $query->where('id', $user->id);
+      // })->with(['artist', 'artwork'])
+      //   ->orderBy(Track::CREATED_AT, 'desc')
+      //   ->paginate();
+
+      $tracks = Track::with(['artist', 'artwork'])
+          ->where('user_id', $user->id)
+          ->orderBy(Track::CREATED_AT, 'desc')
+          ->paginate();
 
       return $tracks;
     }
@@ -133,8 +139,27 @@ class TrackController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Track $track)
     {
-        //
+        $artwork = $track->artwork;
+        Storage::cloud()->delete($track->filename);
+        Storage::cloud()->delete($artwork->filename);
+
+        DB::beginTransaction();
+
+        try {
+            $track->delete();
+            $artwork->delete();
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Storage::cloud()
+                ->putFileAs('', $track, $track->filename, 'public');
+            Storage::cloud()
+                ->putFileAs('', $artwork, $artwork->filename, 'public');
+            throw $exception;
+        }
+
+      return response('', 204);
     }
 }

@@ -6,9 +6,11 @@
     dense
     hide-details
     height="4"
+    color="black"
     class="compact-form"
     v-on:keyup.enter="search"
     v-model="text"
+    :rules="[rules.required]"
   ></v-text-field>
 </template>
 <script>
@@ -16,12 +18,16 @@
     data(){
       return{
         text: '',
+        rules: {
+          required: value => !!value || 'Required.',
+        }
       }
     },
     methods: {
       search() {
-        console.log('search words');
-        this.$router.push({ path: '/search', query: {result: this.text} })
+        if(this.text){
+          this.$router.push({ path: '/search', query: {result: this.text} }).catch(err => {})
+        }
       }
     }
   }
