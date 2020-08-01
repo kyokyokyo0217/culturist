@@ -8,6 +8,8 @@
 - Vuex 3.2.0
 - Vue Router 3.1.6
 - Vuetify 2.2.20
+##インフラ
+AWS(VPC, EC2, RDS, S3, Route53)
 ## 開発環境
 Docker, docker-compose
 ## 機能一覧
