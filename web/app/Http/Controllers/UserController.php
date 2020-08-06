@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\CoverPhoto;
-use App\ProfilePicture;
+use App\Models\User;
+use App\Models\CoverPhoto;
+use App\Models\ProfilePicture;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserProfile;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +47,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-      return $user->load('profile_picture', 'cover_photo',);
+        return $user->load('profile_picture', 'cover_photo',);
     }
 
     /**
@@ -68,49 +68,48 @@ class UserController extends Controller
 
         if ($request->hasFile('profile_picture')) {
 
-          $current_profile_piture = ProfilePicture::firstWhere('user_id', $user->id);
+            $current_profile_piture = ProfilePicture::firstWhere('user_id', $user->id);
 
-          if($current_profile_piture){
+            if ($current_profile_piture) {
 
-              Storage::cloud()->delete($current_profile_piture->filename);
+                Storage::cloud()->delete($current_profile_piture->filename);
 
-              DB::beginTransaction();
+                DB::beginTransaction();
 
-              try {
-                  $current_profile_piture->delete();
-                  DB::commit();
-              } catch (\Exception $exception) {
-                  DB::rollBack();
-                  Storage::cloud()
-                      ->putFileAs('', $current_profile_piture, $current_profile_piture->filename, 'public');
-                  throw $exception;
-              }
-          }
+                try {
+                    $current_profile_piture->delete();
+                    DB::commit();
+                } catch (\Exception $exception) {
+                    DB::rollBack();
+                    Storage::cloud()
+                        ->putFileAs('', $current_profile_piture, $current_profile_piture->filename, 'public');
+                    throw $exception;
+                }
+            }
 
-          $profile_picture = new ProfilePicture();
-          $profile_extension = $request->profile_picture->extension();
-          $profile_picture->filename = $profile_picture->id . '.' . $profile_extension;
-          Storage::cloud()
-              ->putFileAs('', $request->profile_picture, $profile_picture->filename, 'public');
+            $profile_picture = new ProfilePicture();
+            $profile_extension = $request->profile_picture->extension();
+            $profile_picture->filename = $profile_picture->id . '.' . $profile_extension;
+            Storage::cloud()
+                ->putFileAs('', $request->profile_picture, $profile_picture->filename, 'public');
 
-          DB::beginTransaction();
+            DB::beginTransaction();
 
-          try {
-              $user->profile_picture()->save($profile_picture);
-              DB::commit();
-          } catch (\Exception $exception) {
-              DB::rollBack();
-              Storage::cloud()->delete($profile_picture->filename);
-              throw $exception;
-          }
-
+            try {
+                $user->profile_picture()->save($profile_picture);
+                DB::commit();
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                Storage::cloud()->delete($profile_picture->filename);
+                throw $exception;
+            }
         }
 
         if ($request->hasFile('cover_photo')) {
 
             $current_cover_photo = CoverPhoto::firstWhere('user_id', $user->id);
 
-            if($current_cover_photo){
+            if ($current_cover_photo) {
 
                 Storage::cloud()->delete($current_cover_photo->filename);
 
@@ -146,9 +145,8 @@ class UserController extends Controller
             }
         }
 
-// $user->load()を返した方がajax減らせる？
+        // $user->load()を返した方がajax減らせる？
         return response('', 204);
-
     }
 
     /**
@@ -162,6 +160,6 @@ class UserController extends Controller
         // softdeleteにする
         User::destroy($user->id);
 
-        return response('', 204);  
+        return response('', 204);
     }
 }

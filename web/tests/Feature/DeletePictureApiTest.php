@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\User;
-use App\Picture;
+use App\Models\User;
+use App\Models\Picture;
 
 class DeletePictureApiTest extends TestCase
 {
@@ -15,7 +15,7 @@ class DeletePictureApiTest extends TestCase
     /**
      * @test
      */
-    public function should_delete_picture() :void
+    public function should_delete_picture(): void
     {
         factory(User::class)->create()->each(function ($user) {
             factory(Picture::class)->create(['user_id' => $user->id]);

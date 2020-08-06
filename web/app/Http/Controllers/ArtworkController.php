@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Artwork;
-use App\Track;
+use App\Models\Artwork;
+use App\Models\Track;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ArtworkController extends Controller
 {
-      public function __construct()
-      {
-          $this->middleware('auth');
-      }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     /**
      * Display a listing of the resource.
@@ -34,28 +34,28 @@ class ArtworkController extends Controller
      */
     public function store(Request $request, Track $track)
     {
-      $extension = $request->artwork->extension();
+        $extension = $request->artwork->extension();
 
-      $artwork = new Artwork();
+        $artwork = new Artwork();
 
-      $artwork->filename = $artwork->id . '.' . $extension;
+        $artwork->filename = $artwork->id . '.' . $extension;
 
-      Storage::cloud()
-          ->putFileAs('', $request->artwork, $artwork->filename, 'public');
+        Storage::cloud()
+            ->putFileAs('', $request->artwork, $artwork->filename, 'public');
 
 
-      DB::beginTransaction();
+        DB::beginTransaction();
 
-      try {
-          $track->artwork()->save($artwork);
-          DB::commit();
-      } catch (\Exception $exception) {
-          DB::rollBack();
-          Storage::cloud()->delete($artwork->filename);
-          throw $exception;
-      }
+        try {
+            $track->artwork()->save($artwork);
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Storage::cloud()->delete($artwork->filename);
+            throw $exception;
+        }
 
-      return response($artwork, 201);
+        return response($artwork, 201);
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Picture;
-use App\Track;
-use App\User;
+use App\Models\Picture;
+use App\Models\Track;
+use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;

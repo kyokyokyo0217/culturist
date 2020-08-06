@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Track;
-use App\Artwork;
+use App\Models\User;
+use App\Models\Track;
+use App\Models\Artwork;
 use App\Http\Controllers\ArtworkController;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTrack;
@@ -23,50 +23,50 @@ class TrackController extends Controller
 
     public function getNewTracks()
     {
-      $tracks = Track::with(['artist', 'artwork'])
-        ->orderBy(Track::CREATED_AT, 'desc')
-        ->paginate();
+        $tracks = Track::with(['artist', 'artwork'])
+            ->orderBy(Track::CREATED_AT, 'desc')
+            ->paginate();
 
-      return $tracks;
+        return $tracks;
     }
 
-// クエリ少なくしたい
+    // クエリ少なくしたい
     public function getTracksFeed()
     {
-      $tracks = Track::whereHas('artist', function(Builder $query) {
-          $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
-      })->with(['artist', 'artwork'])
-        ->orderBy(Track::CREATED_AT, 'desc')
-        ->paginate();
+        $tracks = Track::whereHas('artist', function (Builder $query) {
+            $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
+        })->with(['artist', 'artwork'])
+            ->orderBy(Track::CREATED_AT, 'desc')
+            ->paginate();
 
-      return $tracks;
+        return $tracks;
     }
 
     public function getLikedTracks()
     {
-      $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
-          $query->where('id', Auth::id());
-      })->with(['artist', 'artwork'])
-        ->orderBy(Track::CREATED_AT, 'desc')
-        ->paginate();
+        $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
+            $query->where('id', Auth::id());
+        })->with(['artist', 'artwork'])
+            ->orderBy(Track::CREATED_AT, 'desc')
+            ->paginate();
 
         return $tracks;
     }
 
     public function getUserProfileTracks(User $user)
     {
-      // $tracks = Track::whereHas('artist', function (Builder $query) use($user) {
-      //     $query->where('id', $user->id);
-      // })->with(['artist', 'artwork'])
-      //   ->orderBy(Track::CREATED_AT, 'desc')
-      //   ->paginate();
+        // $tracks = Track::whereHas('artist', function (Builder $query) use($user) {
+        //     $query->where('id', $user->id);
+        // })->with(['artist', 'artwork'])
+        //   ->orderBy(Track::CREATED_AT, 'desc')
+        //   ->paginate();
 
-      $tracks = Track::with(['artist', 'artwork'])
-          ->where('user_id', $user->id)
-          ->orderBy(Track::CREATED_AT, 'desc')
-          ->paginate();
+        $tracks = Track::with(['artist', 'artwork'])
+            ->where('user_id', $user->id)
+            ->orderBy(Track::CREATED_AT, 'desc')
+            ->paginate();
 
-      return $tracks;
+        return $tracks;
     }
 
     /**
@@ -160,6 +160,6 @@ class TrackController extends Controller
             throw $exception;
         }
 
-      return response('', 204);
+        return response('', 204);
     }
 }

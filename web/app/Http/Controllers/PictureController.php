@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Picture;
+use App\Models\User;
+use App\Models\Picture;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePicture;
 use Illuminate\Support\Facades\Auth;
@@ -20,49 +20,49 @@ class PictureController extends Controller
 
     public function getNewPictures()
     {
-      $pictures = Picture::with(['artist', 'artist.profile_picture'])
-        ->orderBy(Picture::CREATED_AT, 'desc')
-        ->paginate();
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->paginate();
 
-      return $pictures;
+        return $pictures;
     }
 
     public function getPicturesFeed()
     {
-      $pictures = Picture::whereHas('artist', function(Builder $query) {
-          $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
-      })->with(['artist', 'artist.profile_picture'])
-        ->orderBy(Picture::CREATED_AT, 'desc')
-        ->paginate();
+        $pictures = Picture::whereHas('artist', function (Builder $query) {
+            $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
+        })->with(['artist', 'artist.profile_picture'])
+            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->paginate();
 
-      return $pictures;
+        return $pictures;
     }
 
     public function getLikedPictures()
     {
-      $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
-          $query->where('id', Auth::id());
-      })->with(['artist', 'artist.profile_picture'])
-        ->orderBy(Picture::CREATED_AT, 'desc')
-        ->paginate();
+        $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
+            $query->where('id', Auth::id());
+        })->with(['artist', 'artist.profile_picture'])
+            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->paginate();
 
-      return $pictures;
+        return $pictures;
     }
 
     public function getUserProfilePictures(User $user)
     {
-      $pictures = Picture::with(['artist', 'artist.profile_picture'])
-      ->where('user_id', $user->id)
-      ->orderBy(Picture::CREATED_AT, 'desc')
-      ->paginate();
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+            ->where('user_id', $user->id)
+            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->paginate();
 
-      // $pictures = Picture::whereHas('artist', function (Builder $query) use($user){
-      //     $query->where('id', $user->id);
-      // })->with(['artist', 'artist.profile_picture'])
-      //   ->orderBy(Picture::CREATED_AT, 'desc')
-      //   ->paginate();
+        // $pictures = Picture::whereHas('artist', function (Builder $query) use($user){
+        //     $query->where('id', $user->id);
+        // })->with(['artist', 'artist.profile_picture'])
+        //   ->orderBy(Picture::CREATED_AT, 'desc')
+        //   ->paginate();
 
-      return $pictures;
+        return $pictures;
     }
 
     /**
