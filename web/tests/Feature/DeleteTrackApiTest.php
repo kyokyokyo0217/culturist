@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\User;
+use App\Models\User;
 use App\Track;
 use App\Artwork;
 
@@ -16,10 +16,10 @@ class DeleteTrackApiTest extends TestCase
     /**
      * @test
      */
-    public function should_delete_track() :void
+    public function should_delete_track(): void
     {
-        factory(User::class)->create()->each(function (User $user){
-            factory(Track::class)->create(['user_id' => $user->id])->each(function (Track $track){
+        factory(User::class)->create()->each(function (User $user) {
+            factory(Track::class)->create(['user_id' => $user->id])->each(function (Track $track) {
                 factory(Artwork::class)->create(['track_id' => $track->id]);
             });
         });

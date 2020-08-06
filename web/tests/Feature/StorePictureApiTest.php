@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Picture;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -46,7 +46,6 @@ class StorePictureApiTest extends TestCase
         $this->assertDatabaseHas('pictures', ['title' => 'untitled']);
 
         Storage::cloud()->assertExists($picture->filename);
-
     }
 
     /**

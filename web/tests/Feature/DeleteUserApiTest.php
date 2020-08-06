@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\User;
+use App\Models\User;
 
 class DeleteUserApiTest extends TestCase
 {
@@ -14,15 +14,15 @@ class DeleteUserApiTest extends TestCase
     /**
      * @test
      */
-     public function should_delete_user() :void
-     {
-          $user = factory(User::class)->create();
+    public function should_delete_user(): void
+    {
+        $user = factory(User::class)->create();
 
-          $response = $this->actingAs($user)
-              ->deleteJson("api/users/{$user->user_name}");
+        $response = $this->actingAs($user)
+            ->deleteJson("api/users/{$user->user_name}");
 
-          $response->assertStatus(204);
+        $response->assertStatus(204);
 
-          $this->assertCount(0, User::all());
-     }
+        $this->assertCount(0, User::all());
+    }
 }

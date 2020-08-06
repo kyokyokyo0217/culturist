@@ -5,32 +5,32 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\User;
+use App\Models\User;
 use App\Picture;
 use App\ProfilePicture;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Crabon;
 
-class getPicturesListApiTest extends TestCase
+class GetPicturesListApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp() :void
+    public function setUp(): void
     {
-       parent::setUp();
+        parent::setUp();
 
-       factory(User::class, 5)->create()->each(function (User $user){
-           factory(Picture::class)->create(['user_id' => $user->id]);
-           $user->profile_picture()->save(factory(ProfilePicture::class)->make());
-       });
+        factory(User::class, 5)->create()->each(function (User $user) {
+            factory(Picture::class)->create(['user_id' => $user->id]);
+            $user->profile_picture()->save(factory(ProfilePicture::class)->make());
+        });
 
-       $this->authUser = factory(User::class)->create();
+        $this->authUser = factory(User::class)->create();
     }
 
     /**
      * @test
      */
-    public function should_get_new_pictures() :void
+    public function should_get_new_pictures(): void
     {
         $response = $this->getJson('/api/pictures/explore');
 
@@ -50,14 +50,14 @@ class getPicturesListApiTest extends TestCase
                     'followed_by_user' => $picture->artist->followed_by_user,
                     'created_at' => $picture->artist->created_at->format('Y/m/d'),
                     'profile_picture' => [
-                      'id' => $picture->artist->profile_picture->id,
-                      'url' => $picture->artist->profile_picture->url,
-                      'filename' => $picture->artist->profile_picture->filename
+                        'id' => $picture->artist->profile_picture->id,
+                        'url' => $picture->artist->profile_picture->url,
+                        'filename' => $picture->artist->profile_picture->filename
                     ]
                 ],
             ];
         })
-        ->all();
+            ->all();
 
         $response->assertStatus(200)
             ->assertJsonCount(5, 'data')
@@ -69,12 +69,12 @@ class getPicturesListApiTest extends TestCase
     /**
      * @test
      */
-    public function should_get_feed_pictures() :void
+    public function should_get_feed_pictures(): void
     {
         $followedUsers = User::all()->take(3);
 
         $followedUsers->each(function (User $user) {
-          $this->actingAs($this->authUser)->postJson("/api/{$user->user_name}/follow");
+            $this->actingAs($this->authUser)->postJson("/api/{$user->user_name}/follow");
         });
 
         $this->assertEquals(3, $this->authUser->follows()->count());
@@ -82,11 +82,11 @@ class getPicturesListApiTest extends TestCase
 
         $response = $this->getJson('/api/pictures/feed');
 
-        $pictures = Picture::whereHas('artist', function(Builder $query) {
+        $pictures = Picture::whereHas('artist', function (Builder $query) {
             $query->whereIn('id', $this->authUser->follows()->get()->modelKeys());
         })->with(['artist', 'artist.profile_picture'])
-          ->orderBy(Picture::CREATED_AT, 'desc')
-          ->get();
+            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->get();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -102,33 +102,32 @@ class getPicturesListApiTest extends TestCase
                     'followed_by_user' => $picture->artist->followed_by_user,
                     'created_at' => $picture->artist->created_at->format('Y/m/d'),
                     'profile_picture' => [
-                      'id' => $picture->artist->profile_picture->id,
-                      'url' => $picture->artist->profile_picture->url,
-                      'filename' => $picture->artist->profile_picture->filename
+                        'id' => $picture->artist->profile_picture->id,
+                        'url' => $picture->artist->profile_picture->url,
+                        'filename' => $picture->artist->profile_picture->filename
                     ]
                 ],
             ];
         })
-        ->all();
+            ->all();
 
         $response->assertStatus(200)
             ->assertJsonCount(3, 'data')
             ->assertJsonFragment([
                 'data' => $expected_data,
             ]);
-
     }
 
     /**
      * @test
      */
-    public function should_get_liked_pictures() :void
+    public function should_get_liked_pictures(): void
     {
         $likedPictures = Picture::all()->take(3);
 
         $likedPictures->each(function (Picture $picture) {
-          $this->actingAs($this->authUser)
-              ->postJson("api/picture/{$picture->id}/like");
+            $this->actingAs($this->authUser)
+                ->postJson("api/picture/{$picture->id}/like");
         });
 
         // $this->assertEquals(3, $this->authUser->picture_likes()->count());
@@ -138,8 +137,8 @@ class getPicturesListApiTest extends TestCase
         $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
             $query->where('id', $this->authUser->id);
         })->with(['artist', 'artist.profile_picture'])
-          ->orderBy(Picture::CREATED_AT, 'desc')
-          ->get();
+            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->get();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -155,14 +154,14 @@ class getPicturesListApiTest extends TestCase
                     'followed_by_user' => $picture->artist->followed_by_user,
                     'created_at' => $picture->artist->created_at->format('Y/m/d'),
                     'profile_picture' => [
-                      'id' => $picture->artist->profile_picture->id,
-                      'url' => $picture->artist->profile_picture->url,
-                      'filename' => $picture->artist->profile_picture->filename
+                        'id' => $picture->artist->profile_picture->id,
+                        'url' => $picture->artist->profile_picture->url,
+                        'filename' => $picture->artist->profile_picture->filename
                     ]
                 ],
             ];
         })
-        ->all();
+            ->all();
 
         $response->assertStatus(200)
             ->assertJsonCount(3, 'data')
@@ -174,16 +173,16 @@ class getPicturesListApiTest extends TestCase
     /**
      * @test
      */
-     public function should_get_user_profile_pictures() :void
-     {
+    public function should_get_user_profile_pictures(): void
+    {
         $user = User::first();
 
         $response = $this->getJson("/api/pictures/user/{$user->user_name}");
 
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
-              ->where('user_id', $user->id)
-              ->orderBy(Picture::CREATED_AT, 'desc')
-              ->get();
+            ->where('user_id', $user->id)
+            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->get();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -199,19 +198,19 @@ class getPicturesListApiTest extends TestCase
                     'followed_by_user' => $picture->artist->followed_by_user,
                     'created_at' => $picture->artist->created_at->format('Y/m/d'),
                     'profile_picture' => [
-                      'id' => $picture->artist->profile_picture->id,
-                      'url' => $picture->artist->profile_picture->url,
-                      'filename' => $picture->artist->profile_picture->filename
+                        'id' => $picture->artist->profile_picture->id,
+                        'url' => $picture->artist->profile_picture->url,
+                        'filename' => $picture->artist->profile_picture->filename
                     ]
                 ],
             ];
         })
-        ->all();
+            ->all();
 
         $response->assertStatus(200)
             ->assertJsonCount(1, 'data')
             ->assertJsonFragment([
                 'data' => $expected_data,
             ]);
-     }
+    }
 }
