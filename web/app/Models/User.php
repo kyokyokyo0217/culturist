@@ -74,7 +74,7 @@ class User extends Authenticatable
 
     public function pictures()
     {
-        return $this->hasMany('App\Picture');
+        return $this->hasMany('App\Models\Picture');
     }
 
     public function tracks()
@@ -104,7 +104,7 @@ class User extends Authenticatable
 
     public function picture_likes()
     {
-        return $this->belongsToMany('App\Picture', 'picture_likes', 'user_id', 'piture_id')->withTimestamps();
+        return $this->belongsToMany('App\Models\Picture', 'picture_likes', 'user_id', 'piture_id')->withTimestamps();
     }
 
     public function track_likes()

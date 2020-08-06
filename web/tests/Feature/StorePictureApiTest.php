@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Picture;
+use App\Models\Picture;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;

@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Picture;
+use App\Models\Picture;
 use App\Track;
 use App\Artwork;
 use App\Models\User;

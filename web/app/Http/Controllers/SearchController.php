@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Picture;
+use App\Models\Picture;
 use App\Track;
 
 class SearchController extends Controller

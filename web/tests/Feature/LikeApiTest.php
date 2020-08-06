@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Picture;
+use App\Models\Picture;
 use App\Track;
 use App\Models\User;
 use Tests\TestCase;
