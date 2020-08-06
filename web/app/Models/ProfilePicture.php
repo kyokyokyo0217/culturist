@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -25,16 +25,15 @@ class ProfilePicture extends Model
 
     public function __construct(array $attributes = [])
     {
-      parent::__construct($attributes);
+        parent::__construct($attributes);
 
-      if (! Arr::get($this->attributes, 'id')) {
-          $this->setStringId($attributes);
-      }
+        if (!Arr::get($this->attributes, 'id')) {
+            $this->setStringId($attributes);
+        }
     }
 
     public function getUrlAttribute()
     {
         return Storage::cloud()->url($this->attributes['filename']);
-      
     }
 }

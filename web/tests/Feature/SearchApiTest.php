@@ -9,7 +9,7 @@ use App\Models\Picture;
 use App\Models\Track;
 use App\Artwork;
 use App\Models\User;
-use App\ProfilePicture;
+use App\Models\ProfilePicture;
 use App\CoverPhoto;
 
 class SearchApiTest extends TestCase

@@ -84,7 +84,7 @@ class User extends Authenticatable
 
     public function profile_picture()
     {
-        return $this->hasOne('App\ProfilePicture');
+        return $this->hasOne('App\Models\ProfilePicture');
     }
 
     public function cover_photo()

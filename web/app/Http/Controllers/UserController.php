@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\CoverPhoto;
-use App\ProfilePicture;
+use App\Models\ProfilePicture;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserProfile;
 use Illuminate\Support\Facades\Auth;

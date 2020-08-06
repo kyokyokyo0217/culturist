@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use App\ProfilePicture;
+use App\Models\ProfilePicture;
 use Illuminate\Support\Str;
 
 class LoginController extends Controller
@@ -43,10 +43,9 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-      if(ProfilePicture::firstWhere('user_id',$user->id))
-      {
-        return $user->load('profile_picture');
-      }
+        if (ProfilePicture::firstWhere('user_id', $user->id)) {
+            return $user->load('profile_picture');
+        }
         return $user;
     }
 

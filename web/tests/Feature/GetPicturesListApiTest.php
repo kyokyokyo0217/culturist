@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Picture;
-use App\ProfilePicture;
+use App\Models\ProfilePicture;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Crabon;
 

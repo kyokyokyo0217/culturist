@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
-use App\ProfilePicture;
+use App\Models\ProfilePicture;
 use App\CoverPhoto;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
