@@ -7,10 +7,10 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Picture;
 use App\Models\Track;
-use App\Artwork;
+use App\Models\Artwork;
 use App\Models\User;
 use App\Models\ProfilePicture;
-use App\CoverPhoto;
+use App\Models\CoverPhoto;
 
 class SearchApiTest extends TestCase
 {

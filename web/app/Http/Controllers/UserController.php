@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\CoverPhoto;
+use App\Models\CoverPhoto;
 use App\Models\ProfilePicture;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserProfile;

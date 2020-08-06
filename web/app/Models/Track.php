@@ -53,7 +53,7 @@ class Track extends Model
 
     public function artwork()
     {
-        return $this->hasOne('App\Artwork', 'track_id', 'id');
+        return $this->hasOne('App\Models\Artwork', 'track_id', 'id');
     }
 
     public function artist()

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Track;
-use App\Artwork;
+use App\Models\Artwork;
 
 class DeleteTrackApiTest extends TestCase
 {

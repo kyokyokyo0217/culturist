@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Track;
-use App\Artwork;
+use App\Models\Artwork;
 use App\Http\Controllers\ArtworkController;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTrack;

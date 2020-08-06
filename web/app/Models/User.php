@@ -89,7 +89,7 @@ class User extends Authenticatable
 
     public function cover_photo()
     {
-        return $this->hasOne('App\CoverPhoto');
+        return $this->hasOne('App\Models\CoverPhoto');
     }
 
     public function follows()
