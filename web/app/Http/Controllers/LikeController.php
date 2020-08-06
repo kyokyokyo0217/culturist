@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Picture;
-use App\Track;
+use App\Models\Track;
 use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Picture;
-use App\Track;
+use App\Models\Track;
 use App\Artwork;
 use App\Models\User;
 use App\ProfilePicture;

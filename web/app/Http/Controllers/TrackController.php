@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Track;
+use App\Models\Track;
 use App\Artwork;
 use App\Http\Controllers\ArtworkController;
 use Illuminate\Http\Request;

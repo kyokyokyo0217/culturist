@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Picture;
-use App\Track;
+use App\Models\Track;
 use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;

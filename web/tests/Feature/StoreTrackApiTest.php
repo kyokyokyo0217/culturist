@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Track;
+use App\Models\Track;
 use App\Artwork;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
