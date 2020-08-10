@@ -36,6 +36,7 @@ class StoreTrackApiTest extends TestCase
                 'artwork' => UploadedFile::fake()->image('artwork.jpg'),
                 'title' => 'untitled'
             ]);
+
         $response->assertStatus(201);
 
         $track = Track::first();

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\CoverPhoto;
-use App\Models\ProfilePicture;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserProfile;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +45,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user->load('profile_picture', 'cover_photo',);
+        return User::getUserProfile($user);
     }
 
     /**
@@ -60,92 +58,7 @@ class UserController extends Controller
 
     public function update(UpdateUserProfile $request, User $user)
     {
-        $user->fill([
-            'bio' => $request->bio,
-            'location' => $request->location
-        ])->save();
-
-
-        if ($request->hasFile('profile_picture')) {
-
-            $current_profile_piture = ProfilePicture::firstWhere('user_id', $user->id);
-
-            if ($current_profile_piture) {
-
-                Storage::cloud()->delete($current_profile_piture->filename);
-
-                DB::beginTransaction();
-
-                try {
-                    $current_profile_piture->delete();
-                    DB::commit();
-                } catch (\Exception $exception) {
-                    DB::rollBack();
-                    Storage::cloud()
-                        ->putFileAs('', $current_profile_piture, $current_profile_piture->filename, 'public');
-                    throw $exception;
-                }
-            }
-
-            $profile_picture = new ProfilePicture();
-            $profile_extension = $request->profile_picture->extension();
-            $profile_picture->filename = $profile_picture->id . '.' . $profile_extension;
-            Storage::cloud()
-                ->putFileAs('', $request->profile_picture, $profile_picture->filename, 'public');
-
-            DB::beginTransaction();
-
-            try {
-                $user->profile_picture()->save($profile_picture);
-                DB::commit();
-            } catch (\Exception $exception) {
-                DB::rollBack();
-                Storage::cloud()->delete($profile_picture->filename);
-                throw $exception;
-            }
-        }
-
-        if ($request->hasFile('cover_photo')) {
-
-            $current_cover_photo = CoverPhoto::firstWhere('user_id', $user->id);
-
-            if ($current_cover_photo) {
-
-                Storage::cloud()->delete($current_cover_photo->filename);
-
-                DB::beginTransaction();
-
-                try {
-                    $current_cover_photo->delete();
-                    DB::commit();
-                } catch (\Exception $exception) {
-                    DB::rollBack();
-                    Storage::cloud()
-                        ->putFileAs('', $current_cover_photo, $current_cover_photo->filename, 'public');
-                    throw $exception;
-                }
-            }
-
-            $cover_photo = new CoverPhoto();
-            $cover_extension = $request->cover_photo->extension();
-            $cover_photo->filename = $cover_photo->id . '.' . $cover_extension;
-
-            Storage::cloud()
-                ->putFileAs('', $request->cover_photo, $cover_photo->filename, 'public');
-
-            DB::beginTransaction();
-
-            try {
-                $user->cover_photo()->save($cover_photo);
-                DB::commit();
-            } catch (\Exception $exception) {
-                DB::rollBack();
-                Storage::cloud()->delete($cover_photo->filename);
-                throw $exception;
-            }
-        }
-
-        // $user->load()を返した方がajax減らせる？
+        User::updateUserProfile($request, $user);
         return response('', 204);
     }
 
@@ -157,9 +70,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        // softdeleteにする
-        User::destroy($user->id);
-
+        User::deleteUser($user);
         return response('', 204);
     }
+    // public function destroy(User $user)
+    // {
+    //     $user->deleteUser();
+    //     return response('', 204);
+    // }
 }

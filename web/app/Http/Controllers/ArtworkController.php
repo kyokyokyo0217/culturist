@@ -34,28 +34,8 @@ class ArtworkController extends Controller
      */
     public function store(Request $request, Track $track)
     {
-        $extension = $request->artwork->extension();
-
-        $artwork = new Artwork();
-
-        $artwork->filename = $artwork->id . '.' . $extension;
-
-        Storage::cloud()
-            ->putFileAs('', $request->artwork, $artwork->filename, 'public');
-
-
-        DB::beginTransaction();
-
-        try {
-            $track->artwork()->save($artwork);
-            DB::commit();
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            Storage::cloud()->delete($artwork->filename);
-            throw $exception;
-        }
-
-        return response($artwork, 201);
+        Artwork::storeArtWork($request, $track);
+        return response('', 201);
     }
 
     /**
