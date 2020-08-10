@@ -16,12 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/pictures/feed', 'PictureController@getPicturesFeed');
+Route::get('/pictures/feed', 'PictureController@getFeedPictures');
 Route::get('/pictures/likes', 'PictureController@getLikedPictures');
 Route::get('/pictures/explore', 'PictureController@getNewPictures');
 Route::get('/pictures/user/{user}', 'PictureController@getUserProfilePictures');
 Route::apiResource('pictures', 'PictureController');
-Route::get('/tracks/feed', 'TrackController@getTracksFeed');
+Route::get('/tracks/feed', 'TrackController@getFeedTracks');
 Route::get('/tracks/likes', 'TrackController@getLikedTracks');
 Route::get('/tracks/explore', 'TrackController@getNewTracks');
 Route::get('/tracks/user/{user}', 'TrackController@getUserProfileTracks');

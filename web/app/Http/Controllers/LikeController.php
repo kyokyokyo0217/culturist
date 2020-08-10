@@ -14,51 +14,27 @@ class LikeController extends Controller
         $this->middleware('auth');
     }
 
-    public function likePicture(Request $request, Picture $picture)
+    public function likePicture(Picture $picture)
     {
-
-        if (!$picture) {
-            abort(404);
-        }
-
-        $picture->picture_liked_by()->detach(Auth::id());
-        $picture->picture_liked_by()->attach(Auth::id());
-
+        Picture::likePicture($picture);
         return response('', 201);
     }
 
-    public function unlikePicture(Request $request, Picture $picture)
+    public function unlikePicture(Picture $picture)
     {
-        if (!$picture) {
-            abort(404);
-        }
-
-        $picture->picture_liked_by()->detach(Auth::id());
-
+        Picture::unlikePicture($picture);
         return response('', 204);
     }
 
-    public function likeTrack(Request $request, Track $track)
+    public function likeTrack(Track $track)
     {
-
-        if (!$track) {
-            abort(404);
-        }
-
-        $track->track_liked_by()->detach(Auth::id());
-        $track->track_liked_by()->attach(Auth::id());
-
+        Track::likeTrack($track);
         return response('', 201);
     }
 
-    public function unlikeTrack(Request $request, Track $track)
+    public function unlikeTrack(Track $track)
     {
-        if (!$track) {
-            abort(404);
-        }
-
-        $track->track_liked_by()->detach(Auth::id());
-
+        Track::unlikeTrack($track);
         return response('', 204);
     }
 }

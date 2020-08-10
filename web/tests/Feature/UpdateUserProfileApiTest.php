@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-class SaveUserProfileChangesApiTest extends TestCase
+class UpdateUserProfileApiTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -31,7 +31,6 @@ class SaveUserProfileChangesApiTest extends TestCase
     {
         Storage::fake('s3');
 
-        // ""で囲む
         $response = $this->actingAs($this->user)
             ->putJson("api/users/{$this->user->user_name}", [
                 'cover_photo' => UploadedFile::fake()->image('coveer.jpg'),
@@ -39,6 +38,7 @@ class SaveUserProfileChangesApiTest extends TestCase
                 'bio' => 'dumybio',
                 'location' => 'dumylocation'
             ]);
+
         $response->assertStatus(204);
 
         $this->assertDatabaseHas('users', ['bio' => 'dumybio', 'location' => 'dumylocation']);

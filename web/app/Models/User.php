@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Http\Requests\UpdateUserProfile;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use DateTimeInterface;
 
 
@@ -110,5 +113,117 @@ class User extends Authenticatable
     public function track_likes()
     {
         return $this->belongsToMany('App\Models\Track', 'track_likes', 'user_id', 'track_id')->withTimestamps();
+    }
+
+    public static function getUserProfile(User $user)
+    {
+        return $user->load('profile_picture', 'cover_photo');
+    }
+
+    public static function updateUserProfile(UpdateUserProfile $request, User $user)
+    {
+        $user->fill([
+            'bio' => $request->bio,
+            'location' => $request->location
+        ])->save();
+
+        if ($request->hasFile('profile_picture')) {
+
+            $current_profile_piture = ProfilePicture::firstWhere('user_id', $user->id);
+
+            if ($current_profile_piture) {
+
+                Storage::cloud()->delete($current_profile_piture->filename);
+
+                DB::beginTransaction();
+
+                try {
+                    $current_profile_piture->delete();
+                    DB::commit();
+                } catch (\Exception $exception) {
+                    DB::rollBack();
+                    Storage::cloud()
+                        ->putFileAs('', $current_profile_piture, $current_profile_piture->filename, 'public');
+                    throw $exception;
+                }
+            }
+
+            $profile_picture = new ProfilePicture();
+            $profile_extension = $request->profile_picture->extension();
+            $profile_picture->filename = $profile_picture->id . '.' . $profile_extension;
+            Storage::cloud()
+                ->putFileAs('', $request->profile_picture, $profile_picture->filename, 'public');
+
+            DB::beginTransaction();
+
+            try {
+                $user->profile_picture()->save($profile_picture);
+                DB::commit();
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                Storage::cloud()->delete($profile_picture->filename);
+                throw $exception;
+            }
+        }
+
+        if ($request->hasFile('cover_photo')) {
+
+            $current_cover_photo = CoverPhoto::firstWhere('user_id', $user->id);
+
+            if ($current_cover_photo) {
+
+                Storage::cloud()->delete($current_cover_photo->filename);
+
+                DB::beginTransaction();
+
+                try {
+                    $current_cover_photo->delete();
+                    DB::commit();
+                } catch (\Exception $exception) {
+                    DB::rollBack();
+                    Storage::cloud()
+                        ->putFileAs('', $current_cover_photo, $current_cover_photo->filename, 'public');
+                    throw $exception;
+                }
+            }
+
+            $cover_photo = new CoverPhoto();
+            $cover_extension = $request->cover_photo->extension();
+            $cover_photo->filename = $cover_photo->id . '.' . $cover_extension;
+
+            Storage::cloud()
+                ->putFileAs('', $request->cover_photo, $cover_photo->filename, 'public');
+
+            DB::beginTransaction();
+
+            try {
+                $user->cover_photo()->save($cover_photo);
+                DB::commit();
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                Storage::cloud()->delete($cover_photo->filename);
+                throw $exception;
+            }
+        }
+    }
+
+    public static function deleteUser(User $user)
+    {
+        return $user->delete();
+    }
+    // public function deleteUser()
+    // {
+    //     return $this->delete();
+    // }
+
+    public static function followUser(User $user)
+    {
+        Auth::user()->follows()->detach($user->id);
+        Auth::user()->follows()->attach($user->id);
+    }
+
+    public static function unfollowUser(User $user)
+    {
+        Auth::user()->follows()->detach($user->id);
     }
 }

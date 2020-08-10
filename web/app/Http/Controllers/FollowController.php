@@ -14,26 +14,15 @@ class FollowController extends Controller
         $this->middleware('auth');
     }
 
-    public function follow(Request $request, User $user)
+    public function follow(User $user)
     {
-        if (!$user) {
-            abort(404);
-        }
-
-        Auth::user()->follows()->detach($user->id);
-        Auth::user()->follows()->attach($user->id);
-
+        User::followUser($user);
         return response('', 201);
     }
 
-    public function unfollow(Request $request, User $user)
+    public function unfollow(User $user)
     {
-        if (!$user) {
-            abort(404);
-        }
-
-        Auth::user()->follows()->detach($user->id);
-
+        User::unfollowUser($user);
         return response('', 204);
     }
 }
