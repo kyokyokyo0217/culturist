@@ -21,8 +21,6 @@ class Picture extends Model
 
     public $incrementing = false;
 
-    const ID_LENGTH = 12;
-
     protected $appends = [
         'url', 'liked_by_user'
     ];

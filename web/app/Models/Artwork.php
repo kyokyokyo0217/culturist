@@ -16,10 +16,8 @@ class Artwork extends Model
     use UrlAttribute;
 
     protected $keyType = 'string';
-    // primary key 以外にも効いている説
-    public $incrementing = false;
 
-    const ID_LENGTH = 12;
+    public $incrementing = false;
 
     protected $appends = [
         'url',

@@ -13,12 +13,12 @@ trait StringKey
             ['-', '_']
         );
 
-        $length = count($characters);
+        $current_length = count($characters);
 
         $id = "";
 
-        for ($i = 0; $i < self::ID_LENGTH; $i++) {
-            $id .= $characters[random_int(0, $length - 1)];
+        for ($i = 0; $i < config('constants.ID_LENGTH'); $i++) {
+            $id .= $characters[random_int(0, $current_length - 1)];
         }
 
         $this->attributes['id'] = $id;

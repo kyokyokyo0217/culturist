@@ -15,8 +15,6 @@ class CoverPhoto extends Model
 
     protected $keyType = 'string';
 
-    const ID_LENGTH = 12;
-
     protected $appends = [
         'url',
     ];
