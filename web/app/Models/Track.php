@@ -40,20 +40,28 @@ class Track extends Model
         }
     }
 
+    /**
+     * Accessor for 'url'
+     *
+     * @return string
+     */
     public function getUrlAttribute()
     {
         return $this->setUrlAttribute();
     }
 
+    /**
+     * Accessor for 'liked_by_user'
+     *
+     * @return boolean
+     */
     public function getLikedByUserAttribute()
     {
         if (Auth::guest()) {
             return false;
         }
 
-        return $this->track_liked_by->contains(function ($user) {
-            return $user->id === Auth::user()->id;
-        });
+        return $this->track_liked_by->contains(Auth::user());
     }
 
     public function artwork()

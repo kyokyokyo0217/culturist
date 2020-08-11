@@ -19,6 +19,8 @@ class Picture extends Model
 
     protected $keyType = 'string';
 
+    public $incrementing = false;
+
     const ID_LENGTH = 12;
 
     protected $appends = [
@@ -29,22 +31,6 @@ class Picture extends Model
         'id', 'artist', 'url', 'title', 'liked_by_user'
     ];
 
-    public function getUrlAttribute()
-    {
-        return $this->setUrlAttribute();
-    }
-
-    public function getLikedByUserAttribute()
-    {
-        if (Auth::guest()) {
-            return false;
-        }
-
-        return $this->picture_liked_by->contains(function ($user) {
-            return $user->id === Auth::user()->id;
-        });
-    }
-
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -52,6 +38,30 @@ class Picture extends Model
         if (!Arr::get($this->attributes, 'id')) {
             $this->setStringId($attributes);
         }
+    }
+
+    /**
+     * Accessor for 'url'
+     *
+     * @return string
+     */
+    public function getUrlAttribute()
+    {
+        return $this->setUrlAttribute();
+    }
+
+    /**
+     * Accessor for 'liked_by_user'
+     *
+     * @return boolean
+     */
+    public function getLikedByUserAttribute()
+    {
+        if (Auth::guest()) {
+            return false;
+        }
+
+        return $this->picture_liked_by->contains(Auth::user());
     }
 
     public function artist()

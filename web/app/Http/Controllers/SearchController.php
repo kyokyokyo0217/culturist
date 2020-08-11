@@ -12,7 +12,6 @@ class SearchController extends Controller
 {
     public function search(Request $request)
     {
-
         // requestが空文字のときは自動的にnullに変換される
         $isKeywordValid = $request->has('keyword') && isset($request->keyword);
 
