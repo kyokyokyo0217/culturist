@@ -47,21 +47,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // route model binding のkey変える
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
     public function getRouteKeyName()
     {
         return 'user_name';
     }
 
+    /**
+     * Accessor for 'followed_by_user'
+     *
+     * @return boolean
+     */
     public function getFollowedByUserAttribute()
     {
         if (Auth::guest()) {
             return false;
         }
 
-        return $this->followers->contains(function ($user) {
-            return $user->id === Auth::user()->id;
-        });
+        return $this->followers->contains(Auth::user());
     }
 
     /**
