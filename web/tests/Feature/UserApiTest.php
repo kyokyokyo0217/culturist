@@ -44,7 +44,6 @@ class UserApiTest extends TestCase
     {
         $response = $this->actingAs($this->userWithProfilePicture)->getJson('/api/auth/user');
 
-        // 長い！！
         $response->assertStatus(200)
             ->assertJson([
                 'data' => [

@@ -65,7 +65,7 @@ class Picture extends Model
     public static function getNewPictures()
     {
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $pictures;
@@ -76,7 +76,7 @@ class Picture extends Model
         $pictures = Picture::whereHas('artist', function (Builder $query) {
             $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
         })->with(['artist', 'artist.profile_picture'])
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $pictures;
@@ -87,7 +87,7 @@ class Picture extends Model
         $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
             $query->where('id', Auth::id());
         })->with(['artist', 'artist.profile_picture'])
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $pictures;
@@ -98,7 +98,7 @@ class Picture extends Model
     {
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
             ->where('user_id', $user->id)
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $pictures;

@@ -34,7 +34,9 @@ class GetPicturesListApiTest extends TestCase
     {
         $response = $this->getJson('/api/pictures/explore');
 
-        $pictures = Picture::with(['artist', 'artist.profile_picture'])->orderBy('created_at', 'desc')->get();
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+            ->latest()
+            ->get();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -85,7 +87,7 @@ class GetPicturesListApiTest extends TestCase
         $pictures = Picture::whereHas('artist', function (Builder $query) {
             $query->whereIn('id', $this->authUser->follows()->get()->modelKeys());
         })->with(['artist', 'artist.profile_picture'])
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->get();
 
         $expected_data = $pictures->map(function ($picture) {
@@ -137,7 +139,7 @@ class GetPicturesListApiTest extends TestCase
         $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
             $query->where('id', $this->authUser->id);
         })->with(['artist', 'artist.profile_picture'])
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->get();
 
         $expected_data = $pictures->map(function ($picture) {
@@ -181,7 +183,7 @@ class GetPicturesListApiTest extends TestCase
 
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
             ->where('user_id', $user->id)
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->get();
 
         $expected_data = $pictures->map(function ($picture) {

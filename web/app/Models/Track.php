@@ -72,7 +72,7 @@ class Track extends Model
     public static function getNewTracks()
     {
         $tracks = Track::with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $tracks;
@@ -83,7 +83,7 @@ class Track extends Model
         $tracks = Track::whereHas('artist', function (Builder $query) {
             $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
         })->with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $tracks;
@@ -94,7 +94,7 @@ class Track extends Model
         $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
             $query->where('id', Auth::id());
         })->with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $tracks;
@@ -104,7 +104,7 @@ class Track extends Model
     {
         $tracks = Track::with(['artist', 'artwork'])
             ->where('user_id', $user->id)
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $tracks;

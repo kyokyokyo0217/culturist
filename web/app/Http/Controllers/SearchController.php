@@ -22,9 +22,19 @@ class SearchController extends Controller
 
         $keyword = $request->input('keyword');
 
-        $users = User::with(['profile_picture'])->where('name', 'like', '%' . $keyword . '%')->orWhere('user_name', 'like', '%' . $keyword . '%')->orderBy('created_at', 'desc')->get();
-        $pictures = Picture::with(['artist', 'artist.profile_picture'])->where('title', 'like', '%' . $keyword . '%')->orderBy('created_at', 'desc')->get();
-        $tracks = Track::with(['artist', 'artwork'])->where('title', 'like', '%' . $keyword . '%')->orderBy('created_at', 'desc')->get();
+        $users = User::with(['profile_picture'])
+            ->where('name', 'like', '%' . $keyword . '%')
+            ->orWhere('user_name', 'like', '%' . $keyword . '%')
+            ->latest()
+            ->get();
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+            ->where('title', 'like', '%' . $keyword . '%')
+            ->latest()
+            ->get();
+        $tracks = Track::with(['artist', 'artwork'])
+            ->where('title', 'like', '%' . $keyword . '%')
+            ->latest()
+            ->get();
 
         return response()->json([
             'users' => $users,

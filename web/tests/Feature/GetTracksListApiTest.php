@@ -37,7 +37,9 @@ class getTracksListApiTest extends TestCase
     {
         $response = $this->getJson('/api/tracks/explore');
 
-        $tracks = Track::with(['artist', 'artwork'])->orderBy('created_at', 'desc')->get();
+        $tracks = Track::with(['artist', 'artwork'])
+            ->latest()
+            ->get();
 
         $expected_data = $tracks->map(function ($track) {
             return [
@@ -87,7 +89,7 @@ class getTracksListApiTest extends TestCase
         $tracks = Track::whereHas('artist', function (Builder $query) {
             $query->whereIn('id', $this->authUser->follows()->get()->modelKeys());
         })->with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->get();
 
         $expected_data = $tracks->map(function ($track) {
@@ -136,7 +138,7 @@ class getTracksListApiTest extends TestCase
         $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
             $query->where('id', $this->authUser->id);
         })->with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->get();
 
         $expected_data = $tracks->map(function ($track) {
@@ -179,7 +181,7 @@ class getTracksListApiTest extends TestCase
 
         $tracks = Track::with(['artist', 'artwork'])
             ->where('user_id', $user->id)
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->get();
 
         $expected_data = $tracks->map(function ($track) {
