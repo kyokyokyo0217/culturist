@@ -139,20 +139,8 @@ class User extends Authenticatable
             $current_profile_piture = ProfilePicture::firstWhere('user_id', $user->id);
 
             if ($current_profile_piture) {
-
+                $current_profile_piture->delete();
                 Storage::cloud()->delete($current_profile_piture->filename);
-
-                DB::beginTransaction();
-
-                try {
-                    $current_profile_piture->delete();
-                    DB::commit();
-                } catch (\Exception $exception) {
-                    DB::rollBack();
-                    Storage::cloud()
-                        ->putFileAs('', $current_profile_piture, $current_profile_piture->filename, 'public');
-                    throw $exception;
-                }
             }
 
             $profile_picture = new ProfilePicture();
@@ -178,20 +166,8 @@ class User extends Authenticatable
             $current_cover_photo = CoverPhoto::firstWhere('user_id', $user->id);
 
             if ($current_cover_photo) {
-
+                $current_cover_photo->delete();
                 Storage::cloud()->delete($current_cover_photo->filename);
-
-                DB::beginTransaction();
-
-                try {
-                    $current_cover_photo->delete();
-                    DB::commit();
-                } catch (\Exception $exception) {
-                    DB::rollBack();
-                    Storage::cloud()
-                        ->putFileAs('', $current_cover_photo, $current_cover_photo->filename, 'public');
-                    throw $exception;
-                }
             }
 
             $cover_photo = new CoverPhoto();

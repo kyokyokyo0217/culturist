@@ -14,13 +14,12 @@ class CreateArtworksTable extends Migration
     public function up()
     {
         Schema::create('artworks', function (Blueprint $table) {
-          $table->string('id')->primary();
-          // $table->string('track_id')->unique();
-          $table->string('track_id');
-          $table->string('filename');
-          $table->timestamps();
+            $table->string('id')->primary();
+            $table->string('track_id');
+            $table->string('filename');
+            $table->timestamps();
 
-          $table->foreign('track_id')->references('id')->on('tracks')->onDelete('cascade');
+            $table->foreign('track_id')->references('id')->on('tracks')->onDelete('cascade');
         });
     }
 

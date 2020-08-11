@@ -32,6 +32,11 @@ class CoverPhoto extends Model
         }
     }
 
+    /**
+     * Accessor for 'url'
+     *
+     * @return string
+     */
     public function getUrlAttribute()
     {
         return $this->setUrlAttribute();

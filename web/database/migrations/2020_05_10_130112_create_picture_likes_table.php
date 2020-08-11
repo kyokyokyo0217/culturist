@@ -14,12 +14,12 @@ class CreatePictureLikesTable extends Migration
     public function up()
     {
         Schema::create('picture_likes', function (Blueprint $table) {
-          $table->unsignedBigInteger('user_id');
-          $table->string('picture_id');
-          $table->timestamps();
+            $table->unsignedBigInteger('user_id');
+            $table->string('picture_id');
+            $table->timestamps();
 
-          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-          $table->foreign('picture_id')->references('id')->on('pictures')->onDelete('cascade'); 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('picture_id')->references('id')->on('pictures')->onDelete('cascade');
         });
     }
 

@@ -14,11 +14,11 @@ class CreateTracksTable extends Migration
     public function up()
     {
         Schema::create('tracks', function (Blueprint $table) {
-          $table->string('id')->primary();
-          $table->foreignId('user_id')->constrained()->onDelete('cascade');
-          $table->string('filename');
-          $table->string('title');
-          $table->timestamps();
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('filename');
+            $table->string('title');
+            $table->timestamps();
         });
     }
 

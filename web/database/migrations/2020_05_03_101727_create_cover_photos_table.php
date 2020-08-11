@@ -14,10 +14,10 @@ class CreateCoverPhotosTable extends Migration
     public function up()
     {
         Schema::create('cover_photos', function (Blueprint $table) {
-          $table->string('id')->primary();
-          $table->foreignId('user_id')->constrained()->onDelete('cascade');
-          $table->string('filename');
-          $table->timestamps();
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('filename');
+            $table->timestamps();
         });
     }
 

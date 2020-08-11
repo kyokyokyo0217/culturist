@@ -141,19 +141,8 @@ class Picture extends Model
 
     public static function deletePicture(Picture $picture)
     {
+        $picture->delete();
         Storage::cloud()->delete($picture->filename);
-
-        DB::beginTransaction();
-
-        try {
-            $picture->delete();
-            DB::commit();
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            Storage::cloud()
-                ->putFileAs('', $picture, $picture->filename, 'public');
-            throw $exception;
-        }
     }
 
     public static function likePicture(Picture $picture)

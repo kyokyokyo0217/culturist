@@ -130,7 +130,6 @@ class Track extends Model
         Storage::cloud()
             ->putFileAs('', $request->track, $track->filename, 'public');
 
-
         DB::beginTransaction();
 
         try {
@@ -148,23 +147,9 @@ class Track extends Model
     public static function deleteTrack(Track $track)
     {
         $artwork = $track->artwork;
-        Storage::cloud()->delete($track->filename);
-        Storage::cloud()->delete($artwork->filename);
 
-        DB::beginTransaction();
-
-        try {
-            $track->delete();
-            $artwork->delete();
-            DB::commit();
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            Storage::cloud()
-                ->putFileAs('', $track, $track->filename, 'public');
-            Storage::cloud()
-                ->putFileAs('', $artwork, $artwork->filename, 'public');
-            throw $exception;
-        }
+        $track->delete();
+        Storage::cloud()->delete([$track->filename, $artwork->filename]);
     }
 
     public static function likeTrack(Track $track)

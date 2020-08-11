@@ -13,14 +13,14 @@ class CreateTrackLikesTable extends Migration
      */
     public function up()
     {
-      Schema::create('track_likes', function (Blueprint $table) {
-        $table->unsignedBigInteger('user_id');
-        $table->string('track_id');
-        $table->timestamps();
+        Schema::create('track_likes', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id');
+            $table->string('track_id');
+            $table->timestamps();
 
-        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        $table->foreign('track_id')->references('id')->on('tracks')->onDelete('cascade'); 
-      });
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('track_id')->references('id')->on('tracks')->onDelete('cascade');
+        });
     }
 
     /**
