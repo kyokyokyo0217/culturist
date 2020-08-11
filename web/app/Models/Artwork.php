@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
+use App\Traits\UrlAttribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class Artwork extends Model
 {
     use StringKey;
+    use UrlAttribute;
 
     protected $keyType = 'string';
     // primary key 以外にも効いている説
@@ -42,7 +44,7 @@ class Artwork extends Model
 
     public function getUrlAttribute()
     {
-        return Storage::cloud()->url($this->attributes['filename']);
+        return $this->setUrlAttribute();
     }
 
     public static function storeArtwork(Request $request, Track $track)

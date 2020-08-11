@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
+use App\Traits\UrlAttribute;
 use App\Http\Requests\StorePicture;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 class Picture extends Model
 {
     use StringKey;
+    use UrlAttribute;
 
     protected $keyType = 'string';
 
@@ -29,7 +31,7 @@ class Picture extends Model
 
     public function getUrlAttribute()
     {
-        return Storage::cloud()->url($this->attributes['filename']);
+        return $this->setUrlAttribute();
     }
 
     public function getLikedByUserAttribute()

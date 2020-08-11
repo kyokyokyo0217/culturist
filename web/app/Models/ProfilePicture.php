@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
+use App\Traits\UrlAttribute;
 
 class ProfilePicture extends Model
 {
     use StringKey;
+    use UrlAttribute;
 
     protected $keyType = 'string';
 
@@ -34,6 +36,6 @@ class ProfilePicture extends Model
 
     public function getUrlAttribute()
     {
-        return Storage::cloud()->url($this->attributes['filename']);
+        return $this->setUrlAttribute();
     }
 }

@@ -47,7 +47,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // route binding のkey変える
+    // route model binding のkey変える
     public function getRouteKeyName()
     {
         return 'user_name';

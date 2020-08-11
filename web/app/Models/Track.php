@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
+use App\Traits\UrlAttribute;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ use App\Http\Requests\StoreTrack;
 class Track extends Model
 {
     use StringKey;
+    use UrlAttribute;
 
     protected $keyType = 'string';
 
@@ -40,7 +42,7 @@ class Track extends Model
 
     public function getUrlAttribute()
     {
-        return Storage::cloud()->url($this->attributes['filename']);
+        return $this->setUrlAttribute();
     }
 
     public function getLikedByUserAttribute()
