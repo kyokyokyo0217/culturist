@@ -71,5 +71,7 @@ class Artwork extends Model
             Storage::cloud()->delete($artwork->filename);
             throw $exception;
         }
+
+        return $artwork;
     }
 }

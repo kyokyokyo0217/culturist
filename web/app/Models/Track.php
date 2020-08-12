@@ -118,7 +118,7 @@ class Track extends Model
         return $tracks;
     }
 
-    public static function storeTrackWithArtwork(StoreTrackWithArtwork $request)
+    public static function storeTrack($request)
     {
         $extension = $request->track->extension();
 
@@ -140,6 +140,17 @@ class Track extends Model
             Storage::cloud()->delete($track->filename);
             throw $exception;
         }
+
+        return $track;
+    }
+
+    /**
+     * trackがstore成功してartworkがstore失敗する状態は許容する
+     * trackがstore失敗してartworkがstore成功する状態は許容しない
+     */
+    public static function storeTrackWithArtwork(StoreTrackWithArtwork $request)
+    {
+        $track = self::storeTrack($request);
 
         Artwork::storeArtwork($request, $track);
     }
