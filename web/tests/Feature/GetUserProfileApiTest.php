@@ -46,12 +46,10 @@ class GetUserProfileApiTest extends TestCase
                 'profile_picture' => [
                     'id' => $user->profile_picture->id,
                     'url' => $user->profile_picture->url,
-                    'filename' => $user->profile_picture->filename
                 ],
                 'cover_photo' => [
                     'id' => $user->cover_photo->id,
                     'url' => $user->cover_photo->url,
-                    'filename' => $user->cover_photo->filename
                 ]
             ]);
     }

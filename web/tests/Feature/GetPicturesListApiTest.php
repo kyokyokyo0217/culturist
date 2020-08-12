@@ -54,7 +54,6 @@ class GetPicturesListApiTest extends TestCase
                     'profile_picture' => [
                         'id' => $picture->artist->profile_picture->id,
                         'url' => $picture->artist->profile_picture->url,
-                        'filename' => $picture->artist->profile_picture->filename
                     ]
                 ],
             ];
@@ -106,7 +105,6 @@ class GetPicturesListApiTest extends TestCase
                     'profile_picture' => [
                         'id' => $picture->artist->profile_picture->id,
                         'url' => $picture->artist->profile_picture->url,
-                        'filename' => $picture->artist->profile_picture->filename
                     ]
                 ],
             ];
@@ -158,7 +156,6 @@ class GetPicturesListApiTest extends TestCase
                     'profile_picture' => [
                         'id' => $picture->artist->profile_picture->id,
                         'url' => $picture->artist->profile_picture->url,
-                        'filename' => $picture->artist->profile_picture->filename
                     ]
                 ],
             ];
@@ -202,7 +199,6 @@ class GetPicturesListApiTest extends TestCase
                     'profile_picture' => [
                         'id' => $picture->artist->profile_picture->id,
                         'url' => $picture->artist->profile_picture->url,
-                        'filename' => $picture->artist->profile_picture->filename
                     ]
                 ],
             ];

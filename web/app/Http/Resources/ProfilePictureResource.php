@@ -15,9 +15,8 @@ class ProfilePictureResource extends JsonResource
     public function toArray($request)
     {
         return [
-          'id' => $this->id,
-          'url' => $this->url,
-          'filename' => $this->filename
+            'id' => $this->id,
+            'url' => $this->url,
         ];
     }
 }

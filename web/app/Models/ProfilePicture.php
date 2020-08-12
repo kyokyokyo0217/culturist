@@ -24,7 +24,7 @@ class ProfilePicture extends Model
     ];
 
     protected $visible = [
-        'id', 'url', 'filename'
+        'id', 'url'
     ];
 
     public function __construct(array $attributes = [])
