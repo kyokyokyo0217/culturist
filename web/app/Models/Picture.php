@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
+use App\Traits\UrlAttribute;
+use App\Traits\Filename;
 use App\Http\Requests\StorePicture;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,10 +16,12 @@ use Illuminate\Support\Facades\DB;
 class Picture extends Model
 {
     use StringKey;
+    use UrlAttribute;
+    use Filename;
 
     protected $keyType = 'string';
 
-    const ID_LENGTH = 12;
+    public $incrementing = false;
 
     protected $appends = [
         'url', 'liked_by_user'
@@ -27,22 +31,6 @@ class Picture extends Model
         'id', 'artist', 'url', 'title', 'liked_by_user'
     ];
 
-    public function getUrlAttribute()
-    {
-        return Storage::cloud()->url($this->attributes['filename']);
-    }
-
-    public function getLikedByUserAttribute()
-    {
-        if (Auth::guest()) {
-            return false;
-        }
-
-        return $this->picture_liked_by->contains(function ($user) {
-            return $user->id === Auth::user()->id;
-        });
-    }
-
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -50,6 +38,30 @@ class Picture extends Model
         if (!Arr::get($this->attributes, 'id')) {
             $this->setStringId($attributes);
         }
+    }
+
+    /**
+     * Accessor for 'url'
+     *
+     * @return string
+     */
+    public function getUrlAttribute()
+    {
+        return $this->setUrlAttribute();
+    }
+
+    /**
+     * Accessor for 'liked_by_user'
+     *
+     * @return boolean
+     */
+    public function getLikedByUserAttribute()
+    {
+        if (Auth::guest()) {
+            return false;
+        }
+
+        return $this->picture_liked_by->contains(Auth::user());
     }
 
     public function artist()
@@ -65,7 +77,7 @@ class Picture extends Model
     public static function getNewPictures()
     {
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $pictures;
@@ -76,7 +88,7 @@ class Picture extends Model
         $pictures = Picture::whereHas('artist', function (Builder $query) {
             $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
         })->with(['artist', 'artist.profile_picture'])
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $pictures;
@@ -87,18 +99,17 @@ class Picture extends Model
         $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
             $query->where('id', Auth::id());
         })->with(['artist', 'artist.profile_picture'])
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $pictures;
     }
 
-
-    public static function getUserProfilePictures(User $user)
+    public static function getUserPictures(User $user)
     {
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
             ->where('user_id', $user->id)
-            ->orderBy(Picture::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $pictures;
@@ -110,12 +121,11 @@ class Picture extends Model
 
         $picture = new Picture();
 
-        $picture->filename = $picture->id . '.' . $extension;
+        $picture->filename = $picture->getFilename($extension);
         $picture->title = $request->title;
 
         Storage::cloud()
             ->putFileAs('', $request->picture, $picture->filename, 'public');
-
 
         DB::beginTransaction();
 
@@ -127,23 +137,14 @@ class Picture extends Model
             Storage::cloud()->delete($picture->filename);
             throw $exception;
         }
+
+        return $picture;
     }
 
     public static function deletePicture(Picture $picture)
     {
+        $picture->delete();
         Storage::cloud()->delete($picture->filename);
-
-        DB::beginTransaction();
-
-        try {
-            $picture->delete();
-            DB::commit();
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            Storage::cloud()
-                ->putFileAs('', $picture, $picture->filename, 'public');
-            throw $exception;
-        }
     }
 
     public static function likePicture(Picture $picture)

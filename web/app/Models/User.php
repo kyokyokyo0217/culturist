@@ -47,21 +47,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // route binding のkey変える
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
     public function getRouteKeyName()
     {
         return 'user_name';
     }
 
+    /**
+     * Accessor for 'followed_by_user'
+     *
+     * @return boolean
+     */
     public function getFollowedByUserAttribute()
     {
         if (Auth::guest()) {
             return false;
         }
 
-        return $this->followers->contains(function ($user) {
-            return $user->id === Auth::user()->id;
-        });
+        return $this->followers->contains(Auth::user());
     }
 
     /**
@@ -128,82 +135,11 @@ class User extends Authenticatable
         ])->save();
 
         if ($request->hasFile('profile_picture')) {
-
-            $current_profile_piture = ProfilePicture::firstWhere('user_id', $user->id);
-
-            if ($current_profile_piture) {
-
-                Storage::cloud()->delete($current_profile_piture->filename);
-
-                DB::beginTransaction();
-
-                try {
-                    $current_profile_piture->delete();
-                    DB::commit();
-                } catch (\Exception $exception) {
-                    DB::rollBack();
-                    Storage::cloud()
-                        ->putFileAs('', $current_profile_piture, $current_profile_piture->filename, 'public');
-                    throw $exception;
-                }
-            }
-
-            $profile_picture = new ProfilePicture();
-            $profile_extension = $request->profile_picture->extension();
-            $profile_picture->filename = $profile_picture->id . '.' . $profile_extension;
-            Storage::cloud()
-                ->putFileAs('', $request->profile_picture, $profile_picture->filename, 'public');
-
-            DB::beginTransaction();
-
-            try {
-                $user->profile_picture()->save($profile_picture);
-                DB::commit();
-            } catch (\Exception $exception) {
-                DB::rollBack();
-                Storage::cloud()->delete($profile_picture->filename);
-                throw $exception;
-            }
+            ProfilePicture::updateProfilePicture($request, $user);
         }
 
         if ($request->hasFile('cover_photo')) {
-
-            $current_cover_photo = CoverPhoto::firstWhere('user_id', $user->id);
-
-            if ($current_cover_photo) {
-
-                Storage::cloud()->delete($current_cover_photo->filename);
-
-                DB::beginTransaction();
-
-                try {
-                    $current_cover_photo->delete();
-                    DB::commit();
-                } catch (\Exception $exception) {
-                    DB::rollBack();
-                    Storage::cloud()
-                        ->putFileAs('', $current_cover_photo, $current_cover_photo->filename, 'public');
-                    throw $exception;
-                }
-            }
-
-            $cover_photo = new CoverPhoto();
-            $cover_extension = $request->cover_photo->extension();
-            $cover_photo->filename = $cover_photo->id . '.' . $cover_extension;
-
-            Storage::cloud()
-                ->putFileAs('', $request->cover_photo, $cover_photo->filename, 'public');
-
-            DB::beginTransaction();
-
-            try {
-                $user->cover_photo()->save($cover_photo);
-                DB::commit();
-            } catch (\Exception $exception) {
-                DB::rollBack();
-                Storage::cloud()->delete($cover_photo->filename);
-                throw $exception;
-            }
+            CoverPhoto::updateCoverPhoto($request, $user);
         }
     }
 

@@ -6,20 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
+use App\Traits\UrlAttribute;
+use App\Traits\Filename;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StoreTrack;
+use App\Http\Requests\StoreTrackWithArtwork;
 
 class Track extends Model
 {
     use StringKey;
+    use UrlAttribute;
+    use Filename;
 
     protected $keyType = 'string';
 
     public $incrementing = false;
-
-    const ID_LENGTH = 12;
 
     protected $appends = [
         'url', 'liked_by_user'
@@ -38,20 +40,28 @@ class Track extends Model
         }
     }
 
+    /**
+     * Accessor for 'url'
+     *
+     * @return string
+     */
     public function getUrlAttribute()
     {
-        return Storage::cloud()->url($this->attributes['filename']);
+        return $this->setUrlAttribute();
     }
 
+    /**
+     * Accessor for 'liked_by_user'
+     *
+     * @return boolean
+     */
     public function getLikedByUserAttribute()
     {
         if (Auth::guest()) {
             return false;
         }
 
-        return $this->track_liked_by->contains(function ($user) {
-            return $user->id === Auth::user()->id;
-        });
+        return $this->track_liked_by->contains(Auth::user());
     }
 
     public function artwork()
@@ -72,7 +82,7 @@ class Track extends Model
     public static function getNewTracks()
     {
         $tracks = Track::with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $tracks;
@@ -83,7 +93,7 @@ class Track extends Model
         $tracks = Track::whereHas('artist', function (Builder $query) {
             $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
         })->with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $tracks;
@@ -94,34 +104,33 @@ class Track extends Model
         $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
             $query->where('id', Auth::id());
         })->with(['artist', 'artwork'])
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $tracks;
     }
 
-    public static function getUserProfileTracks(User $user)
+    public static function getUserTracks(User $user)
     {
         $tracks = Track::with(['artist', 'artwork'])
             ->where('user_id', $user->id)
-            ->orderBy(Track::CREATED_AT, 'desc')
+            ->latest()
             ->paginate();
 
         return $tracks;
     }
 
-    public static function storeTrack(StoreTrack $request)
+    public static function storeTrack($request)
     {
         $extension = $request->track->extension();
 
         $track = new Track();
 
-        $track->filename = $track->id . '.' . $extension;
+        $track->filename = $track->getFilename($extension);
         $track->title = $request->title;
 
         Storage::cloud()
             ->putFileAs('', $request->track, $track->filename, 'public');
-
 
         DB::beginTransaction();
 
@@ -134,29 +143,26 @@ class Track extends Model
             throw $exception;
         }
 
+        return $track;
+    }
+
+    /**
+     * trackがstore成功してartworkがstore失敗する状態は許容する
+     * trackがstore失敗してartworkがstore成功する状態は許容しない
+     */
+    public static function storeTrackWithArtwork(StoreTrackWithArtwork $request)
+    {
+        $track = self::storeTrack($request);
+
         Artwork::storeArtwork($request, $track);
     }
 
     public static function deleteTrack(Track $track)
     {
         $artwork = $track->artwork;
-        Storage::cloud()->delete($track->filename);
-        Storage::cloud()->delete($artwork->filename);
 
-        DB::beginTransaction();
-
-        try {
-            $track->delete();
-            $artwork->delete();
-            DB::commit();
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            Storage::cloud()
-                ->putFileAs('', $track, $track->filename, 'public');
-            Storage::cloud()
-                ->putFileAs('', $artwork, $artwork->filename, 'public');
-            throw $exception;
-        }
+        $track->delete();
+        Storage::cloud()->delete([$track->filename, $artwork->filename]);
     }
 
     public static function likeTrack(Track $track)

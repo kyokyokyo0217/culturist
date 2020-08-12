@@ -33,9 +33,9 @@ class PictureController extends Controller
         return Picture::getLikedPictures();
     }
 
-    public function getUserProfilePictures(User $user)
+    public function getUserPictures(User $user)
     {
-        return Picture::getUserProfilePictures($user);
+        return Picture::getUserPictures($user);
     }
 
     /**
