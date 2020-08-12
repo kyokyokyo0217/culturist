@@ -7,6 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
 use App\Traits\UrlAttribute;
+use App\Traits\Filename;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,7 @@ class Track extends Model
 {
     use StringKey;
     use UrlAttribute;
+    use Filename;
 
     protected $keyType = 'string';
 
@@ -124,7 +126,7 @@ class Track extends Model
 
         $track = new Track();
 
-        $track->filename = $track->id . '.' . $extension;
+        $track->filename = $track->getFilename($extension);
         $track->title = $request->title;
 
         Storage::cloud()

@@ -7,6 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
 use App\Traits\UrlAttribute;
+use App\Traits\Filename;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,7 @@ class Artwork extends Model
 {
     use StringKey;
     use UrlAttribute;
+    use Filename;
 
     protected $keyType = 'string';
 
@@ -56,7 +58,7 @@ class Artwork extends Model
 
         $artwork = new Artwork();
 
-        $artwork->filename = $artwork->id . '.' . $extension;
+        $artwork->filename = $artwork->getFilename($extension);
 
         Storage::cloud()
             ->putFileAs('', $request->artwork, $artwork->filename, 'public');

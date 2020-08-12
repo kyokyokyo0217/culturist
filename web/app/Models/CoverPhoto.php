@@ -8,12 +8,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Traits\StringKey;
 use App\Traits\UrlAttribute;
+use App\Traits\Filename;
 use App\Http\Requests\UpdateUserProfile;
 
 class CoverPhoto extends Model
 {
     use StringKey;
     use UrlAttribute;
+    use Filename;
 
     protected $keyType = 'string';
 
@@ -46,9 +48,10 @@ class CoverPhoto extends Model
 
     public static function storeCoverPhoto($request, User $user)
     {
+        $extension = $request->cover_photo->extension();
+
         $cover_photo = new CoverPhoto();
-        $cover_extension = $request->cover_photo->extension();
-        $cover_photo->filename = $cover_photo->id . '.' . $cover_extension;
+        $cover_photo->filename = $cover_photo->getFilename($request);
 
         Storage::cloud()
             ->putFileAs('', $request->cover_photo, $cover_photo->filename, 'public');

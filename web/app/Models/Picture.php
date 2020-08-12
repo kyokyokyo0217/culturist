@@ -7,6 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
 use App\Traits\UrlAttribute;
+use App\Traits\Filename;
 use App\Http\Requests\StorePicture;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +17,7 @@ class Picture extends Model
 {
     use StringKey;
     use UrlAttribute;
+    use Filename;
 
     protected $keyType = 'string';
 
@@ -120,7 +122,7 @@ class Picture extends Model
 
         $picture = new Picture();
 
-        $picture->filename = $picture->id . '.' . $extension;
+        $picture->filename = $picture->getFilename($extension);
         $picture->title = $request->title;
 
         Storage::cloud()

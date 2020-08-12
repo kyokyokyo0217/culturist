@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Traits\StringKey;
 use App\Traits\UrlAttribute;
+use App\Traits\Filename;
 use App\Http\Requests\UpdateUserProfile;
 
 
@@ -15,6 +16,7 @@ class ProfilePicture extends Model
 {
     use StringKey;
     use UrlAttribute;
+    use Filename;
 
     protected $keyType = 'string';
 
@@ -47,9 +49,11 @@ class ProfilePicture extends Model
 
     public static function storeProfilePicture($request, User $user)
     {
+        $extension = $request->profile_picture->extension();
+
         $profile_picture = new ProfilePicture();
-        $profile_extension = $request->profile_picture->extension();
-        $profile_picture->filename = $profile_picture->id . '.' . $profile_extension;
+        $profile_picture->filename = $profile_picture->getFilename($extension);
+
         Storage::cloud()
             ->putFileAs('', $request->profile_picture, $profile_picture->filename, 'public');
 
