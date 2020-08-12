@@ -34,6 +34,6 @@ class DeleteTrackApiTest extends TestCase
 
         $this->assertCount(0, Track::all());
         // error artworkが削除されない localhostでは挙動に問題はないのでこのテストに問題あり
-        // $this->assertCount(0, Artwork::all());
+        $this->assertCount(0, Artwork::all());
     }
 }
