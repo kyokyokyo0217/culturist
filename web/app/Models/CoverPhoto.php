@@ -44,15 +44,8 @@ class CoverPhoto extends Model
         return $this->setUrlAttribute();
     }
 
-    public static function updateCoverPhoto(UpdateUserProfile $request, User $user)
+    public static function storeCoverPhoto($request, User $user)
     {
-        $current_cover_photo = $user->cover_photo;
-
-        if ($current_cover_photo) {
-            $current_cover_photo->delete();
-            Storage::cloud()->delete($current_cover_photo->filename);
-        }
-
         $cover_photo = new CoverPhoto();
         $cover_extension = $request->cover_photo->extension();
         $cover_photo->filename = $cover_photo->id . '.' . $cover_extension;
@@ -70,5 +63,20 @@ class CoverPhoto extends Model
             Storage::cloud()->delete($cover_photo->filename);
             throw $exception;
         }
+    }
+
+    public static function updateCoverPhoto(UpdateUserProfile $request, User $user)
+    {
+        if ($user->cover_photo) {
+            self::deleteCoverPhoto($user->cover_photo);
+        }
+
+        self::storeCoverPhoto($request, $user);
+    }
+
+    public static function deleteCoverPhoto(CoverPhoto $cover_photo)
+    {
+        $cover_photo->delete();
+        Storage::cloud()->delete($cover_photo->filename);
     }
 }

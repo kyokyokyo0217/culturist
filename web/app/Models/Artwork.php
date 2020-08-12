@@ -61,7 +61,6 @@ class Artwork extends Model
         Storage::cloud()
             ->putFileAs('', $request->artwork, $artwork->filename, 'public');
 
-
         DB::beginTransaction();
 
         try {
