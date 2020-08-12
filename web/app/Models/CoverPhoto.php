@@ -66,6 +66,8 @@ class CoverPhoto extends Model
             Storage::cloud()->delete($cover_photo->filename);
             throw $exception;
         }
+
+        return $cover_photo;
     }
 
     public static function updateCoverPhoto(UpdateUserProfile $request, User $user)

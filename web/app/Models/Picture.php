@@ -105,7 +105,6 @@ class Picture extends Model
         return $pictures;
     }
 
-
     public static function getUserPictures(User $user)
     {
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
@@ -128,7 +127,6 @@ class Picture extends Model
         Storage::cloud()
             ->putFileAs('', $request->picture, $picture->filename, 'public');
 
-
         DB::beginTransaction();
 
         try {
@@ -139,6 +137,8 @@ class Picture extends Model
             Storage::cloud()->delete($picture->filename);
             throw $exception;
         }
+
+        return $picture;
     }
 
     public static function deletePicture(Picture $picture)

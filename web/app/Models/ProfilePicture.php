@@ -11,7 +11,6 @@ use App\Traits\UrlAttribute;
 use App\Traits\Filename;
 use App\Http\Requests\UpdateUserProfile;
 
-
 class ProfilePicture extends Model
 {
     use StringKey;
@@ -67,6 +66,8 @@ class ProfilePicture extends Model
             Storage::cloud()->delete($profile_picture->filename);
             throw $exception;
         }
+
+        return $profile_picture;
     }
 
     public static function updateProfilePicture(UpdateUserProfile $request, User $user)
