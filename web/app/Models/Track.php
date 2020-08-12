@@ -108,7 +108,7 @@ class Track extends Model
         return $tracks;
     }
 
-    public static function getUserProfileTracks(User $user)
+    public static function getUserTracks(User $user)
     {
         $tracks = Track::with(['artist', 'artwork'])
             ->where('user_id', $user->id)

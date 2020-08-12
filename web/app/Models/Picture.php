@@ -104,7 +104,7 @@ class Picture extends Model
     }
 
 
-    public static function getUserProfilePictures(User $user)
+    public static function getUserPictures(User $user)
     {
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
             ->where('user_id', $user->id)

@@ -36,9 +36,9 @@ class TrackController extends Controller
         return Track::getLikedTracks();
     }
 
-    public function getUserProfileTracks(User $user)
+    public function getUserTracks(User $user)
     {
-        return Track::getUserProfileTracks($user);
+        return Track::getUserTracks($user);
     }
 
     /**
