@@ -13,11 +13,7 @@ class ReturnAuthenticatedUserController extends Controller
     public function returnAuthenticatedUser()
     {
         if (Auth::check()) {
-            if (ProfilePicture::firstWhere('user_id', Auth::id())) {
-                return new AuthenticatedUserResource(Auth::user()->load('profile_picture'));
-            } else {
-                return new AuthenticatedUserResource(Auth::user());
-            }
+            return new AuthenticatedUserResource(Auth::user()->load('profile_picture'));
         }
     }
 }
