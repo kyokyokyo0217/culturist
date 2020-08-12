@@ -7,7 +7,7 @@ use App\Models\Track;
 use App\Models\Artwork;
 use App\Http\Controllers\ArtworkController;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreTrack;
+use App\Http\Requests\StoreTrackWithArtwork;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -47,9 +47,9 @@ class TrackController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTrack $request)
+    public function store(StoreTrackWithArtwork $request)
     {
-        Track::storeTrack($request);
+        Track::storeTrackWithArtwork($request);
         return response('', 201);
     }
 

@@ -10,7 +10,7 @@ use App\Traits\UrlAttribute;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StoreTrack;
+use App\Http\Requests\StoreTrackWithArtwork;
 
 class Track extends Model
 {
@@ -118,7 +118,7 @@ class Track extends Model
         return $tracks;
     }
 
-    public static function storeTrack(StoreTrack $request)
+    public static function storeTrackWithArtwork(StoreTrackWithArtwork $request)
     {
         $extension = $request->track->extension();
 
