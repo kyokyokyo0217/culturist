@@ -10,11 +10,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use DateTimeInterface;
+use App\Traits\LikeSearchScope;
 
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use LikeSearchScope;
 
     /**
      * The attributes that are mass assignable.
@@ -161,5 +163,15 @@ class User extends Authenticatable
     public static function unfollowUser(User $user)
     {
         Auth::user()->follows()->detach($user->id);
+    }
+
+    public static function searchUsers($keyword)
+    {
+        return User::with(['profile_picture'])
+            ->LikeSearch($keyword, 'name')
+            ->orWhere
+            ->LikeSearch($keyword, 'user_name')
+            ->latest()
+            ->get();
     }
 }

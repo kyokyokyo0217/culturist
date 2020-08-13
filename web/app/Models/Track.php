@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
 use App\Traits\UrlAttribute;
 use App\Traits\Filename;
+use App\Traits\LikeSearchScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,7 @@ class Track extends Model
     use StringKey;
     use UrlAttribute;
     use Filename;
+    use LikeSearchScope;
 
     protected $keyType = 'string';
 
@@ -174,5 +176,13 @@ class Track extends Model
     public static function unlikeTrack(Track $track)
     {
         $track->track_liked_by()->detach(Auth::id());
+    }
+
+    public static function searchTracks($keyword)
+    {
+        return Track::with(['artist', 'artwork'])
+            ->LikeSearch($keyword, 'title')
+            ->latest()
+            ->get();
     }
 }
