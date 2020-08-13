@@ -6,19 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Picture;
 use App\Models\Track;
+use App\Http\Requests\Search;
 
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    public function search(Search $request)
     {
-        // requestが空文字のときは自動的にnullに変換される
-        $isKeywordValid = $request->has('keyword') && isset($request->keyword);
-
-        if (!$isKeywordValid) {
-            abort(404);
-        }
-
         $keyword = $request->input('keyword');
 
         $users = User::with(['profile_picture'])
