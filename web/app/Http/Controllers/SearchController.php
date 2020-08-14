@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\Picture;
 use App\Models\Track;
 use App\Http\Requests\Search;
-
+use App\Http\Resources\UserResource;
+use App\Http\Resources\PictureResource;
+use App\Http\Resources\TrackResource;
 
 class SearchController extends Controller
 {
@@ -20,9 +22,9 @@ class SearchController extends Controller
         $tracks = Track::searchTracks($keyword);
 
         return response()->json([
-            'users' => $users,
-            'pictures' => $pictures,
-            'tracks' => $tracks
+            'users' => UserResource::collection($users),
+            'pictures' => PictureResource::collection($pictures),
+            'tracks' => TrackResource::collection($tracks)
         ]);
     }
 }
