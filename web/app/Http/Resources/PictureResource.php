@@ -3,8 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\UserResource;
 
-class ProfilePictureResource extends JsonResource
+class PictureResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +16,11 @@ class ProfilePictureResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'title' => $this->title,
             'id' => $this->id,
             'url' => $this->url,
+            'liked_by_user' => $this->liked_by_user,
+            'artist' => new UserResource($this->artist)
         ];
     }
 }

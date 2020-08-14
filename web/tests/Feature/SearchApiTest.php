@@ -60,10 +60,10 @@ class SearchApiTest extends TestCase
     /**
      * @test
      */
-    public function should_abort_404(): void
+    public function should_return_422_response(): void
     {
         $response = $this->postJson('/api/search', ['keyword' => '']);
 
-        $response->assertStatus(404);
+        $response->assertStatus(422);
     }
 }

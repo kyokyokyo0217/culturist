@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Traits\StringKey;
 use App\Traits\UrlAttribute;
 use App\Traits\Filename;
+use App\Traits\LikeSearchScope;
 use App\Http\Requests\StorePicture;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +19,7 @@ class Picture extends Model
     use StringKey;
     use UrlAttribute;
     use Filename;
+    use LikeSearchScope;
 
     protected $keyType = 'string';
 
@@ -156,5 +158,13 @@ class Picture extends Model
     public static function unlikePicture(Picture $picture)
     {
         $picture->picture_liked_by()->detach(Auth::id());
+    }
+
+    public static function searchPictures($keyword)
+    {
+        return Picture::with(['artist', 'artist.profile_picture'])
+            ->LikeSearch($keyword, 'title')
+            ->latest()
+            ->get();
     }
 }

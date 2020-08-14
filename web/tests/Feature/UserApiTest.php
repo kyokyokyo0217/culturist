@@ -52,7 +52,6 @@ class UserApiTest extends TestCase
                     'profile_picture' => [
                         'id' => $this->userWithProfilePicture->profile_picture->id,
                         'url' => $this->userWithProfilePicture->profile_picture->url,
-                        'filename' => $this->userWithProfilePicture->profile_picture->filename
                     ]
                 ]
             ]);
