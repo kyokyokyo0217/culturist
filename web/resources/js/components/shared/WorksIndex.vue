@@ -3,7 +3,7 @@
     <v-row>
       <template v-if="selectedChip === 'music'">
         <v-col v-for="(track, index) in tracks" :key="index" class="d-flex child-flex" :cols="cols">
-          <track-card :item="track" :edit="edit" @fetchTracks="fetchTracks"></track-card>
+          <track-card :item="track" :edit="edit" @fetch-tracks="fetchTracks"></track-card>
         </v-col>
       </template>
       <template v-if="selectedChip === 'picture'">
@@ -13,7 +13,7 @@
           class="d-flex child-flex"
           :cols="cols"
         >
-          <picture-card :item="picture" :edit="edit" @fetchPhotos="fetchPhotos"></picture-card>
+          <picture-card :item="picture" :edit="edit" @fetch-photos="fetchPhotos"></picture-card>
         </v-col>
       </template>
     </v-row>
@@ -52,10 +52,10 @@ export default {
   },
   methods: {
     fetchTracks() {
-      this.$emit("fetchTracks");
+      this.$emit("fetch-tracks");
     },
     fetchPhotos() {
-      this.$emit("fetchPhotos");
+      this.$emit("fetch-photos");
     },
   },
 };

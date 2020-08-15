@@ -27,7 +27,7 @@
       </v-img>
     </v-hover>
 
-    <picture-detail-card v-if="overlay" @closeDetail="overlay = false" :item="item"></picture-detail-card>
+    <picture-detail-card v-if="overlay" @close-detail="overlay = false" :item="item"></picture-detail-card>
   </v-card>
 </template>
 <script>
@@ -68,7 +68,7 @@ export default {
       this.dialog = false;
       this.loading = false;
 
-      this.$emit("fetchPhotos");
+      this.$emit("fetch-photos");
 
       // this.$router.replace({path: this.$router.currentRoute.path}).catch(err => {})
     },

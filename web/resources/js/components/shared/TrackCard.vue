@@ -111,7 +111,7 @@ export default {
       this.dialog = false;
       this.loading = false;
 
-      this.$emit("fetchTracks");
+      this.$emit("fetch-tracks");
 
       // this.$router.replace({path: this.$router.currentRoute.path}).catch(err => {})
     },

@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     closeDetail() {
-      this.$emit("closeDetail");
+      this.$emit("close-detail");
     },
 
     getProfilePictureUrl() {

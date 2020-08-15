@@ -17,7 +17,7 @@
               <v-col cols="12" class="text-center" align-self="end">
                 <!-- close-on~~ :付けないと動かない-->
                 <v-menu
-                  v-model="backgroundMenu"
+                  v-model="coverPhotoUploadMenu"
                   :close-on-click="false"
                   :close-on-content-click="false"
                   :nudge-width="200"
@@ -29,13 +29,13 @@
                     </v-btn>
                   </template>
 
-                  <!-- <image-upload-card :menu="backgroundMenu" @closeMenu="backgroundMenu= false"></image-upload-card> -->
+                  <!-- <image-upload-card :menu="coverPhotoUploadMenu" @close-menu="coverPhotoUploadMenu= false"></image-upload-card> -->
 
                   <v-card class="pa-4">
                     <v-card-title>
                       <span>Add Image</span>
                       <v-spacer></v-spacer>
-                      <v-btn icon x-small @click="backgroundMenu = !backgroundMenu">
+                      <v-btn icon x-small @click="coverPhotoUploadMenu = !coverPhotoUploadMenu">
                         <v-icon>mdi-close-thick</v-icon>
                       </v-btn>
                     </v-card-title>
@@ -57,7 +57,7 @@
                 <v-img :src="profilePictureSrc">
                   <v-menu
                     v-if="edit"
-                    v-model="avatarMenu"
+                    v-model="profilePictureUploadMenu"
                     :close-on-click="false"
                     :close-on-content-click="false"
                     nudge-width="200"
@@ -69,13 +69,17 @@
                       </v-btn>
                     </template>
 
-                    <!-- <image-upload-card :menu="avatarMenu" @closeMenu="avatarMenu= false"></image-upload-card> -->
+                    <!-- <image-upload-card :menu="profilePictureUploadMenu" @close-menu="profilePictureUploadMenu= false"></image-upload-card> -->
 
                     <v-card class="pa-4">
                       <v-card-title>
                         <span>Add Image</span>
                         <v-spacer></v-spacer>
-                        <v-btn icon x-small @click="avatarMenu = !avatarMenu">
+                        <v-btn
+                          icon
+                          x-small
+                          @click="profilePictureUploadMenu = !profilePictureUploadMenu"
+                        >
                           <v-icon>mdi-close-thick</v-icon>
                         </v-btn>
                       </v-card-title>
@@ -177,8 +181,8 @@
                 :tracks="tracks"
                 :pictures="pictures"
                 :edit="edit"
-                @fetchTracks="fetchTracks"
-                @fetchPhotos="fetchPhotos"
+                @fetch-tracks="fetchTracks"
+                @fetch-photos="fetchPhotos"
               ></works-index>
             </v-col>
           </v-row>
@@ -203,8 +207,8 @@ export default {
   data() {
     return {
       edit: false,
-      avatarMenu: false,
-      backgroundMenu: false,
+      profilePictureUploadMenu: false,
+      coverPhotoUploadMenu: false,
       user: null,
       coverPhotoPreview: null,
       profilePicturePreview: null,
@@ -338,8 +342,8 @@ export default {
 
       // navigationdrawerのプロフ画も再取得したい
 
-      this.avatarMenu = false;
-      this.backgroundMenu = false;
+      this.profilePictureUploadMenu = false;
+      this.coverPhotoUploadMenu = false;
       this.edit = !this.edit;
       this.loading = false;
     },
