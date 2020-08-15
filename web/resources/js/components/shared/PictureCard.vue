@@ -27,32 +27,32 @@
       </v-img>
     </v-hover>
 
-    <picture-detail-card v-if="overlay" @closeDetail="overlay = false" :item="item"></picture-detail-card>
+    <picture-detail-card v-if="overlay" @close-detail="overlay = false" :item="item"></picture-detail-card>
   </v-card>
 </template>
 <script>
-import { CREATED, NO_CONTENT } from "../../util";
-import PictureDetailCard from "./PictureDetailCard.vue";
+import { CREATED, NO_CONTENT } from "@/util";
+import PictureDetailCard from "@components/shared/PictureDetailCard.vue";
 export default {
   components: {
-    PictureDetailCard
+    PictureDetailCard,
   },
   props: {
     item: {
       type: Object,
-      required: true
+      required: true,
     },
     edit: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       overlay: false,
       liked: false,
       dialog: false,
-      loading: false
+      loading: false,
     };
   },
   methods: {
@@ -68,11 +68,11 @@ export default {
       this.dialog = false;
       this.loading = false;
 
-      this.$emit("fetchPhotos");
+      this.$emit("fetch-photos");
 
       // this.$router.replace({path: this.$router.currentRoute.path}).catch(err => {})
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

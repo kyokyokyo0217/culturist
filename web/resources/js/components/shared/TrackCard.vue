@@ -49,28 +49,28 @@
   </v-card>
 </template>
 <script>
-import { CREATED, NO_CONTENT } from "../../util";
+import { CREATED, NO_CONTENT } from "@/util";
 export default {
   props: {
     item: {
       type: Object,
-      required: true
+      required: true,
     },
     edit: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       dialog: false,
-      loading: false
+      loading: false,
     };
   },
   computed: {
     isLogin() {
       return this.$store.getters["auth/check"];
-    }
+    },
   },
   methods: {
     playTrack() {
@@ -111,11 +111,11 @@ export default {
       this.dialog = false;
       this.loading = false;
 
-      this.$emit("fetchTracks");
+      this.$emit("fetch-tracks");
 
       // this.$router.replace({path: this.$router.currentRoute.path}).catch(err => {})
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,9 +12,19 @@ const mix = require('laravel-mix');
  |
  */
 
- mix.browserSync({
-   proxy: '0.0.0.0:8081',
-   open: false
- })
-   .js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+mix.webpackConfig({
+    resolve: {
+        // extensions: ['.js', '.vue', '.json'],
+        alias: {
+            "@": path.resolve(__dirname, "resources/js/"),
+            "@components": path.resolve(__dirname, "resources/js/components/")
+        }
+    }
+});
+
+mix.browserSync({
+    proxy: '0.0.0.0:8081',
+    open: false
+})
+    .js('resources/js/app.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css');

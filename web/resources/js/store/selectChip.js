@@ -1,25 +1,24 @@
 const state = {
-  selectedChip: 'music',
+    selectedChip: 'music',
 }
 
 const getters = {
-  selectedChip: state => state.selectedChip
+    selectedChip: state => state.selectedChip
 }
 
 const mutations = {
-  selectChip (state, chip) {
-    state.selectedChip = chip
-  }
+    selectChip(state, chip) {
+        state.selectedChip = chip
+    }
 }
 
 const actions = {
-
 }
 
 export default {
-  namespaced: true,
-  state,
-  getters,
-  mutations,
-  actions
+    namespaced: true,
+    state,
+    getters,
+    mutations,
+    actions
 }

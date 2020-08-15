@@ -16,13 +16,13 @@ export default {
   props: {
     menu: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     closeMenu() {
-      this.$emit("closeMenu");
-    }
-  }
+      this.$emit("close-menu");
+    },
+  },
 };
 </script>
