@@ -37,6 +37,13 @@ const routes = [
     {
         path: '/signup',
         component: SignUp,
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next('/explore')
+            } else {
+                next()
+            }
+        }
     },
     {
         path: '/explore',
@@ -45,18 +52,46 @@ const routes = [
     {
         path: '/feed',
         component: Feed,
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()
+            } else {
+                next('/explore')
+            }
+        }
     },
     {
         path: '/likes',
-        component: Likes
+        component: Likes,
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()
+            } else {
+                next('/explore')
+            }
+        }
     },
     {
         path: '/setting',
-        component: Setting
+        component: Setting,
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()
+            } else {
+                next('/explore')
+            }
+        }
     },
     {
         path: '/upload',
-        component: Upload
+        component: Upload,
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()
+            } else {
+                next('/explore')
+            }
+        }
     },
     {
         path: '/search*',
