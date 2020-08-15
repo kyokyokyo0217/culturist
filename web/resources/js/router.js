@@ -12,8 +12,8 @@ import Likes from '@components/pages/Likes.vue'
 import Upload from '@components/pages/Upload.vue'
 import UserProfile from '@components/pages/UserProfile.vue'
 import SearchResult from '@components/pages/SearchResult.vue'
-import SystemError from '@components/errors/SystemError.vue'
-import NotFoundError from '@components/errors/NotFoundError.vue'
+import SystemError from '@components/pages/SystemError.vue'
+import NotFoundError from '@components/pages/NotFoundError.vue'
 
 Vue.use(VueRouter)
 
