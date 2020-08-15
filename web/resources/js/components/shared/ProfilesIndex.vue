@@ -8,21 +8,21 @@
   </v-container>
 </template>
 <script>
-import ProfileCard from "./ProfileCard.vue";
+import ProfileCard from "@components/shared/ProfileCard.vue";
 export default {
   components: {
-    ProfileCard
+    ProfileCard,
   },
   props: {
     cols: {
       type: Number,
-      required: true
+      required: true,
     },
     users: {
       type: Array,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>
 <style scoped>

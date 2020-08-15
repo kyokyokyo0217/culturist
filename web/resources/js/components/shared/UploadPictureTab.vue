@@ -21,19 +21,19 @@
   </v-form>
 </template>
 <script>
-import { CREATED, UNPROCESSABLE_ENTITY } from "../../util";
-import ValidationErrorsAlert from "../shared/ValidationErrorsAlert.vue";
+import { CREATED, UNPROCESSABLE_ENTITY } from "@/util";
+import ValidationErrorsAlert from "@components/shared/ValidationErrorsAlert.vue";
 export default {
   components: {
-    ValidationErrorsAlert
+    ValidationErrorsAlert,
   },
-  data: function() {
+  data: function () {
     return {
       title: "",
       preview: null,
       file: null,
       errors: null,
-      loading: false
+      loading: false,
     };
   },
   methods: {
@@ -46,7 +46,7 @@ export default {
 
       const reader = new FileReader();
 
-      reader.onload = e => {
+      reader.onload = (e) => {
         this.preview = e.target.result;
       };
 
@@ -82,7 +82,7 @@ export default {
       this.loading = false;
 
       this.$router.push("/explore");
-    }
-  }
+    },
+  },
 };
 </script>

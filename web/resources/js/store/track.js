@@ -1,27 +1,27 @@
 const state = {
-  nowPlaying: null,
+    nowPlaying: null,
 }
 
 const getters = {
-  track: state => state.nowPlaying ? state.nowPlaying : '',
+    track: state => state.nowPlaying ? state.nowPlaying : '',
 }
 
 const mutations = {
-  setNowPlaying (state, nowPlaying) {
-    state.nowPlaying = nowPlaying
-  }
+    setNowPlaying(state, nowPlaying) {
+        state.nowPlaying = nowPlaying
+    }
 }
 
 const actions = {
-  nowPlaying(context, data){
-    context.commit('setNowPlaying', data)
-  }
+    nowPlaying(context, data) {
+        context.commit('setNowPlaying', data)
+    }
 }
 
 export default {
-  namespaced: true,
-  state,
-  getters,
-  mutations,
-  actions
+    namespaced: true,
+    state,
+    getters,
+    mutations,
+    actions
 }

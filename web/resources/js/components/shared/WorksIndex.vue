@@ -23,35 +23,35 @@
   </v-container>
 </template>
 <script>
-import TrackCard from "./TrackCard.vue";
-import PictureCard from "./PictureCard.vue";
+import TrackCard from "@components/shared/TrackCard.vue";
+import PictureCard from "@components/shared/PictureCard.vue";
 export default {
   components: {
     TrackCard,
-    PictureCard
+    PictureCard,
   },
   props: {
     cols: {
       type: Number,
-      required: true
+      required: true,
     },
     edit: {
       type: Boolean,
-      default: false
+      default: false,
     },
     pictures: {
       type: Array,
-      required: true
+      required: true,
     },
     tracks: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     selectedChip() {
       return this.$store.getters["selectChip/selectedChip"];
-    }
+    },
   },
   methods: {
     fetchTracks() {
@@ -59,7 +59,7 @@ export default {
     },
     fetchPhotos() {
       this.$emit("fetchPhotos");
-    }
-  }
+    },
+  },
 };
 </script>

@@ -31,28 +31,28 @@
   </v-card>
 </template>
 <script>
-import { CREATED, NO_CONTENT } from "../../util";
-import PictureDetailCard from "./PictureDetailCard.vue";
+import { CREATED, NO_CONTENT } from "@/util";
+import PictureDetailCard from "@components/shared/PictureDetailCard.vue";
 export default {
   components: {
-    PictureDetailCard
+    PictureDetailCard,
   },
   props: {
     item: {
       type: Object,
-      required: true
+      required: true,
     },
     edit: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       overlay: false,
       liked: false,
       dialog: false,
-      loading: false
+      loading: false,
     };
   },
   methods: {
@@ -71,8 +71,8 @@ export default {
       this.$emit("fetchPhotos");
 
       // this.$router.replace({path: this.$router.currentRoute.path}).catch(err => {})
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

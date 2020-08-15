@@ -1,20 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import store from './store'
+import store from '@/store'
 
-import Login from './components/pages/Login.vue'
-import SignUp from './components/pages/SignUp.vue'
-import Explore from './components/pages/Explore.vue'
-import Feed from './components/pages/Feed.vue'
-import Setting from './components/pages/Setting.vue'
-import Likes from './components/pages/Likes.vue'
-import Upload from './components/pages/Upload.vue'
-import UserProfile from './components/pages/UserProfile.vue'
-import SearchResult from './components/pages/SearchResult.vue'
-
-import SystemError from './components/errors/SystemError.vue'
-import NotFoundError from './components/errors/NotFoundError.vue'
+import Login from '@components/pages/Login.vue'
+import SignUp from '@components/pages/SignUp.vue'
+import Explore from '@components/pages/Explore.vue'
+import Feed from '@components/pages/Feed.vue'
+import Setting from '@components/pages/Setting.vue'
+import Likes from '@components/pages/Likes.vue'
+import Upload from '@components/pages/Upload.vue'
+import UserProfile from '@components/pages/UserProfile.vue'
+import SearchResult from '@components/pages/SearchResult.vue'
+import SystemError from '@components/errors/SystemError.vue'
+import NotFoundError from '@components/errors/NotFoundError.vue'
 
 Vue.use(VueRouter)
 
