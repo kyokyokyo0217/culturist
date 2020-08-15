@@ -36,6 +36,8 @@ Docker, docker-compose
 ## 工夫した点
 - Ajaxを用いたREST API
 - クエリのN+1問題への配慮
+- Fat Controller, Fat Modelへの対処
+- Traitを利用した共通処理の切り出し
 - Vuexによる認証状態の保持、認証状態取得API
 - SPA化(Single Page Application)によるUXの向上
 - APIテスト
