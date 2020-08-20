@@ -135,11 +135,11 @@ class getTracksListApiTest extends TestCase
 
         $response = $this->getJson('/api/tracks/likes');
 
-        $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
-            $query->where('id', $this->authUser->id);
-        })->with(['artist', 'artwork'])
+        $tracks = $this->authUser
+            ->track_likes()
+            ->with(['artist', 'artwork'])
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $tracks->map(function ($track) {
             return [

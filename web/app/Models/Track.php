@@ -103,9 +103,9 @@ class Track extends Model
 
     public static function getLikedTracks()
     {
-        $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
-            $query->where('id', Auth::id());
-        })->with(['artist', 'artwork'])
+        $tracks = Auth::user()
+            ->track_likes()
+            ->with(['artist', 'artwork'])
             ->latest()
             ->paginate();
 
