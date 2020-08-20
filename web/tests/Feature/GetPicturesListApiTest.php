@@ -134,11 +134,11 @@ class GetPicturesListApiTest extends TestCase
 
         $response = $this->getJson('/api/pictures/likes');
 
-        $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
-            $query->where('id', $this->authUser->id);
-        })->with(['artist', 'artist.profile_picture'])
+        $pictures = $this->authUser
+            ->picture_likes()
+            ->with(['artist', 'artist.profile_picture'])
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
