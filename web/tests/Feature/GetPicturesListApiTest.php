@@ -36,7 +36,7 @@ class GetPicturesListApiTest extends TestCase
 
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -170,7 +170,7 @@ class GetPicturesListApiTest extends TestCase
     /**
      * @test
      */
-    public function should_get_user_profile_pictures(): void
+    public function should_get_user_pictures(): void
     {
         $user = User::first();
 
@@ -179,7 +179,7 @@ class GetPicturesListApiTest extends TestCase
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
             ->where('user_id', $user->id)
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
