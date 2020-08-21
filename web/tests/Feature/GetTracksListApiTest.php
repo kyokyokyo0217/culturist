@@ -83,14 +83,12 @@ class getTracksListApiTest extends TestCase
 
         $this->assertEquals(3, $this->authUser->follows()->count());
 
-
         $response = $this->getJson('/api/tracks/feed');
 
-        $tracks = Track::whereHas('artist', function (Builder $query) {
-            $query->whereIn('id', $this->authUser->follows()->get()->modelKeys());
-        })->with(['artist', 'artwork'])
+        $tracks = Track::with(['artist', 'artwork'])
+            ->whereIn('user_id', $this->authUser->follows()->get()->modelKeys())
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $tracks->map(function ($track) {
             return [

@@ -92,9 +92,8 @@ class Track extends Model
 
     public static function getFeedTracks()
     {
-        $tracks = Track::whereHas('artist', function (Builder $query) {
-            $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
-        })->with(['artist', 'artwork'])
+        $tracks = Track::with(['artist', 'artwork'])
+            ->whereIn('user_id', Auth::user()->follows()->get()->modelKeys())
             ->latest()
             ->paginate();
 
