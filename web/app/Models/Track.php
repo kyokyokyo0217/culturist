@@ -92,9 +92,8 @@ class Track extends Model
 
     public static function getFeedTracks()
     {
-        $tracks = Track::whereHas('artist', function (Builder $query) {
-            $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
-        })->with(['artist', 'artwork'])
+        $tracks = Track::with(['artist', 'artwork'])
+            ->whereIn('user_id', self::getFollowingUsersKeys())
             ->latest()
             ->paginate();
 
@@ -103,9 +102,9 @@ class Track extends Model
 
     public static function getLikedTracks()
     {
-        $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
-            $query->where('id', Auth::id());
-        })->with(['artist', 'artwork'])
+        $tracks = Auth::user()
+            ->track_likes()
+            ->with(['artist', 'artwork'])
             ->latest()
             ->paginate();
 
@@ -184,5 +183,10 @@ class Track extends Model
             ->LikeSearch($keyword, 'title')
             ->latest()
             ->get();
+    }
+
+    private static function getFollowingUsersKeys()
+    {
+        return Auth::user()->follows()->get()->modelKeys();
     }
 }

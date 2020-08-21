@@ -39,7 +39,7 @@ class getTracksListApiTest extends TestCase
 
         $tracks = Track::with(['artist', 'artwork'])
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $tracks->map(function ($track) {
             return [
@@ -83,14 +83,12 @@ class getTracksListApiTest extends TestCase
 
         $this->assertEquals(3, $this->authUser->follows()->count());
 
-
         $response = $this->getJson('/api/tracks/feed');
 
-        $tracks = Track::whereHas('artist', function (Builder $query) {
-            $query->whereIn('id', $this->authUser->follows()->get()->modelKeys());
-        })->with(['artist', 'artwork'])
+        $tracks = Track::with(['artist', 'artwork'])
+            ->whereIn('user_id', $this->authUser->follows()->get()->modelKeys())
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $tracks->map(function ($track) {
             return [
@@ -135,11 +133,11 @@ class getTracksListApiTest extends TestCase
 
         $response = $this->getJson('/api/tracks/likes');
 
-        $tracks = Track::whereHas('track_liked_by', function (Builder $query) {
-            $query->where('id', $this->authUser->id);
-        })->with(['artist', 'artwork'])
+        $tracks = $this->authUser
+            ->track_likes()
+            ->with(['artist', 'artwork'])
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $tracks->map(function ($track) {
             return [
@@ -173,7 +171,7 @@ class getTracksListApiTest extends TestCase
     /**
      * @test
      */
-    public function should_get_user_profile_pictures(): void
+    public function should_get_user_pictures(): void
     {
         $user = User::first();
 
@@ -182,7 +180,7 @@ class getTracksListApiTest extends TestCase
         $tracks = Track::with(['artist', 'artwork'])
             ->where('user_id', $user->id)
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $tracks->map(function ($track) {
             return [

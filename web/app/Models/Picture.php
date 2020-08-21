@@ -13,6 +13,7 @@ use App\Http\Requests\StorePicture;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class Picture extends Model
 {
@@ -87,9 +88,8 @@ class Picture extends Model
 
     public static function getFeedPictures()
     {
-        $pictures = Picture::whereHas('artist', function (Builder $query) {
-            $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
-        })->with(['artist', 'artist.profile_picture'])
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+            ->whereIn('user_id', self::getFollowingUsersKeys())
             ->latest()
             ->paginate();
 
@@ -98,9 +98,9 @@ class Picture extends Model
 
     public static function getLikedPictures()
     {
-        $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
-            $query->where('id', Auth::id());
-        })->with(['artist', 'artist.profile_picture'])
+        $pictures = Auth::user()
+            ->picture_likes()
+            ->with(['artist', 'artist.profile_picture'])
             ->latest()
             ->paginate();
 
@@ -166,5 +166,10 @@ class Picture extends Model
             ->LikeSearch($keyword, 'title')
             ->latest()
             ->get();
+    }
+
+    private static function getFollowingUsersKeys()
+    {
+        return Auth::user()->follows()->get()->modelKeys();
     }
 }

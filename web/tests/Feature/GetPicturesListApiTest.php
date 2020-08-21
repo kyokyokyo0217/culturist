@@ -36,7 +36,7 @@ class GetPicturesListApiTest extends TestCase
 
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -80,14 +80,12 @@ class GetPicturesListApiTest extends TestCase
 
         $this->assertEquals(3, $this->authUser->follows()->count());
 
-
         $response = $this->getJson('/api/pictures/feed');
 
-        $pictures = Picture::whereHas('artist', function (Builder $query) {
-            $query->whereIn('id', $this->authUser->follows()->get()->modelKeys());
-        })->with(['artist', 'artist.profile_picture'])
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+            ->whereIn('user_id', $this->authUser->follows()->get()->modelkeys())
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -134,11 +132,11 @@ class GetPicturesListApiTest extends TestCase
 
         $response = $this->getJson('/api/pictures/likes');
 
-        $pictures = Picture::whereHas('picture_liked_by', function (Builder $query) {
-            $query->where('id', $this->authUser->id);
-        })->with(['artist', 'artist.profile_picture'])
+        $pictures = $this->authUser
+            ->picture_likes()
+            ->with(['artist', 'artist.profile_picture'])
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $pictures->map(function ($picture) {
             return [
@@ -172,7 +170,7 @@ class GetPicturesListApiTest extends TestCase
     /**
      * @test
      */
-    public function should_get_user_profile_pictures(): void
+    public function should_get_user_pictures(): void
     {
         $user = User::first();
 
@@ -181,7 +179,7 @@ class GetPicturesListApiTest extends TestCase
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
             ->where('user_id', $user->id)
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $pictures->map(function ($picture) {
             return [

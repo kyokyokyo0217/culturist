@@ -116,7 +116,7 @@ class User extends Authenticatable
 
     public function picture_likes()
     {
-        return $this->belongsToMany('App\Models\Picture', 'picture_likes', 'user_id', 'piture_id')->withTimestamps();
+        return $this->belongsToMany('App\Models\Picture', 'picture_likes', 'user_id', 'picture_id')->withTimestamps();
     }
 
     public function track_likes()
