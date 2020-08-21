@@ -89,7 +89,7 @@ class Picture extends Model
     public static function getFeedPictures()
     {
         $pictures = Picture::with(['artist', 'artist.profile_picture'])
-            ->whereIn('user_id', Auth::user()->follows()->get()->modelkeys())
+            ->whereIn('user_id', self::getFollowingUsersKeys())
             ->latest()
             ->paginate();
 
@@ -166,5 +166,10 @@ class Picture extends Model
             ->LikeSearch($keyword, 'title')
             ->latest()
             ->get();
+    }
+
+    private static function getFollowingUsersKeys()
+    {
+        return Auth::user()->follows()->get()->modelKeys();
     }
 }

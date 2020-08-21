@@ -93,7 +93,7 @@ class Track extends Model
     public static function getFeedTracks()
     {
         $tracks = Track::with(['artist', 'artwork'])
-            ->whereIn('user_id', Auth::user()->follows()->get()->modelKeys())
+            ->whereIn('user_id', self::getFollowingUsersKeys())
             ->latest()
             ->paginate();
 
@@ -183,5 +183,10 @@ class Track extends Model
             ->LikeSearch($keyword, 'title')
             ->latest()
             ->get();
+    }
+
+    private static function getFollowingUsersKeys()
+    {
+        return Auth::user()->follows()->get()->modelKeys();
     }
 }
