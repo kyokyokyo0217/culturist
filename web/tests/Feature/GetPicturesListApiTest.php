@@ -80,14 +80,12 @@ class GetPicturesListApiTest extends TestCase
 
         $this->assertEquals(3, $this->authUser->follows()->count());
 
-
         $response = $this->getJson('/api/pictures/feed');
 
-        $pictures = Picture::whereHas('artist', function (Builder $query) {
-            $query->whereIn('id', $this->authUser->follows()->get()->modelKeys());
-        })->with(['artist', 'artist.profile_picture'])
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+            ->whereIn('user_id', $this->authUser->follows()->get()->modelkeys())
             ->latest()
-            ->get();
+            ->paginate();
 
         $expected_data = $pictures->map(function ($picture) {
             return [

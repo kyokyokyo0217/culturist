@@ -88,9 +88,8 @@ class Picture extends Model
 
     public static function getFeedPictures()
     {
-        $pictures = Picture::whereHas('artist', function (Builder $query) {
-            $query->whereIn('id', Auth::user()->follows()->get()->modelKeys());
-        })->with(['artist', 'artist.profile_picture'])
+        $pictures = Picture::with(['artist', 'artist.profile_picture'])
+            ->whereIn('user_id', Auth::user()->follows()->get()->modelkeys())
             ->latest()
             ->paginate();
 
