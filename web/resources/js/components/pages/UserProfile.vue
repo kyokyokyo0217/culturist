@@ -157,11 +157,11 @@
               </v-card>
 
               <v-card-text v-else>
-                <p>{{ user.bio }}</p>
+                <p class="line-breaks">{{ user.bio }}</p>
                 <p>
                   {{ user.location }}
                   <br />
-                  Joined {{ user.created_at}}
+                  Joined {{ user.created_at }}
                 </p>
               </v-card-text>
             </v-col>
@@ -340,8 +340,6 @@ export default {
       //laravel側のreturnで$userとして返す方が速い？
       this.fetchUser();
 
-      // navigationdrawerのプロフ画も再取得したい
-
       this.profilePictureUploadMenu = false;
       this.coverPhotoUploadMenu = false;
       this.edit = !this.edit;
@@ -448,5 +446,8 @@ export default {
 .profile-nm {
   position: relative;
   top: -100px;
+}
+.line-breaks {
+  white-space: pre-wrap;
 }
 </style>
