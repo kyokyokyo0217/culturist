@@ -7,10 +7,10 @@ window._ = require('lodash');
  */
 
 try {
-  window.Popper = require('popper.js').default;
-  window.$ = window.jQuery = require('jquery');
+    window.Popper = require('popper.js').default;
+    window.$ = window.jQuery = require('jquery');
 
-  require('bootstrap');
+    require('bootstrap');
 } catch (e) { }
 
 /**
@@ -24,17 +24,18 @@ import { getCookieValue } from './util'
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.timeout = 10000;
 
 window.axios.interceptors.request.use(config => {
-  config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
+    config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
 
-  return config
+    return config
 })
 
 window.axios.interceptors.response.use(
-  response => response,
-  // 非同期が失敗した場合もreponseオブジェクトを代入→そのままstatuscodeとか使える
-  error => error.response || error
+    response => response,
+    // 非同期が失敗した場合もreponseオブジェクトを代入→そのままstatuscodeとか使える
+    error => error.response || error
 )
 
 /**
