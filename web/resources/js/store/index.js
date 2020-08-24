@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import auth from '@/store/auth'
-import track from '@/store/track'
-import selectChip from '@/store/selectChip'
-import error from '@/store/error'
+import auth from '@store/modules/auth'
+import track from '@store/modules/track'
+import selectChip from '@store/modules/selectChip'
+import error from '@store/modules/error'
 
 Vue.use(Vuex)
 
