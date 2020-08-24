@@ -11,21 +11,15 @@ import App from '@/App.vue'
 
 Vue.use(Vuetify)
 
-const createApp = async () => {
-    await store.dispatch('auth/currentUser')
-
-    new Vue({
-        el: '#app',
-        store,
-        router,
-        vuetify: new Vuetify({
-            icons: {
-                iconfont: 'mdi',
-            },
-        }),
-        components: { App },
-        template: '<App />'
-    })
-}
-
-createApp()
+new Vue({
+    el: '#app',
+    store,
+    router,
+    vuetify: new Vuetify({
+        icons: {
+            iconfont: 'mdi',
+        },
+    }),
+    components: { App },
+    template: '<App />'
+})

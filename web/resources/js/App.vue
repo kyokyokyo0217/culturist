@@ -65,9 +65,9 @@ export default {
       },
       immediate: true,
     },
-    // $route () {
-    //   this.$store.commit('error/setCode', null)
-    // }
+  },
+  async mounted() {
+    await this.$store.dispatch("auth/currentUser");
   },
 };
 </script>

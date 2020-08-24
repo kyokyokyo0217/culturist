@@ -36,12 +36,11 @@ window.axios.interceptors.request.use(config => {
 window.axios.interceptors.response.use(
     //成功時
     response => response,
-
+    //エラー時
     function (error) {
-        console.log(error)
         if (error.code === 'ECONNABORTED') {
             //axiosのタイムアウト時
-            store.dispatch('error/setCode', { data: 408 })
+            store.dispatch('error/setCode', 408)
             return error
         } else if (error.response) {
             //The request was made and the server responded with a status code

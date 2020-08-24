@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from "vuex-persistedstate";
 
 import auth from '@store/modules/auth'
 import track from '@store/modules/track'
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
         track,
         selectChip,
         error
-    }
+    },
+    plugins: [createPersistedState()],
 })
 
 export default store
