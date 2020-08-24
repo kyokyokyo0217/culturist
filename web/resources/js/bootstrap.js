@@ -7,10 +7,10 @@ window._ = require('lodash');
  */
 
 try {
-  window.Popper = require('popper.js').default;
-  window.$ = window.jQuery = require('jquery');
+    window.Popper = require('popper.js').default;
+    window.$ = window.jQuery = require('jquery');
 
-  require('bootstrap');
+    require('bootstrap');
 } catch (e) { }
 
 /**
@@ -20,21 +20,40 @@ try {
  */
 
 import { getCookieValue } from './util'
+import store from '@/store'
 
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.timeout = 10000;
 
 window.axios.interceptors.request.use(config => {
-  config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
+    config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
 
-  return config
+    return config
 })
 
 window.axios.interceptors.response.use(
-  response => response,
-  // 非同期が失敗した場合もreponseオブジェクトを代入→そのままstatuscodeとか使える
-  error => error.response || error
+    //成功時
+    response => response,
+    //エラー時
+    function (error) {
+        if (error.code === 'ECONNABORTED') {
+            //axiosのタイムアウト時
+            store.dispatch('error/setCode', 408)
+            return error
+        } else if (error.response) {
+            //The request was made and the server responded with a status code
+            // 非同期が失敗した場合はreponseオブジェクトを代入→そのままstatuscodeとか使える
+            return error.response
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser
+            return error.request
+        }
+
+
+    }
 )
 
 /**
