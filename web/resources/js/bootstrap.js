@@ -20,6 +20,7 @@ try {
  */
 
 import { getCookieValue } from './util'
+import store from '@/store'
 
 window.axios = require('axios');
 
@@ -33,9 +34,27 @@ window.axios.interceptors.request.use(config => {
 })
 
 window.axios.interceptors.response.use(
+    //成功時
     response => response,
-    // 非同期が失敗した場合もreponseオブジェクトを代入→そのままstatuscodeとか使える
-    error => error.response || error
+
+    function (error) {
+        console.log(error)
+        if (error.code === 'ECONNABORTED') {
+            //axiosのタイムアウト時
+            store.dispatch('error/setCode', { data: 408 })
+            return error
+        } else if (error.response) {
+            //The request was made and the server responded with a status code
+            // 非同期が失敗した場合はreponseオブジェクトを代入→そのままstatuscodeとか使える
+            return error.response
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser
+            return error.request
+        }
+
+
+    }
 )
 
 /**
