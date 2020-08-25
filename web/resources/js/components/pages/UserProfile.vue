@@ -1,6 +1,5 @@
 <template>
   <v-card tile flat width="100%" height="100%">
-    <!-- CSS要精査 -->
     <div v-if="!user" class="d-flex justify-center mt-12 pt-12">
       <v-progress-circular :size="70" :width="7" indeterminate class="mt-12"></v-progress-circular>
     </div>
@@ -114,6 +113,7 @@
                     v-if="!user.followed_by_user"
                     color="black"
                     outlined
+                    :loading="loadingFollow"
                     @click="followUser"
                   >Follow</v-btn>
                   <v-btn
@@ -121,6 +121,7 @@
                     color="black"
                     class="white--text"
                     flat
+                    :loading="loadingFollow"
                     @click="unfollowUser"
                   >Following</v-btn>
                 </template>
@@ -220,6 +221,7 @@ export default {
       tracks: [],
       errors: null,
       loading: false,
+      loadingFollow: false,
       loadingWorks: false,
     };
   },
@@ -396,6 +398,8 @@ export default {
     },
 
     async followUser() {
+      this.loadingFollow = true;
+
       const response = await axios.post(
         `/api/${this.$route.params.username}/follow`
       );
@@ -406,9 +410,12 @@ export default {
       }
 
       this.user.followed_by_user = true;
+      this.loadingFollow = false;
     },
 
     async unfollowUser() {
+      this.loadingFollow = true;
+
       const response = await axios.delete(
         `/api/${this.$route.params.username}/follow`
       );
@@ -419,6 +426,7 @@ export default {
       }
 
       this.user.followed_by_user = false;
+      this.loadingFollow = false;
     },
   },
 
