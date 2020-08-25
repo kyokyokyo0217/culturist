@@ -98,14 +98,13 @@
             <v-col align-self="end" class="mb-12 text-center">
               <template v-if="isLogin">
                 <template v-if="isAuthenticatedUser">
-                  <template v-if="edit">
-                    <v-btn
-                      color="black"
-                      outlined
-                      @click="saveChange"
-                      :loading="loading"
-                    >Save Changes</v-btn>
-                  </template>
+                  <v-btn
+                    v-if="edit"
+                    color="black"
+                    outlined
+                    @click="saveChange"
+                    :loading="loadingSaveChange"
+                  >Save Changes</v-btn>
                   <v-btn v-else color="black" outlined @click="edit =! edit">Edit Page</v-btn>
                 </template>
                 <template v-else>
@@ -220,7 +219,7 @@ export default {
       pictures: [],
       tracks: [],
       errors: null,
-      loading: false,
+      loadingSaveChange: false,
       loadingFollow: false,
       loadingWorks: false,
     };
@@ -303,7 +302,7 @@ export default {
     },
 
     async saveChange() {
-      this.loading = true;
+      this.loadingSaveChange = true;
       const formData = new FormData();
       //  laravel側のvalidationでnullableを通すため ='null' ではなく =null にする
       if (this.profilePictureFile) {
@@ -339,13 +338,12 @@ export default {
         return false;
       }
 
-      //laravel側のreturnで$userとして返す方が速い？
       this.fetchUser();
 
       this.profilePictureUploadMenu = false;
       this.coverPhotoUploadMenu = false;
       this.edit = !this.edit;
-      this.loading = false;
+      this.loadingSaveChange = false;
     },
 
     async fetchUser() {
