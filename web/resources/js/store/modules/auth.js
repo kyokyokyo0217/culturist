@@ -1,4 +1,4 @@
-import { OK, CREATED, UNPROCESSABLE_ENTITY } from '@/util'
+import status from "@/constants.js";
 
 const state = {
     user: null,
@@ -34,7 +34,7 @@ const actions = {
         context.commit('setApiStatus', null)
         const response = await axios.post('/api/register', data)
 
-        if (response.status === CREATED) {
+        if (response.status === status.CREATED) {
             context.commit('setApiStatus', true)
             context.commit('setUser', response.data)
             return false
@@ -42,7 +42,7 @@ const actions = {
 
         context.commit('setApiStatus', false)
 
-        if (response.status === UNPROCESSABLE_ENTITY) {
+        if (response.status === status.UNPROCESSABLE_ENTITY) {
             context.commit('setRegisterErrorMessages', response.data.errors)
         } else {
             context.commit('error/setCode', response.status, { root: true })
@@ -53,7 +53,7 @@ const actions = {
         context.commit('setApiStatus', null)
         const response = await axios.post('/api/login', data)
 
-        if (response.status === OK) {
+        if (response.status === status.OK) {
             context.commit('setApiStatus', true)
             context.commit('setUser', response.data)
             return false
@@ -61,7 +61,7 @@ const actions = {
 
         context.commit('setApiStatus', false)
 
-        if (response.status === UNPROCESSABLE_ENTITY) {
+        if (response.status === status.UNPROCESSABLE_ENTITY) {
             context.commit('setLoginErrorMessages', response.data.errors)
         } else {
             context.commit('error/setCode', response.status, { root: true })
@@ -72,7 +72,7 @@ const actions = {
         context.commit('setApiStatus', null)
         const response = await axios.post('/api/logout')
 
-        if (response.status === OK) {
+        if (response.status === status.OK) {
             context.commit('setApiStatus', true)
             context.commit('setUser', null)
             return false
@@ -89,7 +89,7 @@ const actions = {
 
         const user = response.data.data || null
 
-        if (response.status === OK) {
+        if (response.status === status.OK) {
             context.commit('setApiStatus', true)
             context.commit('setUser', user)
             return false

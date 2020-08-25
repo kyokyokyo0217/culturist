@@ -30,7 +30,7 @@
   </content-layout>
 </template>
 <script>
-import { OK } from "@/util";
+import status from "@/constants.js";
 import ContentLayout from "@components/core/ContentLayout.vue";
 import ProfilesIndex from "@components/shared/ProfilesIndex.vue";
 import WorksIndex from "@components/shared/WorksIndex.vue";
@@ -73,7 +73,7 @@ export default {
           keyword: this.$route.query.result,
         });
 
-        if (response.status !== OK) {
+        if (response.status !== status.OK) {
           this.$store.commit("error/setCode", response.status);
           this.loading = false;
           return false;

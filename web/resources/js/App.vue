@@ -8,12 +8,7 @@
 </template>
 
 <script>
-import {
-  INTERNAL_SERVER_ERROR,
-  UNAUTHORIZED,
-  NOT_FOUND,
-  REQUEST_TIMEOUT,
-} from "@/util";
+import status from "@/constants.js";
 import NavigationDrawer from "@components/core/NavigationDrawer.vue";
 import AudioPlayer from "@components/core/AudioPlayer.vue";
 import MainView from "@components/core/MainView.vue";
@@ -51,15 +46,15 @@ export default {
     },
     errorCode: {
       async handler(val) {
-        if (val === INTERNAL_SERVER_ERROR) {
+        if (val === status.INTERNAL_SERVER_ERROR) {
           this.$router.push("/500");
-        } else if (val === REQUEST_TIMEOUT) {
+        } else if (val === status.REQUEST_TIMEOUT) {
           this.$router.push("/500");
-        } else if (val === UNAUTHORIZED) {
+        } else if (val === status.UNAUTHORIZED) {
           await axios.get("/api/refresh-token");
           this.$store.commit("auth/setUser", null);
           this.$router.push("/login");
-        } else if (val === NOT_FOUND) {
+        } else if (val === status.NOT_FOUND) {
           this.$router.push("/404");
         }
       },

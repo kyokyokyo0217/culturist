@@ -11,7 +11,7 @@
   </content-layout>
 </template>
 <script>
-import { OK } from "@/util";
+import status from "@/constants.js";
 import ContentLayout from "@components/core/ContentLayout.vue";
 import WorksIndex from "@components/shared/WorksIndex.vue";
 import SelectChip from "@components/shared/SelectChip.vue";
@@ -38,7 +38,7 @@ export default {
       this.loading = true;
       const response = await axios.get("/api/pictures/feed");
 
-      if (response.status !== OK) {
+      if (response.status !== status.OK) {
         this.$store.commit("error/setCode", response.status);
         this.loading = false;
         return false;
@@ -51,7 +51,7 @@ export default {
       this.loading = true;
       const response = await axios.get("/api/tracks/feed");
 
-      if (response.status !== OK) {
+      if (response.status !== status.OK) {
         this.$store.commit("error/setCode", response.status);
         this.loading = false;
         return false;

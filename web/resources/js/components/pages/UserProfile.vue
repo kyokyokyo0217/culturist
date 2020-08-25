@@ -192,7 +192,7 @@
   </v-card>
 </template>
 <script>
-import { OK, CREATED, NO_CONTENT, UNPROCESSABLE_ENTITY } from "@/util";
+import status from "@/constants.js";
 import ValidationErrorsAlert from "@components/shared/ValidationErrorsAlert.vue";
 import ImageUploadCard from "@components/shared/ImageUploadCard.vue";
 import WorksIndex from "@components/shared/WorksIndex.vue";
@@ -324,7 +324,7 @@ export default {
         }
       );
 
-      if (response.status === UNPROCESSABLE_ENTITY) {
+      if (response.status === status.UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors;
         this.loading = false;
         return false;
@@ -333,7 +333,7 @@ export default {
       this.coverPhotoFileReset();
       this.profilePictureFileReset();
 
-      if (response.status !== NO_CONTENT) {
+      if (response.status !== status.NO_CONTENT) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
@@ -351,7 +351,7 @@ export default {
         `/api/users/${this.$route.params.username}`
       );
 
-      if (response.status !== OK) {
+      if (response.status !== status.OK) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
@@ -369,7 +369,7 @@ export default {
         `/api/pictures/user/${this.$route.params.username}`
       );
 
-      if (response.status !== OK) {
+      if (response.status !== status.OK) {
         this.$store.commit("error/setCode", response.status);
         this.loadingWorks = false;
         return false;
@@ -385,7 +385,7 @@ export default {
         `/api/tracks/user/${this.$route.params.username}`
       );
 
-      if (response.status !== OK) {
+      if (response.status !== status.OK) {
         this.$store.commit("error/setCode", response.status);
         this.loadingWorks = false;
         return false;
@@ -402,7 +402,7 @@ export default {
         `/api/${this.$route.params.username}/follow`
       );
 
-      if (response.status !== CREATED) {
+      if (response.status !== status.CREATED) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
@@ -418,7 +418,7 @@ export default {
         `/api/${this.$route.params.username}/follow`
       );
 
-      if (response.status !== NO_CONTENT) {
+      if (response.status !== status.NO_CONTENT) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }

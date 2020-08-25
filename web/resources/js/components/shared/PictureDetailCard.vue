@@ -36,7 +36,7 @@
   </v-overlay>
 </template>
 <script>
-import { CREATED, NO_CONTENT } from "@/util";
+import status from "@/constants.js";
 export default {
   props: {
     item: {
@@ -71,7 +71,7 @@ export default {
     async likePicture() {
       const response = await axios.post(`/api/picture/${this.item.id}/like`);
 
-      if (response.status !== CREATED) {
+      if (response.status !== status.CREATED) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
@@ -82,7 +82,7 @@ export default {
     async unlikePicture() {
       const response = await axios.delete(`/api/picture/${this.item.id}/like`);
 
-      if (response.status !== NO_CONTENT) {
+      if (response.status !== status.NO_CONTENT) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
