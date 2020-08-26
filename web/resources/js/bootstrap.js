@@ -21,6 +21,7 @@ try {
 
 import { getCookieValue } from './util'
 import store from '@/store'
+import status from '@/constants.js'
 
 window.axios = require('axios');
 
@@ -40,7 +41,7 @@ window.axios.interceptors.response.use(
     function (error) {
         if (error.code === 'ECONNABORTED') {
             //axiosのタイムアウト時
-            store.dispatch('error/setCode', 408)
+            store.dispatch('error/setCode', status.REQUEST_TIMEOUT)
             return error
         } else if (error.response) {
             //The request was made and the server responded with a status code
@@ -51,8 +52,6 @@ window.axios.interceptors.response.use(
             // `error.request` is an instance of XMLHttpRequest in the browser
             return error.request
         }
-
-
     }
 )
 
