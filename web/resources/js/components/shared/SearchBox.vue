@@ -14,30 +14,31 @@
   ></v-text-field>
 </template>
 <script>
-  export default{
-    data(){
-      return{
-        text: '',
-        rules: {
-          required: value => !!value || 'Required.',
-        }
+export default {
+  data() {
+    return {
+      text: "",
+      rules: {
+        required: (value) => !!value || "Required.",
+      },
+    };
+  },
+  methods: {
+    search() {
+      if (this.text) {
+        this.$router
+          .push({ path: "/search", query: { result: this.text } })
+          .catch((err) => {});
       }
     },
-    methods: {
-      search() {
-        if(this.text){
-          this.$router.push({ path: '/search', query: {result: this.text} }).catch(err => {})
-        }
-      }
-    }
-  }
+  },
+};
 </script>
 <style scoped>
-  .v-input{
-    flex: 0 0 auto;
-  }
-  .compact-form {
-    -webkit-transform: scale(0.75);
-    -webkit-transform-origin: left;
-  }
+.v-input {
+  flex: 0 0 auto;
+}
+.compact-form {
+  transform: scale(0.75);
+}
 </style>
