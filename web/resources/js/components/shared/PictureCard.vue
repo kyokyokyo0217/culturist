@@ -79,7 +79,4 @@ export default {
 .picture-card:hover {
   cursor: zoom-in;
 }
-.show-btn {
-  opacity: 1 !important;
-}
 </style>

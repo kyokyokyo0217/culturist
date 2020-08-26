@@ -92,12 +92,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.user-link {
-  text-decoration: none;
-  color: grey;
-}
-.user-link:hover {
-  color: black;
-}
-</style>

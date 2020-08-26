@@ -119,17 +119,7 @@ export default {
 };
 </script>
 <style scoped>
-.show-btn {
-  opacity: 1 !important;
-}
 .image-clickable {
   cursor: pointer;
-}
-.user-link {
-  text-decoration: none;
-  color: grey;
-}
-.user-link:hover {
-  color: black;
 }
 </style>
