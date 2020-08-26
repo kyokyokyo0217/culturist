@@ -1,0 +1,10 @@
+.user-link{
+    text-decoration: none;
+    color: grey !important;
+}
+.user-link:hover{
+    color:black !important;
+}
+.show-btn {
+    opacity: 1 !important;
+}

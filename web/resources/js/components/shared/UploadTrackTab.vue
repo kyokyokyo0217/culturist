@@ -23,7 +23,7 @@
   </v-form>
 </template>
 <script>
-import { CREATED, UNPROCESSABLE_ENTITY } from "@/util";
+import status from "@/constants.js";
 import ValidationErrorsAlert from "@components/shared/ValidationErrorsAlert.vue";
 export default {
   components: {
@@ -89,7 +89,7 @@ export default {
       formData.append("title", this.title);
       const response = await axios.post("/api/tracks", formData);
 
-      if (response.status === UNPROCESSABLE_ENTITY) {
+      if (response.status === status.UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors;
         this.loading = false;
         return false;
@@ -98,7 +98,7 @@ export default {
       this.audioFileReset();
       this.artworkFileReset();
 
-      if (response.status !== CREATED) {
+      if (response.status !== status.CREATED) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }

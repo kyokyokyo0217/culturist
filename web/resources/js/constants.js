@@ -1,0 +1,10 @@
+export default Object.freeze({
+    OK: 200,
+    CREATED: 201,
+    NO_CONTENT: 204,
+    NOT_FOUND: 404,
+    REQUEST_TIMEOUT: 408,
+    UNPROCESSABLE_ENTITY: 422,
+    UNAUTHORIZED: 419,
+    INTERNAL_SERVER_ERROR: 500
+});

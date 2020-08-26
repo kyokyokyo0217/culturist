@@ -23,7 +23,7 @@
   </content-layout>
 </template>
 <script>
-import { NO_CONTENT } from "@/util";
+import status from "@/constants.js";
 import ContentLayout from "@components/core/ContentLayout.vue";
 export default {
   components: {
@@ -45,7 +45,7 @@ export default {
       this.loading = true;
       const response = await axios.delete(`/api/users/${this.username}`);
 
-      if (response.status !== NO_CONTENT) {
+      if (response.status !== status.NO_CONTENT) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }

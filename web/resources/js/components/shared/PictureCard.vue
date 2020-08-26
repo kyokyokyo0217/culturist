@@ -31,7 +31,7 @@
   </v-card>
 </template>
 <script>
-import { CREATED, NO_CONTENT } from "@/util";
+import status from "@/constants.js";
 import PictureDetailCard from "@components/shared/PictureDetailCard.vue";
 export default {
   components: {
@@ -60,7 +60,7 @@ export default {
       this.loading = true;
       const response = await axios.delete(`/api/pictures/${this.item.id}`);
 
-      if (response.status !== NO_CONTENT) {
+      if (response.status !== stats.NO_CONTENT) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
@@ -78,8 +78,5 @@ export default {
 <style scoped>
 .picture-card:hover {
   cursor: zoom-in;
-}
-.show-btn {
-  opacity: 1 !important;
 }
 </style>

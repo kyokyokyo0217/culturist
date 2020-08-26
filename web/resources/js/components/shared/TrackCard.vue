@@ -49,7 +49,7 @@
   </v-card>
 </template>
 <script>
-import { CREATED, NO_CONTENT } from "@/util";
+import status from "@/constants.js";
 export default {
   props: {
     item: {
@@ -80,7 +80,7 @@ export default {
     async likeTrack() {
       const response = await axios.post(`/api/track/${this.item.id}/like`);
 
-      if (response.status !== CREATED) {
+      if (response.status !== status.CREATED) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
@@ -91,7 +91,7 @@ export default {
     async unlikeTrack() {
       const response = await axios.delete(`/api/track/${this.item.id}/like`);
 
-      if (response.status !== NO_CONTENT) {
+      if (response.status !== status.NO_CONTENT) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
@@ -103,7 +103,7 @@ export default {
       this.loading = true;
       const response = await axios.delete(`/api/tracks/${this.item.id}`);
 
-      if (response.status !== NO_CONTENT) {
+      if (response.status !== status.NO_CONTENT) {
         this.$store.commit("error/setCode", response.status);
         return false;
       }
@@ -119,17 +119,7 @@ export default {
 };
 </script>
 <style scoped>
-.show-btn {
-  opacity: 1 !important;
-}
 .image-clickable {
   cursor: pointer;
-}
-.user-link {
-  text-decoration: none;
-  color: grey;
-}
-.user-link:hover {
-  color: black;
 }
 </style>
