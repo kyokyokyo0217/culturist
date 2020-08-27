@@ -9,6 +9,29 @@
         :gradient="hover ? 'to top, rgba(0, 0, 0, 0.4) 0%, transparent 180px' : undefined"
         @click="playTrack"
       >
+        <div v-if="edit" class="fill-height ma-0 text-right">
+          <v-btn
+            @click.stop="dialog = true"
+            fab
+            small
+            style="opacity: 0"
+            color="white"
+            :class="{'show-btn': hover }"
+          >
+            <v-icon style="opacity: 0" color="black" :class="{'show-btn': hover }">mdi-delete</v-icon>
+          </v-btn>
+          <v-dialog v-model="dialog" max-width="290">
+            <v-card>
+              <v-card-title>Are You Sure ?</v-card-title>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="dialog = false">Cancel</v-btn>
+                <v-btn color="red" outlined @click="deleteTrack" :loading="loading">Delete</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-icon
             size="100"
@@ -19,6 +42,7 @@
         </v-row>
       </v-img>
     </v-hover>
+
     <v-card-text class="py-0">
       <p class="ma-0 subtitle-1 black--text">{{ item.title }}</p>
       <span>by</span>
@@ -30,20 +54,9 @@
         <v-btn v-if="item.liked_by_user" icon color="pink" @click="unlikeTrack">
           <v-icon>mdi-heart</v-icon>
         </v-btn>
-        <v-btn v-if="!item.liked_by_user" icon color="pink" @click="likeTrack">
+        <v-btn v-else icon color="pink" @click="likeTrack">
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
-        <v-btn v-if="edit" small color="red" outlined @click.stop="dialog = true">Delete</v-btn>
-        <v-dialog v-model="dialog" max-width="290">
-          <v-card>
-            <v-card-title>Are You Sure ?</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text @click="dialog = false">Cancel</v-btn>
-              <v-btn color="red" outlined @click="deleteTrack" :loading="loading">Delete</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </template>
     </v-card-text>
   </v-card>
