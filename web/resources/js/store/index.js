@@ -16,7 +16,7 @@ const store = new Vuex.Store({
         selectChip,
         error
     },
-    plugins: [createPersistedState()],
+    plugins: [createPersistedState({ storage: window.sessionStorage })],
 })
 
 export default store
