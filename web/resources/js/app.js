@@ -1,7 +1,6 @@
-require('@/bootstrap')
+import '@/bootstrap'
 
 import Vue from 'vue'
-
 import store from '@/store'
 import router from '@/router'
 import vuetify from '@/vuetify'
