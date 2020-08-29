@@ -45,6 +45,7 @@ export default {
         { title: "Explore", path: "/explore" },
         { title: "Feed", path: "/feed" },
         { title: "Likes", path: "/likes" },
+        { title: "Following / Followers", path: "/following" },
         { title: "Setting", path: "/setting" },
       ],
       logo_src: "/img/logo.png",
