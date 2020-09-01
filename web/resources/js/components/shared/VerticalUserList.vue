@@ -7,16 +7,23 @@
 
       <v-list-item-content>
         <v-list-item-title>{{ item.name }}</v-list-item-title>
-        <v-list-item-subtitle>{{ item.user_name}}</v-list-item-subtitle>
+        <v-list-item-subtitle>
+          <router-link
+            :to="{ name: 'user', params:{username: item.user_name}}"
+            class="user-link"
+          >@{{ item.user_name }}</router-link>
+        </v-list-item-subtitle>
       </v-list-item-content>
 
       <v-list-item-action>
-        <v-btn outlined>Follow</v-btn>
+        <v-btn v-if="!item.followed_by_user" color="black" outlined @click="followUser(item)">Follow</v-btn>
+        <v-btn v-else color="black" class="white--text" @click="unfollowUser(item)">Following</v-btn>
       </v-list-item-action>
     </v-list-item>
   </v-list>
 </template>
 <script>
+import status from "@/constants.js";
 export default {
   props: {
     items: {
@@ -24,10 +31,28 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      avatar_src: "/img/avator.png",
-    };
+  methods: {
+    async followUser(item) {
+      const response = await axios.post(`/api/${item.user_name}/follow`);
+
+      if (response.status !== status.CREATED) {
+        this.$store.commit("error/setCode", response.status);
+        return false;
+      }
+
+      item.followed_by_user = true;
+    },
+
+    async unfollowUser(item) {
+      const response = await axios.delete(`/api/${item.user_name}/follow`);
+
+      if (response.status !== status.NO_CONTENT) {
+        this.$store.commit("error/setCode", response.status);
+        return false;
+      }
+
+      item.followed_by_user = false;
+    },
   },
 };
 </script>
