@@ -8,10 +8,10 @@
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <vertical-user-list :items="users"></vertical-user-list>
+          <vertical-user-list :items="followingUsers"></vertical-user-list>
         </v-tab-item>
         <v-tab-item>
-          <vertical-user-list :items="users"></vertical-user-list>
+          <vertical-user-list :items="followers"></vertical-user-list>
         </v-tab-item>
       </v-tabs-items>
     </template>
@@ -28,30 +28,25 @@ export default {
   data() {
     return {
       tab: 0,
-      users: [
-        {
-          name: "hoge",
-          user_name: "hogehoge",
-          profile_picture: {
-            url: "/img/background.jpg",
-          },
-        },
-        {
-          name: "fuga",
-          user_name: "fugafuga",
-          profile_picture: {
-            url: "/img/background.jpg",
-          },
-        },
-        {
-          name: "hey",
-          user_name: "heyhey",
-          profile_picture: {
-            url: "/img/background.jpg",
-          },
-        },
-      ],
+      followingUsers: [],
+      followers: [],
     };
+  },
+  methods: {
+    async fetchFollowingUsers() {
+      const response = await axios.get("/api/users/following");
+
+      this.followingUsers = response.data.data;
+    },
+    async fetchFollowers() {
+      const response = await axios.get("/api/users/followers");
+
+      this.followers = response.data.data;
+    },
+  },
+  async created() {
+    await this.fetchFollowingUsers();
+    await this.fetchFollowers();
   },
 };
 </script>
