@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Storage;
 use DateTimeInterface;
 use App\Traits\LikeSearchScope;
 
-
 class User extends Authenticatable
 {
     use Notifiable;
@@ -122,6 +121,26 @@ class User extends Authenticatable
     public function track_likes()
     {
         return $this->belongsToMany('App\Models\Track', 'track_likes', 'user_id', 'track_id')->withTimestamps();
+    }
+
+    public static function getFollowingUsers()
+    {
+        $users = Auth::user()
+            ->follows()
+            ->with('profile_picture')
+            ->paginate();
+
+        return $users;
+    }
+
+    public static function getFollowers()
+    {
+        $users = Auth::user()
+            ->followers()
+            ->with('profile_picture')
+            ->paginate();
+
+        return $users;
     }
 
     public static function getUserProfile(User $user)

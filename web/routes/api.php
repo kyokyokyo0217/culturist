@@ -26,8 +26,11 @@ Route::get('/tracks/likes', 'TrackController@getLikedTracks');
 Route::get('/tracks/explore', 'TrackController@getNewTracks');
 Route::get('/tracks/user/{user}', 'TrackController@getUserTracks');
 Route::apiResource('tracks', 'TrackController');
-Route::apiResource('artworks', 'ArtworkController');
+Route::get('/users/following', 'UserController@getFollowingUsers');
+Route::get('/users/followers', 'UserController@getFollowers');
 Route::apiResource('users', 'UserController');
+Route::apiResource('artworks', 'ArtworkController');
+
 
 Route::post('/{user}/follow', 'FollowController@follow');
 Route::delete('/{user}/follow', 'FollowController@unfollow');

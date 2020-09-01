@@ -128,7 +128,7 @@ class GetPicturesListApiTest extends TestCase
                 ->postJson("api/picture/{$picture->id}/like");
         });
 
-        // $this->assertEquals(3, $this->authUser->picture_likes()->count());
+        $this->assertEquals(3, $this->authUser->picture_likes()->count());
 
         $response = $this->getJson('/api/pictures/likes');
 

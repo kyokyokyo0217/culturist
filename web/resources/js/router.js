@@ -9,6 +9,7 @@ import Explore from '@components/pages/Explore.vue'
 import Feed from '@components/pages/Feed.vue'
 import Setting from '@components/pages/Setting.vue'
 import Likes from '@components/pages/Likes.vue'
+import FollowingList from '@components/pages/FollowingList.vue'
 import Upload from '@components/pages/Upload.vue'
 import UserProfile from '@components/pages/UserProfile.vue'
 import SearchResult from '@components/pages/SearchResult.vue'
@@ -62,6 +63,17 @@ const routes = [
     {
         path: '/likes',
         component: Likes,
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next()
+            } else {
+                next('/explore')
+            }
+        }
+    },
+    {
+        path: '/following',
+        component: FollowingList,
         beforeEnter(to, from, next) {
             if (store.getters['auth/check']) {
                 next()

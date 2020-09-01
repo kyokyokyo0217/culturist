@@ -15,6 +15,17 @@ class UserController extends Controller
     {
         $this->middleware('auth')->except(['show']);
     }
+
+    public function getFollowingUsers()
+    {
+        return User::getFollowingUsers();
+    }
+
+    public function getFollowers()
+    {
+        return User::getFollowers();
+    }
+
     /**
      * Display a listing of the resource.
      *
