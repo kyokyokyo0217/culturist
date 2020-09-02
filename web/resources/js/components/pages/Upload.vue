@@ -31,7 +31,7 @@ export default {
     UploadPictureTab,
     UploadTrackTab,
   },
-  data: function () {
+  data() {
     return {
       tab: 0,
     };

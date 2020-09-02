@@ -25,7 +25,7 @@ export default {
   components: {
     SearchBox,
   },
-  data: function () {
+  data() {
     return {
       loading: false,
     };

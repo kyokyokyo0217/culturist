@@ -29,7 +29,7 @@ export default {
   components: {
     ContentLayout,
   },
-  data: function () {
+  data() {
     return {
       dialog: false,
       loading: false,

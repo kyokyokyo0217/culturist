@@ -2,7 +2,7 @@
   <v-list two-line>
     <v-list-item v-for="(item, i) in items" :key="i">
       <v-list-item-avatar>
-        <v-img :src="item.profile_picture.url"></v-img>
+        <v-img :src="profilePictureSrc(item)"></v-img>
       </v-list-item-avatar>
 
       <v-list-item-content>
@@ -32,6 +32,13 @@ export default {
     },
   },
   methods: {
+    profilePictureSrc(item) {
+      if (item.profile_picture != null) {
+        return item.profile_picture.url;
+      } else {
+        return "/img/avator.png";
+      }
+    },
     async followUser(item) {
       const response = await axios.post(`/api/${item.user_name}/follow`);
 
