@@ -21,7 +21,7 @@ export default {
     WorksIndex,
     SelectChip,
   },
-  data: function () {
+  data() {
     return {
       pictures: [],
       tracks: [],

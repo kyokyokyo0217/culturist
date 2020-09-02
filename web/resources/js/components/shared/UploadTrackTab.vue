@@ -29,7 +29,7 @@ export default {
   components: {
     ValidationErrorsAlert,
   },
-  data: function () {
+  data() {
     return {
       title: "",
       preview: null,
