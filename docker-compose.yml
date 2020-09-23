@@ -9,7 +9,6 @@ services:
       - 3000:3000
   culturist_database:
     image: mysql:8.0
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
     volumes:
